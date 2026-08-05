@@ -15,18 +15,11 @@ export default function Welcome({ onStart }) {
         borderBottom: '1px solid #eaeaea',
         boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
-          
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ fontWeight: 'bold', color: '#005baa', fontSize: '1.3rem', lineHeight: '1.2' }}>
-              មជ្ឈមណ្ឌលបច្ចេកវិទ្យាសហគមន៍
-            </div>
-            <div style={{ fontWeight: 'bold', color: '#005baa', fontSize: '1rem', letterSpacing: '1px' }}>
-              COMMUNITY TECH CENTER
-            </div>
-          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
         </div>
       </header>
 
