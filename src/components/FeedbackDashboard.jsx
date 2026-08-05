@@ -95,8 +95,8 @@ export default function FeedbackDashboard() {
   );
 
   return (
-    <div className="dashboard-container" style={{ padding: '32px', background: 'var(--bg-color)', width: '100%', boxSizing: 'border-box' }}>
-      <main className="main-content" style={{ padding: 0 }}>
+    <div className="dashboard-container">
+      <main className="main-content">
         <header className="header">
           <h1>មតិយោបល់៖ ផលវិជ្ជមាន និងអវិជ្ជមាន (Advantages & Disadvantages)</h1>
           <p>ទិដ្ឋភាពទូទៅនៃការវាយតម្លៃរបស់លោកគ្រូអ្នកគ្រូលើផលជះនៃមជ្ឈមណ្ឌល</p>

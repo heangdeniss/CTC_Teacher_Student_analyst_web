@@ -118,8 +118,8 @@ export default function AdvancedImpactDashboard() {
   );
 
   return (
-    <div className="dashboard-container" style={{ padding: '32px', background: 'var(--bg-color)', width: '100%', boxSizing: 'border-box' }}>
-      <main className="main-content" style={{ padding: 0 }}>
+    <div className="dashboard-container">
+      <main className="main-content">
         <header className="header">
           <h1>ផ្ទាំងគ្រប់គ្រងការអភិវឌ្ឍជំនាញ & សុវត្ថិភាពឌីជីថល (Skills & Safety)</h1>
           <p>ទិដ្ឋភាពទូទៅនៃការអភិវឌ្ឍសមត្ថភាព ភាពច្នៃប្រឌិត និងសុវត្ថិភាពឌីជីថល</p>

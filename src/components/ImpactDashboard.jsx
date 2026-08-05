@@ -119,8 +119,8 @@ export default function ImpactDashboard() {
   );
 
   return (
-    <div className="dashboard-container" style={{ padding: '32px', background: 'var(--bg-color)', width: '100%', boxSizing: 'border-box' }}>
-      <main className="main-content" style={{ padding: 0 }}>
+    <div className="dashboard-container">
+      <main className="main-content">
         <header className="header">
           <h1>ផ្ទាំងគ្រប់គ្រងផលជះ និងការចូលរួម (Impact & Engagement)</h1>
           <p>ទិដ្ឋភាពទូទៅនៃផលជះលើសាលារៀន សហគមន៍ សមត្ថភាពគ្រូ និងសិស្ស</p>

@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <div style={{ padding: '15px 32px', background: 'var(--card-bg)', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+      <div className="tabs-container">
         <button 
           className={`tab-btn ${currentView === 'demographics' ? 'active' : ''}`}
           onClick={() => switchTab('demographics')}

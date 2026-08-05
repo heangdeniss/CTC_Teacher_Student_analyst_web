@@ -144,9 +144,9 @@ body {
 .tabs-container {
   display: flex;
   gap: 16px;
-  margin-bottom: 32px;
+  background-color: var(--card-bg);
+  padding: 15px 32px;
   border-bottom: 2px solid var(--border-color);
-  padding-bottom: 12px;
 }
 
 .tab-btn {
@@ -260,6 +260,7 @@ body {
   }
   .tabs-container {
     flex-wrap: wrap;
+    padding: 16px;
   }
   .full-width-chart {
     grid-column: span 1;
