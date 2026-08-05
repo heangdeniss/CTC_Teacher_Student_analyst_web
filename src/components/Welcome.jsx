@@ -8,8 +8,9 @@ export default function Welcome({ onStart }) {
       <div style={{ maxWidth: '800px', padding: '40px', textAlign: 'center', background: 'var(--card-bg)', borderRadius: '24px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-color)', margin: '20px' }}>
         
         <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'inline-flex', padding: '16px', borderRadius: '50%', background: 'var(--accent-light)', color: 'var(--accent-primary)', marginBottom: '16px' }}>
-            <BarChart3 size={48} />
+          <div style={{ display: 'inline-flex', marginBottom: '16px' }}>
+            {/* The user can drop their logo into the public folder as logo.png */}
+            <img src="/logo.png" alt="Logo" style={{ height: '80px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
           </div>
           <h1 style={{ fontSize: '2.5rem', color: 'var(--text-main)', marginBottom: '16px', lineHeight: '1.4' }}>
             សូមស្វាគមន៍មកកាន់ <br/>
