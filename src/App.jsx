@@ -19,7 +19,8 @@ function App() {
 
   return (
     <>
-      <div className="tabs-container">
+      {currentView !== 'welcome' && (
+        <div className="tabs-container">
         <button 
           className={`tab-btn ${currentView === 'welcome' ? 'active' : ''}`}
           onClick={() => switchTab('welcome')}
@@ -56,6 +57,7 @@ function App() {
           មតិយោបល់
         </button>
       </div>
+      )}
       <div style={{ display: currentView === 'welcome' ? 'block' : 'none', height: '100%' }}>
         {mounted.welcome && <Welcome onStart={() => switchTab('demographics')} />}
       </div>

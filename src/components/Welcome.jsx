@@ -1,66 +1,85 @@
 import React from 'react';
-import { BarChart3, Users, LineChart, MessageSquare } from 'lucide-react';
 import '../App.css';
 
 export default function Welcome({ onStart }) {
   return (
-    <div className="dashboard-container" style={{ justifyContent: 'center', alignItems: 'center', background: 'var(--bg-color)', width: '100%' }}>
-      <div style={{ maxWidth: '800px', padding: '40px', textAlign: 'center', background: 'var(--card-bg)', borderRadius: '24px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-color)', margin: '20px' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'inherit' }}>
+      
+      {/* Header Bar */}
+      <header style={{ 
+        padding: '16px 5%', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        backgroundColor: '#ffffff', 
+        borderBottom: '1px solid #eaeaea',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+          <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+          
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ fontWeight: 'bold', color: '#005baa', fontSize: '1.3rem', lineHeight: '1.2' }}>
+              មជ្ឈមណ្ឌលបច្ចេកវិទ្យាសហគមន៍
+            </div>
+            <div style={{ fontWeight: 'bold', color: '#005baa', fontSize: '1rem', letterSpacing: '1px' }}>
+              COMMUNITY TECH CENTER
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main style={{ 
+        flex: 1, 
+        position: 'relative', 
+        display: 'flex', 
+        alignItems: 'center', 
+        backgroundColor: '#1e293b',
+        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.7))', // Fallback gradient
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'inline-flex', marginBottom: '16px' }}>
-            {/* The user can drop their logo into the public folder as logo.png */}
-            <img src="/logo.png" alt="Logo" style={{ height: '80px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
-          </div>
-          <h1 style={{ fontSize: '2.5rem', color: 'var(--text-main)', marginBottom: '16px', lineHeight: '1.4' }}>
-            សូមស្វាគមន៍មកកាន់ <br/>
-            <span style={{ color: 'var(--accent-primary)' }}>ប្រព័ន្ធវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ ម.ប.ស.</span>
+        {/* We can add an actual background image here if provided later, for now the dark gradient serves as the hero overlay */}
+        
+        <div style={{ position: 'relative', zIndex: 1, padding: '0 5%', maxWidth: '900px', color: 'white' }}>
+          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '8px', lineHeight: '1.2' }}>
+            Community Tech Center
           </h1>
-          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '32px' }}>
-            ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូអំពីផលជះ ការចូលរួម និងការអភិវឌ្ឍសមត្ថភាពឌីជីថលតាមរយៈមជ្ឈមណ្ឌលបច្ចេកវិទ្យាសហគមន៍។
+          <h2 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '24px', color: '#e2e8f0', lineHeight: '1.4' }}>
+            ប្រព័ន្ធវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ ម.ប.ស.
+          </h2>
+          <p style={{ fontSize: '1.25rem', marginBottom: '40px', color: '#cbd5e1', lineHeight: '1.6', maxWidth: '700px' }}>
+            Empowering communities through technology and innovation.<br/>
+            ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
           </p>
+          
+          <button 
+            onClick={onStart} 
+            style={{ 
+              padding: '12px 32px', 
+              fontSize: '1.1rem', 
+              backgroundColor: '#e2e8f0', 
+              color: '#0f172a', 
+              border: 'none', 
+              borderRadius: '24px', 
+              cursor: 'pointer', 
+              fontWeight: '600', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#ffffff'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#e2e8f0'}
+          >
+            Learn More <span style={{fontSize: '1.2rem'}}>→</span>
+          </button>
         </div>
+      </main>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '40px', textAlign: 'left' }}>
-          <div style={{ padding: '20px', background: 'var(--bg-color)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-            <Users size={24} color="#0ea5e9" style={{ marginBottom: '12px' }} />
-            <h3 style={{ fontSize: '1rem', margin: '0 0 8px 0' }}>ព័ត៌មានទូទៅ</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>ស្ថិតិទូទៅ និងការប្រើប្រាស់បច្ចេកវិទ្យា</p>
-          </div>
-          <div style={{ padding: '20px', background: 'var(--bg-color)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-            <LineChart size={24} color="#8b5cf6" style={{ marginBottom: '12px' }} />
-            <h3 style={{ fontSize: '1rem', margin: '0 0 8px 0' }}>ផលជះ</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>ការវាយតម្លៃលើផលជះរបស់ ម.ប.ស.</p>
-          </div>
-          <div style={{ padding: '20px', background: 'var(--bg-color)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-            <MessageSquare size={24} color="#10b981" style={{ marginBottom: '12px' }} />
-            <h3 style={{ fontSize: '1rem', margin: '0 0 8px 0' }}>មតិយោបល់</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>ចំណុចវិជ្ជមាន និងអវិជ្ជមាន</p>
-          </div>
-        </div>
-
-        <button 
-          onClick={onStart}
-          style={{ 
-            background: 'var(--accent-primary)', 
-            color: 'white', 
-            border: 'none', 
-            padding: '16px 40px', 
-            fontSize: '1.2rem', 
-            fontWeight: 'bold', 
-            borderRadius: '12px', 
-            cursor: 'pointer',
-            fontFamily: 'inherit',
-            transition: 'background 0.2s',
-            boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.4)'
-          }}
-          onMouseOver={(e) => e.target.style.background = 'var(--accent-hover)'}
-          onMouseOut={(e) => e.target.style.background = 'var(--accent-primary)'}
-        >
-          ចាប់ផ្តើមមើលទិន្នន័យ (Start)
-        </button>
-
-      </div>
     </div>
   );
 }

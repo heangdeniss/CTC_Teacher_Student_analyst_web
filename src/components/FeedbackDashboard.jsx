@@ -36,8 +36,8 @@ export default function FeedbackDashboard() {
       }
     };
 
-    loadCSV('/CTC_Advantages.csv', setDataAdv);
-    loadCSV('/CTC_Disadvantages.csv', setDataDis);
+    loadCSV('/Data/CTC_teacher/CTC_Advantages.csv', setDataAdv);
+    loadCSV('/Data/CTC_teacher/CTC_Disadvantages.csv', setDataDis);
   }, []);
 
   const processData = (data, categoryKey) => {

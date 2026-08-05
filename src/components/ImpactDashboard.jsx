@@ -28,19 +28,19 @@ export default function ImpactDashboard() {
       if (loaded === 4) setLoading(false);
     };
 
-    Papa.parse('/1 Impact of CTC on School & Community.csv', {
+    Papa.parse('/Data/CTC_teacher/1 Impact of CTC on School & Community.csv', {
       download: true, header: true, skipEmptyLines: true,
       complete: (results) => { setData1(results.data); checkLoaded(); }
     });
-    Papa.parse('/1 Impact on Teacher Capacity & Student Skills.csv', {
+    Papa.parse('/Data/CTC_teacher/1 Impact on Teacher Capacity & Student Skills.csv', {
       download: true, header: true, skipEmptyLines: true,
       complete: (results) => { setData2(results.data); checkLoaded(); }
     });
-    Papa.parse('/2 Teacher Engagement & Community Outreach.csv', {
+    Papa.parse('/Data/CTC_teacher/2 Teacher Engagement & Community Outreach.csv', {
       download: true, header: true, skipEmptyLines: true,
       complete: (results) => { setData3(results.data); checkLoaded(); }
     });
-    Papa.parse('/2 Teacher Perception & Tech Readiness.csv', {
+    Papa.parse('/Data/CTC_teacher/2 Teacher Perception & Tech Readiness.csv', {
       download: true, header: true, skipEmptyLines: true,
       complete: (results) => { setData4(results.data); checkLoaded(); }
     });

@@ -39,10 +39,10 @@ export default function AdvancedImpactDashboard() {
       }
     };
 
-    loadCSV('/3 Digital Growth.csv', setData1);
-    loadCSV('/3 Resource Usage & Facility Utilization.csv', setData2);
-    loadCSV('/4 Digital Creativity, AI Adoption & Online Safety.csv', setData3);
-    loadCSV('/5 Digital Safety, Autonomy & Community Impact.csv', setData4);
+    loadCSV('/Data/CTC_teacher/3 Digital Growth.csv', setData1);
+    loadCSV('/Data/CTC_teacher/3 Resource Usage & Facility Utilization.csv', setData2);
+    loadCSV('/Data/CTC_teacher/4 Digital Creativity, AI Adoption & Online Safety.csv', setData3);
+    loadCSV('/Data/CTC_teacher/5 Digital Safety, Autonomy & Community Impact.csv', setData4);
   }, []);
 
   const processData = (data, categoryKey, valueKey) => {

@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('demographics'); // 'demographics' or 'tech'
 
   useEffect(() => {
-    Papa.parse('/Demographical CTC Teacher.csv', {
+    Papa.parse('/Data/CTC_teacher/Demographical CTC Teacher.csv', {
       download: true,
       header: true,
       skipEmptyLines: true,
