@@ -54,7 +54,8 @@ function App() {
           onClick={() => switchTab('feedback')}
           style={{ fontSize: '1rem', padding: '10px 20px' }}
         >
-          មតិយោបល់
+          <MessageSquare size={20} />
+          ផលវិជ្ជមាន និងអវិជ្ជមាន
         </button>
       </div>
       )}
