@@ -33,25 +33,20 @@ export default function Welcome({ onStart }) {
       {/* Hero Section */}
       <main style={{ 
         flex: 1, 
-        position: 'relative', 
         display: 'flex', 
         alignItems: 'center', 
-        backgroundColor: '#1e293b',
-        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.7))', // Fallback gradient
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffffff',
       }}>
         
-        {/* We can add an actual background image here if provided later, for now the dark gradient serves as the hero overlay */}
-        
-        <div style={{ position: 'relative', zIndex: 1, padding: '0 5%', maxWidth: '900px', color: 'white' }}>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '8px', lineHeight: '1.2' }}>
+        <div style={{ padding: '0 5%', maxWidth: '900px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '16px', lineHeight: '1.2', color: '#0f172a' }}>
             Community Tech Center
           </h1>
-          <h2 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '24px', color: '#e2e8f0', lineHeight: '1.4' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '24px', color: '#005baa', lineHeight: '1.4' }}>
             ប្រព័ន្ធវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ ម.ប.ស.
           </h2>
-          <p style={{ fontSize: '1.25rem', marginBottom: '40px', color: '#cbd5e1', lineHeight: '1.6', maxWidth: '700px' }}>
+          <p style={{ fontSize: '1.25rem', marginBottom: '40px', color: '#475569', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto' }}>
             Empowering communities through technology and innovation.<br/>
             ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
           </p>
@@ -59,23 +54,24 @@ export default function Welcome({ onStart }) {
           <button 
             onClick={onStart} 
             style={{ 
-              padding: '12px 32px', 
+              padding: '14px 36px', 
               fontSize: '1.1rem', 
-              backgroundColor: '#e2e8f0', 
-              color: '#0f172a', 
+              backgroundColor: '#005baa', 
+              color: '#ffffff', 
               border: 'none', 
-              borderRadius: '24px', 
+              borderRadius: '8px', 
               cursor: 'pointer', 
               fontWeight: '600', 
               display: 'inline-flex', 
               alignItems: 'center', 
               gap: '8px',
-              transition: 'background-color 0.2s'
+              transition: 'background-color 0.2s',
+              boxShadow: '0 4px 6px -1px rgba(0, 91, 170, 0.2)'
             }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#ffffff'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#e2e8f0'}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#004785'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#005baa'}
           >
-            Learn More <span style={{fontSize: '1.2rem'}}>→</span>
+            ចូលទៅកាន់ផ្ទាំងទិន្នន័យ (Start) <span style={{fontSize: '1.2rem'}}>→</span>
           </button>
         </div>
       </main>
