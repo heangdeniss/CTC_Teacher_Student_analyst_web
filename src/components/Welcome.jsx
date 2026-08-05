@@ -44,28 +44,52 @@ export default function Welcome({ onStart }) {
             ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
           </p>
           
-          <button 
-            onClick={onStart} 
-            style={{ 
-              padding: '14px 36px', 
-              fontSize: '1.1rem', 
-              backgroundColor: '#005baa', 
-              color: '#ffffff', 
-              border: 'none', 
-              borderRadius: '8px', 
-              cursor: 'pointer', 
-              fontWeight: '600', 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '8px',
-              transition: 'background-color 0.2s',
-              boxShadow: '0 4px 6px -1px rgba(0, 91, 170, 0.2)'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#004785'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#005baa'}
-          >
-            ចូលទៅកាន់ផ្ទាំងទិន្នន័យ (Start) <span style={{fontSize: '1.2rem'}}>→</span>
-          </button>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button 
+              onClick={onStart} 
+              style={{ 
+                padding: '14px 36px', 
+                fontSize: '1.1rem', 
+                backgroundColor: '#005baa', 
+                color: '#ffffff', 
+                border: 'none', 
+                borderRadius: '8px', 
+                cursor: 'pointer', 
+                fontWeight: '600', 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                transition: 'background-color 0.2s',
+                boxShadow: '0 4px 6px -1px rgba(0, 91, 170, 0.2)'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#004785'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#005baa'}
+            >
+              Teacher Analyst <span style={{fontSize: '1.2rem'}}>→</span>
+            </button>
+            <button 
+              onClick={() => alert("ផ្ទាំងទិន្នន័យសិស្សមិនទាន់រួចរាល់នៅឡើយទេ (Student Analyst dashboard is coming soon)")}
+              style={{ 
+                padding: '14px 36px', 
+                fontSize: '1.1rem', 
+                backgroundColor: '#ffffff', 
+                color: '#005baa', 
+                border: '2px solid #005baa', 
+                borderRadius: '8px', 
+                cursor: 'pointer', 
+                fontWeight: '600', 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 6px -1px rgba(0, 91, 170, 0.1)'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#f1f5f9'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#ffffff'}
+            >
+              Student Analyst <span style={{fontSize: '1.2rem'}}>→</span>
+            </button>
+          </div>
         </div>
       </main>
 
