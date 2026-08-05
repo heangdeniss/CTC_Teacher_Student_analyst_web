@@ -37,11 +37,11 @@ export default function Welcome({ onStart }) {
             Community Tech Center
           </h1>
           <h2 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '24px', color: '#005baa', lineHeight: '1.4' }}>
-            ប្រព័ន្ធវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ ម.ប.ស.
+            ប្រព័ន្ធវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្ស ម.ប.ស.
           </h2>
           <p style={{ fontSize: '1.25rem', marginBottom: '40px', color: '#475569', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto' }}>
             Empowering communities through technology and innovation.<br/>
-            ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
+            ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្សអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
           </p>
           
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
