@@ -239,7 +239,7 @@ body {
   overflow-y: hidden;
 }
 .chart-body > div {
-  min-width: 100% !important;
+  min-width: 600px !important;
 }
 
 @media (max-width: 1024px) {

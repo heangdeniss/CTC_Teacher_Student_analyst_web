@@ -7,19 +7,21 @@ export default function Welcome({ onStart }) {
       
       {/* Header Bar */}
       <header style={{ 
-        padding: '16px 5%', 
+        padding: 'clamp(10px, 3vw, 16px) 5%', 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between', 
         backgroundColor: '#ffffff', 
         borderBottom: '1px solid #eaeaea',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+        gap: '16px',
+        flexWrap: 'wrap'
       }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+          <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: '60px', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+          <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
         </div>
       </header>
 
