@@ -29,24 +29,36 @@ export default function Welcome({ onStart }) {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#334155',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
         
-        <div style={{ padding: '0 5%', maxWidth: '900px', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '16px', lineHeight: '1.2', color: '#0f172a' }}>
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundImage: 'url("/Image/image.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.6,
+          zIndex: 0
+        }} />
+
+        <div style={{ padding: '0 5%', maxWidth: '900px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <h1 style={{ fontSize: '3.5rem', fontWeight: '900', marginBottom: '16px', lineHeight: '1.2', color: '#ffffff', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
             Community Tech Center
           </h1>
-          <h2 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '24px', color: '#005baa', lineHeight: '1.4' }}>
-            ប្រព័ន្ធវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្ស ម.ប.ស.
+          <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '24px', color: '#38bdf8', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+            ប្រព័ន្ធវិភាគទិន្នន័យ ម.ប.ស.
           </h2>
-          <p style={{ fontSize: '1.25rem', marginBottom: '40px', color: '#475569', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto' }}>
+          <p style={{ fontSize: '1.25rem', marginBottom: '40px', color: '#f1f5f9', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto', fontWeight: '500', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Empowering communities through technology and innovation.<br/>
             ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្សអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
           </p>
           
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
             <button 
-              onClick={onStart} 
+              onClick={() => onStart('teacher')} 
               style={{ 
                 padding: '14px 36px', 
                 fontSize: '1.1rem', 
@@ -68,24 +80,24 @@ export default function Welcome({ onStart }) {
               Teacher Analyst <span style={{fontSize: '1.2rem'}}>→</span>
             </button>
             <button 
-              onClick={() => alert("ផ្ទាំងទិន្នន័យសិស្សមិនទាន់រួចរាល់នៅឡើយទេ (Student Analyst dashboard is coming soon)")}
+              onClick={() => onStart('student')} 
               style={{ 
                 padding: '14px 36px', 
                 fontSize: '1.1rem', 
-                backgroundColor: '#ffffff', 
-                color: '#005baa', 
-                border: '2px solid #005baa', 
+                backgroundColor: '#0d9488', 
+                color: '#ffffff', 
+                border: 'none', 
                 borderRadius: '8px', 
                 cursor: 'pointer', 
                 fontWeight: '600', 
                 display: 'inline-flex', 
                 alignItems: 'center', 
                 gap: '8px',
-                transition: 'all 0.2s',
-                boxShadow: '0 4px 6px -1px rgba(0, 91, 170, 0.1)'
+                transition: 'background-color 0.2s',
+                boxShadow: '0 4px 6px -1px rgba(13, 148, 136, 0.2)'
               }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#f1f5f9'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#ffffff'}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#0f766e'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#0d9488'}
             >
               Student Analyst <span style={{fontSize: '1.2rem'}}>→</span>
             </button>
