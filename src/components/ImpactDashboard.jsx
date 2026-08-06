@@ -94,14 +94,14 @@ export default function ImpactDashboard() {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
-            <XAxis type="number" domain={[0, 100]} tickFormatter={val => `${val}%`} tick={{fill: 'var(--text-muted)', fontSize: 12}} axisLine={false} tickLine={false} />
-            <YAxis type="category" dataKey="name" width={220} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
-            <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={(val, name, props) => {
-               let count = 0;
-               if (name === 'យល់ស្រប (ពិត)') count = props.payload.trueCount;
-               if (name === 'មិនប្រែប្រួល') count = props.payload.neutralCount;
-               if (name === 'មិនយល់ស្រប (មិនពិត)') count = props.payload.falseCount;
-               return [`${val.toFixed(1)}% (${count} នាក់)`, name];
+            <XAxis type="number" domain={[0, 100]} tickFormatter={val => `${val}%`} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <YAxis type="category" dataKey="name" width={220} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
+            <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={(val, name, props) => {
+              let count = 0;
+              if (name === 'យល់ស្រប (ពិត)') count = props.payload.trueCount;
+              if (name === 'មិនប្រែប្រួល') count = props.payload.neutralCount;
+              if (name === 'មិនយល់ស្រប (មិនពិត)') count = props.payload.falseCount;
+              return [`${val.toFixed(1)}% (${count} នាក់)`, name];
             }} />
             <Bar maxBarSize={45} dataKey="percentTrue" name="យល់ស្រប (ពិត)" stackId="a" fill={COLORS.teal} radius={[0, 0, 0, 0]}>
               <LabelList dataKey="percentTrue" position="center" formatter={(val) => val >= 10 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
@@ -127,10 +127,10 @@ export default function ImpactDashboard() {
         </header>
 
         <div className="charts-grid">
-          {renderChart(chartData1, 'ផលជះលើសាលារៀន និងសហគមន៍ (1)', 'ការវាយតម្លៃរបស់លោកគ្រូអ្នកគ្រូលើផលជះនេះ')}
-          {renderChart(chartData2, 'ផលជះលើការអភិវឌ្ឍសមត្ថភាពគ្រូ និងសិស្ស (1)', 'ការវាយតម្លៃពីការរីកចម្រើននៃសមត្ថភាព')}
-          {renderChart(chartData3, 'ការចូលរួម និងផ្សព្វផ្សាយទៅកាន់សហគមន៍ (2)', 'ទិដ្ឋភាពនៃការចូលរួមរបស់គ្រូ')}
-          {renderChart(chartData4, 'ទស្សនៈ និងការបន្សាំខ្លួនផ្នែកបច្ចេកទេស (2)', 'ការបន្សាំខ្លួនរបស់គ្រូជាមួយបច្ចេកវិទ្យាថ្មីៗ')}
+          {renderChart(chartData1, 'ផលជះលើសាលារៀន និងសហគមន៍', 'ការវាយតម្លៃរបស់លោកគ្រូអ្នកគ្រូលើផលជះនេះ')}
+          {renderChart(chartData2, 'ផលជះលើការអភិវឌ្ឍសមត្ថភាពគ្រូ និងសិស្ស', 'ការវាយតម្លៃពីការរីកចម្រើននៃសមត្ថភាព')}
+          {renderChart(chartData3, 'ការចូលរួម និងផ្សព្វផ្សាយទៅកាន់សហគមន៍', 'ទិដ្ឋភាពនៃការចូលរួមរបស់គ្រូ')}
+          {renderChart(chartData4, 'ទស្សនៈ និងការបន្សាំខ្លួនផ្នែកបច្ចេកទេស', 'ការបន្សាំខ្លួនរបស់គ្រូជាមួយបច្ចេកវិទ្យាថ្មីៗ')}
         </div>
       </main>
     </div>
