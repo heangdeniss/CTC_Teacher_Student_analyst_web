@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dashboard from './components/Dashboard'
 import ImpactDashboard from './components/ImpactDashboard'
 import AdvancedImpactDashboard from './components/AdvancedImpactDashboard'
@@ -13,9 +13,36 @@ import Welcome from './components/Welcome'
 import './App.css'
 
 function App() {
-  const [currentView, setCurrentView] = useState('welcome');
-  const [analystType, setAnalystType] = useState(null); // 'teacher' or 'student'
-  const [mounted, setMounted] = useState({ welcome: true });
+  const [currentView, setCurrentView] = useState(() => {
+    return localStorage.getItem('currentView') || 'welcome';
+  });
+  const [analystType, setAnalystType] = useState(() => {
+    return localStorage.getItem('analystType') || null;
+  });
+  const [mounted, setMounted] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mountedTabs');
+      return saved ? JSON.parse(saved) : { welcome: true };
+    } catch (e) {
+      return { welcome: true };
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('currentView', currentView);
+  }, [currentView]);
+
+  useEffect(() => {
+    if (analystType) {
+      localStorage.setItem('analystType', analystType);
+    } else {
+      localStorage.removeItem('analystType');
+    }
+  }, [analystType]);
+
+  useEffect(() => {
+    localStorage.setItem('mountedTabs', JSON.stringify(mounted));
+  }, [mounted]);
 
   const switchTab = (tab) => {
     setCurrentView(tab);
