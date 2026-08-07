@@ -134,6 +134,19 @@ export default function Dashboard() {
       .sort((a, b) => a.value - b.value);
   }, [filteredData]);
 
+  const schoolData = useMemo(() => {
+    const counts = {};
+    filteredData.forEach(row => {
+      let s = row['មកពីវិទ្យាល័យ'];
+      if (!s || s.trim() === '') s = 'ផ្សេងៗ';
+      counts[s] = (counts[s] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10); // Top 10 for readability
+  }, [filteredData]);
+
   const aiToolData = useMemo(() => {
     const counts = {};
     filteredData.forEach(row => {
@@ -306,8 +319,8 @@ export default function Dashboard() {
             <div className="charts-grid">
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">សមាមាត្រភេទ</h3>
-                  <p className="chart-desc">បង្ហាញពីចំនួនភាគរយនៃគ្រូបង្រៀនតាមភេទនីមួយៗ</p>
+                  <h3 className="chart-title">ភេទគ្រូបង្រៀន</h3>
+                  <p className="chart-desc">ភាគរយគ្រូបង្រៀន (ប្រុស/ស្រី)</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -345,8 +358,8 @@ export default function Dashboard() {
 
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">បែងចែកតាមអាយុ</h3>
-                  <p className="chart-desc">បង្ហាញពីចំនួនគ្រូបង្រៀនដែលបានចូលរួមទៅតាមចន្លោះអាយុ</p>
+                  <h3 className="chart-title">កម្រិតអាយុ</h3>
+                  <p className="chart-desc">ចំនួនគ្រូបង្រៀនតាមចន្លោះអាយុ</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -365,8 +378,8 @@ export default function Dashboard() {
 
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">កម្មសិទ្ធិស្ថាប័ន</h3>
-                  <p className="chart-desc">បង្ហាញពីចំនួនមជ្ឈមណ្ឌលដែលគ្រប់គ្រងដោយស្ថាប័ននីមួយៗ</p>
+                  <h3 className="chart-title">ស្ថាប័នគ្រប់គ្រងមជ្ឈមណ្ឌល</h3>
+                  <p className="chart-desc">ចំនួនមជ្ឈមណ្ឌលបែងចែកតាមស្ថាប័នគ្រប់គ្រង</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -376,6 +389,46 @@ export default function Dashboard() {
                       <YAxis type="category" dataKey="name" width={140} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
                       <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={val => `${val} នាក់`} />
                       <Bar maxBarSize={45} dataKey="value" fill={COLORS.teal} radius={[0, 4, 4, 0]}>
+                        <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val/totalRespondents)*100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="chart-card">
+                <div className="chart-header-container">
+                  <h3 className="chart-title">វិទ្យាល័យ</h3>
+                  <p className="chart-desc">វិទ្យាល័យដែលមានគ្រូបង្រៀនចូលរួមច្រើនជាងគេ</p>
+                </div>
+                <div className="chart-body">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={schoolData} layout="vertical" margin={{ top: 0, right: 80, left: 10, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
+                      <XAxis type="number" tick={{fill: 'var(--text-muted)', fontSize: 12}} axisLine={false} tickLine={false} />
+                      <YAxis type="category" dataKey="name" width={180} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={val => `${val} នាក់`} />
+                      <Bar maxBarSize={45} dataKey="value" fill={COLORS.rose} radius={[0, 4, 4, 0]}>
+                        <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val/totalRespondents)*100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="chart-card">
+                <div className="chart-header-container">
+                  <h3 className="chart-title">មុខវិជ្ជាកំពុងបង្រៀន</h3>
+                  <p className="chart-desc">មុខវិជ្ជាចម្បងដែលគ្រូបង្រៀន</p>
+                </div>
+                <div className="chart-body">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={subjectData} layout="vertical" margin={{ top: 0, right: 80, left: 10, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
+                      <XAxis type="number" tick={{fill: 'var(--text-muted)', fontSize: 12}} axisLine={false} tickLine={false} />
+                      <YAxis type="category" dataKey="name" width={140} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={val => `${val} នាក់`} />
+                      <Bar maxBarSize={45} dataKey="value" fill={COLORS.amber} radius={[0, 4, 4, 0]}>
                         <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val/totalRespondents)*100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
                       </Bar>
                     </BarChart>
@@ -401,30 +454,11 @@ export default function Dashboard() {
             </div>
 
             <div className="charts-grid">
-              <div className="chart-card">
-                <div className="chart-header-container">
-                  <h3 className="chart-title">មុខវិជ្ជាបង្រៀន</h3>
-                  <p className="chart-desc">បង្ហាញពីមុខវិជ្ជាចម្បងទាំង ៨ ដែលគ្រូបង្រៀន</p>
-                </div>
-                <div className="chart-body">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={subjectData} layout="vertical" margin={{ top: 0, right: 80, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
-                      <XAxis type="number" tick={{fill: 'var(--text-muted)', fontSize: 12}} axisLine={false} tickLine={false} />
-                      <YAxis type="category" dataKey="name" width={140} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
-                      <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={val => `${val} នាក់`} />
-                      <Bar maxBarSize={45} dataKey="value" fill={COLORS.amber} radius={[0, 4, 4, 0]}>
-                        <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val/totalRespondents)*100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
 
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">ការប្រើប្រាស់ឧបករណ៍ AI</h3>
-                  <p className="chart-desc">បង្ហាញពីឧបករណ៍ AI ពេញនិយមបំផុតដែលលោកគ្រូអ្នកគ្រូប្រើប្រាស់ញឹកញាប់</p>
+                  <h3 className="chart-title">ការប្រើប្រាស់ AI</h3>
+                  <p className="chart-desc">ឧបករណ៍ AI ពេញនិយមដែលគ្រូប្រើញឹកញាប់</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -443,8 +477,8 @@ export default function Dashboard() {
 
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">ឧបករណ៍ឌីជីថលប្រើប្រាស់</h3>
-                  <p className="chart-desc">បង្ហាញពីប្រភេទឧបករណ៍ឌីជីថលដែលលោកគ្រូអ្នកគ្រូកំពុងប្រើប្រាស់</p>
+                  <h3 className="chart-title">ឧបករណ៍ឌីជីថល</h3>
+                  <p className="chart-desc">ឧបករណ៍បច្ចេកវិទ្យាដែលគ្រូកំពុងប្រើប្រាស់</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -481,8 +515,8 @@ export default function Dashboard() {
             <div className="charts-grid">
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">មុខវិជ្ជាឌីជីថលចង់សិក្សាបន្ថែម</h3>
-                  <p className="chart-desc">បង្ហាញពីចំណង់ចំណូលចិត្តក្នុងការសិក្សាបន្ថែមរបស់លោកគ្រូអ្នកគ្រូ</p>
+                  <h3 className="chart-title">មុខវិជ្ជាចង់រៀនបន្ថែម</h3>
+                  <p className="chart-desc">ជំនាញឌីជីថលដែលគ្រូចង់សិក្សាបន្ថែម</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -501,8 +535,8 @@ export default function Dashboard() {
 
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">ការរៀបចំមជ្ឈមណ្ឌលគាំទ្រការងារ</h3>
-                  <p className="chart-desc">សំណូមពរអំពីការរៀបចំ ម.ប.ស ដើម្បីគាំទ្រដល់ការបង្រៀន</p>
+                  <h3 className="chart-title">ការគាំទ្រពីមជ្ឈមណ្ឌល</h3>
+                  <p className="chart-desc">ការរៀបចំដើម្បីជួយគាំទ្រដល់ការបង្រៀន</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
@@ -521,8 +555,8 @@ export default function Dashboard() {
 
               <div className="chart-card">
                 <div className="chart-header-container">
-                  <h3 className="chart-title">ចំណុចគួរកែលម្អ</h3>
-                  <p className="chart-desc">មតិយោបល់សម្រាប់ការកែលម្អមជ្ឈមណ្ឌលនាពេលអនាគត</p>
+                  <h3 className="chart-title">ចំណុចត្រូវកែលម្អ</h3>
+                  <p className="chart-desc">មតិយោបល់ដើម្បីអភិវឌ្ឍមជ្ឈមណ្ឌលឱ្យកាន់តែប្រសើរ</p>
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">

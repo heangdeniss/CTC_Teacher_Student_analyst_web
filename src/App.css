@@ -235,11 +235,9 @@ body {
   flex: 1;
   position: relative;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
 }
 .chart-body > div {
-  min-width: 600px !important;
+  width: 100% !important;
 }
 
 @media (max-width: 1024px) {

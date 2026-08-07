@@ -91,21 +91,21 @@ function App() {
                 onClick={() => switchTab('impact')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                ផលជះ & ការចូលរួម
+                ការចូលរួម & ផលជះ
               </button>
               <button 
                 className={`tab-btn ${currentView === 'advanced' ? 'active' : ''}`}
                 onClick={() => switchTab('advanced')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                ការអភិវឌ្ឍជំនាញ & សុវត្ថិភាព
+                ជំនាញ & សុវត្ថិភាពឌីជីថល
               </button>
               <button 
                 className={`tab-btn ${currentView === 'feedback' ? 'active' : ''}`}
                 onClick={() => switchTab('feedback')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                មតិយោបល់
+                គុណសម្បត្តិ និងគុណវិបត្តិ
               </button>
             </>
           )}

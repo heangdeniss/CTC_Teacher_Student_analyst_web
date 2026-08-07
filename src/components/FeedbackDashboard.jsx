@@ -103,8 +103,8 @@ export default function FeedbackDashboard() {
         </header>
 
         <div className="charts-grid">
-          {renderChart(chartAdv, 'ផលវិជ្ជមាននៃ ម.ប.ស (Advantages)', 'កត្តាវិជ្ជមានដែលទទួលបានពីមជ្ឈមណ្ឌល', COLORS.emerald)}
-          {renderChart(chartDis, 'ផលអវិជ្ជមាននៃ ម.ប.ស (Disadvantages)', 'បញ្ហាប្រឈម ឬកត្តាអវិជ្ជមានដែលកើតមាន', COLORS.rose)}
+          {renderChart(chartAdv, 'ចំណុចវិជ្ជមាន (Advantages)', 'កត្តាវិជ្ជមានពីមជ្ឈមណ្ឌល', COLORS.emerald)}
+          {renderChart(chartDis, 'បញ្ហាប្រឈម (Challenges)', 'បញ្ហា និងកត្តាអវិជ្ជមាន', COLORS.rose)}
         </div>
       </main>
     </div>

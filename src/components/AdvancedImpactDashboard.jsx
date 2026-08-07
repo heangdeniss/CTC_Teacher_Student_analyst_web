@@ -127,10 +127,10 @@ export default function AdvancedImpactDashboard() {
         </header>
 
         <div className="charts-grid">
-          {renderChart(chartData1, 'ការអភិវឌ្ឍសមត្ថភាព និងជំនាញឌីជីថល ', 'ការវាយតម្លៃលើជំនាញថ្មីៗ')}
-          {renderChart(chartData2, 'ការប្រើប្រាស់ធនធាន និងទីតាំងរួម ', 'របៀបប្រើប្រាស់មជ្ឈមណ្ឌល')}
-          {renderChart(chartData3, 'ភាពច្នៃប្រឌិត និងការប្រើប្រាស់ AI ', 'ការប្រើប្រាស់បច្ចេកវិទ្យាក្នុងការបង្រៀន')}
-          {renderChart(chartData4, 'សុវត្ថិភាពឌីជីថល និងស្វ័យសិក្សា ', 'ការយល់ដឹងពីសុវត្ថិភាព និងការរៀនដោយខ្លួនឯង')}
+          {renderChart(chartData1, 'ជំនាញឌីជីថល', 'ការអភិវឌ្ឍជំនាញថ្មីៗ')}
+          {renderChart(chartData2, 'ការប្រើប្រាស់ធនធានរួម', 'ការប្រើប្រាស់ទីតាំងមជ្ឈមណ្ឌល')}
+          {renderChart(chartData3, 'ភាពច្នៃប្រឌិត និង AI', 'បច្ចេកវិទ្យាក្នុងការបង្រៀន')}
+          {renderChart(chartData4, 'សុវត្ថិភាព និងស្វ័យសិក្សា', 'ការយល់ដឹងពីសុវត្ថិភាពអនឡាញ')}
         </div>
       </main>
     </div>
