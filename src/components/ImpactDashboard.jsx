@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend } from 'recharts';
 import '../App.css';
 
 const COLORS = {
@@ -103,14 +103,15 @@ export default function ImpactDashboard() {
               if (name === 'មិនយល់ស្រប (មិនពិត)') count = props.payload.falseCount;
               return [`${val.toFixed(1)}% (${count} នាក់)`, name];
             }} />
+            <Legend verticalAlign="top" height={36} iconType="circle" />
             <Bar maxBarSize={45} dataKey="percentTrue" name="យល់ស្រប (ពិត)" stackId="a" fill={COLORS.teal} radius={[0, 0, 0, 0]}>
-              <LabelList dataKey="percentTrue" position="center" formatter={(val) => val >= 10 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
+              <LabelList dataKey="percentTrue" position="center" formatter={(val) => val > 0 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
             </Bar>
             <Bar maxBarSize={45} dataKey="percentNeutral" name="មិនប្រែប្រួល" stackId="a" fill={COLORS.amber} radius={[0, 0, 0, 0]}>
-              <LabelList dataKey="percentNeutral" position="center" formatter={(val) => val >= 10 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
+              <LabelList dataKey="percentNeutral" position="center" formatter={(val) => val > 0 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
             </Bar>
             <Bar maxBarSize={45} dataKey="percentFalse" name="មិនយល់ស្រប (មិនពិត)" stackId="a" fill={COLORS.rose} radius={[0, 4, 4, 0]}>
-              <LabelList dataKey="percentFalse" position="center" formatter={(val) => val >= 10 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
+              <LabelList dataKey="percentFalse" position="center" formatter={(val) => val > 0 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
