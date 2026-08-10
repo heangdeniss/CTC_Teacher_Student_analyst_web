@@ -19,6 +19,9 @@ function App() {
   const [analystType, setAnalystType] = useState(() => {
     return localStorage.getItem('analystType') || null;
   });
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem('language') || 'km';
+  });
   const [mounted, setMounted] = useState(() => {
     try {
       const saved = localStorage.getItem('mountedTabs');
@@ -43,6 +46,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('mountedTabs', JSON.stringify(mounted));
   }, [mounted]);
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
 
   const switchTab = (tab) => {
     setCurrentView(tab);
@@ -74,7 +81,7 @@ function App() {
             onClick={handleHome}
             style={{ fontSize: '1rem', padding: '10px 20px' }}
           >
-            ទំព័រដើម
+            {analystType === 'teacher' && language === 'en' ? 'Home' : 'ទំព័រដើម'}
           </button>
           
           {analystType === 'teacher' && (
@@ -84,28 +91,37 @@ function App() {
                 onClick={() => switchTab('demographics')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                ព័ត៌មានទូទៅ
+                {language === 'en' ? 'General Info' : 'ព័ត៌មានទូទៅ'}
               </button>
               <button 
                 className={`tab-btn ${currentView === 'impact' ? 'active' : ''}`}
                 onClick={() => switchTab('impact')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                ការចូលរួម & ផលជះ
+                {language === 'en' ? 'Participation & Impact' : 'ការចូលរួម & ផលជះ'}
               </button>
               <button 
                 className={`tab-btn ${currentView === 'advanced' ? 'active' : ''}`}
                 onClick={() => switchTab('advanced')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                ជំនាញ & សុវត្ថិភាពឌីជីថល
+                {language === 'en' ? 'Digital Skills & Safety' : 'ជំនាញ & សុវត្ថិភាពឌីជីថល'}
               </button>
               <button 
                 className={`tab-btn ${currentView === 'feedback' ? 'active' : ''}`}
                 onClick={() => switchTab('feedback')}
                 style={{ fontSize: '1rem', padding: '10px 20px' }}
               >
-                គុណសម្បត្តិ និងគុណវិបត្តិ
+                {language === 'en' ? 'Advantages & Disadvantages' : 'គុណសម្បត្តិ និងគុណវិបត្តិ'}
+              </button>
+              
+              <div style={{ flexGrow: 1 }}></div>
+              <button 
+                className="tab-btn lang-toggle"
+                onClick={() => setLanguage(l => l === 'km' ? 'en' : 'km')}
+                style={{ fontSize: '0.9rem', padding: '8px 15px', marginLeft: 'auto', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                {language === 'en' ? '🇰🇭 ខ្មែរ' : '🇬🇧 EN'}
               </button>
             </>
           )}
@@ -146,21 +162,21 @@ function App() {
       )}
       
       <div style={{ display: currentView === 'welcome' ? 'block' : 'none', height: '100%' }}>
-        {mounted.welcome && <Welcome onStart={handleStart} />}
+          {mounted.welcome && <Welcome onStart={handleStart} language={language} />}
       </div>
       
       {/* Teacher Tabs */}
       <div style={{ display: currentView === 'demographics' ? 'block' : 'none' }}>
-        {mounted.demographics && <Dashboard />}
+        {mounted.demographics && <Dashboard language={language} />}
       </div>
       <div style={{ display: currentView === 'impact' ? 'block' : 'none' }}>
-        {mounted.impact && <ImpactDashboard />}
+        {mounted.impact && <ImpactDashboard language={language} />}
       </div>
       <div style={{ display: currentView === 'advanced' ? 'block' : 'none' }}>
-        {mounted.advanced && <AdvancedImpactDashboard />}
+        {mounted.advanced && <AdvancedImpactDashboard language={language} />}
       </div>
       <div style={{ display: currentView === 'feedback' ? 'block' : 'none' }}>
-        {mounted.feedback && <FeedbackDashboard />}
+        {mounted.feedback && <FeedbackDashboard language={language} />}
       </div>
 
       {/* Student Tabs */}

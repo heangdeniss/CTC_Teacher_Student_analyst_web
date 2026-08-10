@@ -2,16 +2,43 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList } from 'recharts';
 import '../App.css';
+import { translateData } from '../utils/dataTranslations';
 
 const COLORS = {
   emerald: '#10b981',
   rose: '#e11d48'
 };
 
-export default function FeedbackDashboard() {
+export default function FeedbackDashboard({ language = 'km' }) {
   const [dataAdv, setDataAdv] = useState([]);
   const [dataDis, setDataDis] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const t = {
+    km: {
+      loading: 'កំពុងផ្ទុកទិន្នន័យ...',
+      title: 'មតិយោបល់៖ ផលវិជ្ជមាន និងអវិជ្ជមាន (Advantages & Disadvantages)',
+      subtitle: 'ទិដ្ឋភាពទូទៅនៃការវាយតម្លៃរបស់លោកគ្រូអ្នកគ្រូលើផលជះនៃមជ្ឈមណ្ឌល',
+      people: 'នាក់',
+      count: 'ចំនួន (Count)',
+      chart1Title: 'ចំណុចវិជ្ជមាន (Advantages)',
+      chart1Desc: 'កត្តាវិជ្ជមានពីមជ្ឈមណ្ឌល',
+      chart2Title: 'បញ្ហាប្រឈម (Challenges)',
+      chart2Desc: 'បញ្ហា និងកត្តាអវិជ្ជមាន'
+    },
+    en: {
+      loading: 'Loading Feedback...',
+      title: 'Feedback: Advantages & Disadvantages',
+      subtitle: 'Overview of teachers\' evaluation on the center\'s impact',
+      people: 'people',
+      count: 'Count',
+      chart1Title: 'Advantages',
+      chart1Desc: 'Positive factors from the center',
+      chart2Title: 'Challenges',
+      chart2Desc: 'Problems and negative factors'
+    }
+  };
+
 
   useEffect(() => {
     let loaded = 0;
@@ -40,12 +67,13 @@ export default function FeedbackDashboard() {
     loadCSV('/Data/CTC_teacher/CTC_Disadvantages.csv', setDataDis);
   }, []);
 
-  const processData = (data, categoryKey) => {
+  const processData = (data, categoryKey, lang) => {
     const counts = {};
     let total = 0;
     data.forEach(row => {
-      const cat = row[categoryKey]?.trim();
-      if (!cat) return;
+      const rawCat = row[categoryKey]?.trim();
+      if (!rawCat) return;
+      const cat = translateData(rawCat, lang);
       if (!counts[cat]) counts[cat] = 0;
       counts[cat] += 1;
       total += 1;
@@ -61,13 +89,13 @@ export default function FeedbackDashboard() {
     }).sort((a, b) => b.value - a.value);
   };
 
-  const chartAdv = useMemo(() => processData(dataAdv, 'Structure ម.ប.ស. បានបង្កើតផលវិជ្ជមានអ្វីខ្លះដល់វិទ្យាល័យលោកគ្រូ/អ្នកគ្រូ?'), [dataAdv]);
-  const chartDis = useMemo(() => processData(dataDis, 'Structure ម.ប.ស. បានបង្កើតផលអវិជ្ជមានអ្វីខ្លះដល់វិទ្យាល័យលោកគ្រូ/អ្នកគ្រូ?'), [dataDis]);
+  const chartAdv = useMemo(() => processData(dataAdv, 'Structure ម.ប.ស. បានបង្កើតផលវិជ្ជមានអ្វីខ្លះដល់វិទ្យាល័យលោកគ្រូ/អ្នកគ្រូ?', language), [dataAdv, language]);
+  const chartDis = useMemo(() => processData(dataDis, 'Structure ម.ប.ស. បានបង្កើតផលអវិជ្ជមានអ្វីខ្លះដល់វិទ្យាល័យលោកគ្រូ/អ្នកគ្រូ?', language), [dataDis, language]);
 
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'var(--bg-color)' }}>
-        <h2 style={{ color: 'var(--accent-primary)' }}>Loading Feedback...</h2>
+        <h2 style={{ color: 'var(--accent-primary)' }}>{t[language].loading}</h2>
       </div>
     );
   }
@@ -84,7 +112,7 @@ export default function FeedbackDashboard() {
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
             <XAxis type="number" tick={{fill: 'var(--text-muted)', fontSize: 12}} axisLine={false} tickLine={false} />
             <YAxis type="category" dataKey="name" width={280} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
-            <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={(val, name, props) => [`${val} នាក់ (${props.payload.percent.toFixed(1)}%)`, 'ចំនួន (Count)']} />
+            <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={(val, name, props) => [`${val}  (${props.payload.percent.toFixed(1)}%)`, t[language].count]} />
             <Bar maxBarSize={45} dataKey="value" fill={color} radius={[0, 4, 4, 0]}>
               <LabelList dataKey="labelStr" position="right" formatter={(val) => `${val}`} style={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 'bold' }} />
             </Bar>
@@ -98,13 +126,13 @@ export default function FeedbackDashboard() {
     <div className="dashboard-container">
       <main className="main-content">
         <header className="header">
-          <h1>មតិយោបល់៖ ផលវិជ្ជមាន និងអវិជ្ជមាន (Advantages & Disadvantages)</h1>
-          <p>ទិដ្ឋភាពទូទៅនៃការវាយតម្លៃរបស់លោកគ្រូអ្នកគ្រូលើផលជះនៃមជ្ឈមណ្ឌល</p>
+          <h1>{t[language].title}</h1>
+          <p>{t[language].subtitle}</p>
         </header>
 
         <div className="charts-grid">
-          {renderChart(chartAdv, 'ចំណុចវិជ្ជមាន (Advantages)', 'កត្តាវិជ្ជមានពីមជ្ឈមណ្ឌល', COLORS.emerald)}
-          {renderChart(chartDis, 'បញ្ហាប្រឈម (Challenges)', 'បញ្ហា និងកត្តាអវិជ្ជមាន', COLORS.rose)}
+          {renderChart(chartAdv, t[language].chart1Title, t[language].chart1Desc, COLORS.emerald)}
+          {renderChart(chartDis, t[language].chart2Title, t[language].chart2Desc, COLORS.rose)}
         </div>
       </main>
     </div>

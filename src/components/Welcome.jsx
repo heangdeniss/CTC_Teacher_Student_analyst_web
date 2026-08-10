@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 
-export default function Welcome({ onStart }) {
+export default function Welcome({ onStart, language = 'km' }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'inherit' }}>
       
@@ -51,11 +51,11 @@ export default function Welcome({ onStart }) {
             Community Tech Center
           </h1>
           <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '700', marginBottom: '24px', color: '#38bdf8', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
-            ប្រព័ន្ធវិភាគទិន្នន័យ ម.ប.ស.
+            {language === 'en' ? 'CTC Data Analysis System' : 'ប្រព័ន្ធវិភាគទិន្នន័យ ម.ប.ស.'}
           </h2>
           <p style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', marginBottom: '40px', color: '#f1f5f9', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto', fontWeight: '500', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Empowering communities through technology and innovation.<br/>
-            ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្សអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។
+            {language === 'en' ? 'This dashboard is designed to present and analyze evaluation data from teachers and students regarding digital capacity impact and development.' : 'ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្សអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។'}
           </p>
           
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
