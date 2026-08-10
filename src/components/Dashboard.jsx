@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { Filter, Users, School, BookOpen, Sparkles, Activity, Target, MessageSquare } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
@@ -520,15 +520,13 @@ export default function Dashboard({ language = 'km' }) {
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={subjectData} layout="vertical" margin={{ top: 0, right: 80, left: 10, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
-                      <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
-                      <YAxis type="category" dataKey="name" width={140} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                      <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={val => `${val} `} />
-                      <Bar maxBarSize={45} dataKey="value" fill={COLORS.amber} radius={[0, 4, 4, 0]}>
-                        <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
-                      </Bar>
-                    </BarChart>
+                    <RadarChart cx="50%" cy="50%" outerRadius="70%" data={subjectData}>
+                      <PolarGrid stroke="var(--border-color)" />
+                      <PolarAngleAxis dataKey="name" tick={{ fill: 'var(--text-main)', fontSize: 11 }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 'auto']} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                      <Radar name={t[language].subjTitle} dataKey="value" stroke={COLORS.amber} fill={COLORS.amber} fillOpacity={0.6} />
+                      <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={val => `${val} ${t[language].people}`} />
+                    </RadarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
