@@ -4,10 +4,7 @@ import ImpactDashboard from './components/ImpactDashboard'
 import AdvancedImpactDashboard from './components/AdvancedImpactDashboard'
 import FeedbackDashboard from './components/FeedbackDashboard'
 
-import StudentOverview from './components/StudentOverview'
-import StudentImpact from './components/StudentImpact'
-import StudentOperations from './components/StudentOperations'
-import StudentCommunity from './components/StudentCommunity'
+import StudentAnalyticsApp from './student/StudentAnalyticsApp'
 
 import Welcome from './components/Welcome'
 import './App.css'
@@ -63,7 +60,7 @@ function App() {
     if (type === 'teacher') {
       switchTab('demographics');
     } else {
-      switchTab('student_overview');
+      switchTab('student');
     }
   };
 
@@ -74,7 +71,7 @@ function App() {
 
   return (
     <>
-      {currentView !== 'welcome' && (
+      {currentView !== 'welcome' && currentView !== 'student' && (
         <div className="tabs-container">
           <button 
             className={`tab-btn ${currentView === 'welcome' ? 'active' : ''}`}
@@ -125,39 +122,6 @@ function App() {
               </button>
             </>
           )}
-
-          {analystType === 'student' && (
-            <>
-              <button 
-                className={`tab-btn ${currentView === 'student_overview' ? 'active' : ''}`}
-                onClick={() => switchTab('student_overview')}
-                style={{ fontSize: '1rem', padding: '10px 20px' }}
-              >
-                ទិដ្ឋភាពទូទៅ
-              </button>
-              <button 
-                className={`tab-btn ${currentView === 'student_impact' ? 'active' : ''}`}
-                onClick={() => switchTab('student_impact')}
-                style={{ fontSize: '1rem', padding: '10px 20px' }}
-              >
-                ការវិភាគផលជះ
-              </button>
-              <button 
-                className={`tab-btn ${currentView === 'student_operations' ? 'active' : ''}`}
-                onClick={() => switchTab('student_operations')}
-                style={{ fontSize: '1rem', padding: '10px 20px' }}
-              >
-                ប្រតិបត្តិការ & សមធម៌
-              </button>
-              <button 
-                className={`tab-btn ${currentView === 'student_community' ? 'active' : ''}`}
-                onClick={() => switchTab('student_community')}
-                style={{ fontSize: '1rem', padding: '10px 20px' }}
-              >
-                ផលជះរយៈពេលវែង
-              </button>
-            </>
-          )}
         </div>
       )}
       
@@ -179,18 +143,9 @@ function App() {
         {mounted.feedback && <FeedbackDashboard language={language} />}
       </div>
 
-      {/* Student Tabs */}
-      <div style={{ display: currentView === 'student_overview' ? 'block' : 'none' }}>
-        {mounted.student_overview && <StudentOverview />}
-      </div>
-      <div style={{ display: currentView === 'student_impact' ? 'block' : 'none' }}>
-        {mounted.student_impact && <StudentImpact />}
-      </div>
-      <div style={{ display: currentView === 'student_operations' ? 'block' : 'none' }}>
-        {mounted.student_operations && <StudentOperations />}
-      </div>
-      <div style={{ display: currentView === 'student_community' ? 'block' : 'none' }}>
-        {mounted.student_community && <StudentCommunity />}
+      {/* Student Analyst dashboard */}
+      <div style={{ display: currentView === 'student' ? 'block' : 'none' }}>
+        {mounted.student && <StudentAnalyticsApp onHome={handleHome} />}
       </div>
     </>
   )

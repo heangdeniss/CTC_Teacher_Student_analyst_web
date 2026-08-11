@@ -16,4 +16,14 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    proxy: {
+      // Student Analyst dashboard calls the NestJS API in server/backend
+      // (see server/README.md — run it with `npm run start:dev` there).
+      '/api': {
+        target: process.env.VITE_STUDENT_API_URL ?? 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
 })

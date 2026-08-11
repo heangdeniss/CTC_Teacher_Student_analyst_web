@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Preflight is disabled (see tailwind.config.js — corePlugins.preflight:
+ * false) and `important` is scoped to .student-analyst-root, so nothing
+ * below this point is allowed to affect the host app (Welcome / Teacher
+ * Analyst). Every rule here is explicitly scoped under that container.
+ */
+
+#root.student-analyst-active {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  border-inline: none;
+  display: block;
+}
+
+.student-analyst-root,
+.student-analyst-root *,
+.student-analyst-root *::before,
+.student-analyst-root *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #E2E8F0;
+}
+
+.student-analyst-root {
+  background: #F5F7FB;
+  color: #172033;
+  /* Same typeface as the rest of the app (see src/App.css) — Kantumruy Pro
+     is a paired Khmer/Latin design, so English words embedded in Khmer
+     strings (e.g. "CTC", "AI") render in matching Latin glyphs instead of
+     whatever a Khmer-only fallback font supplies. */
+  font-family: 'Kantumruy Pro', Battambang, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+
+.student-analyst-root h1,
+.student-analyst-root h2,
+.student-analyst-root h3,
+.student-analyst-root h4,
+.student-analyst-root h5,
+.student-analyst-root h6,
+.student-analyst-root p,
+.student-analyst-root blockquote,
+.student-analyst-root dl,
+.student-analyst-root dd,
+.student-analyst-root figure {
+  margin: 0;
+}
+
+.student-analyst-root h1,
+.student-analyst-root h2,
+.student-analyst-root h3,
+.student-analyst-root h4,
+.student-analyst-root h5,
+.student-analyst-root h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.student-analyst-root ol,
+.student-analyst-root ul,
+.student-analyst-root menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.student-analyst-root button,
+.student-analyst-root input,
+.student-analyst-root optgroup,
+.student-analyst-root select,
+.student-analyst-root textarea {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  background-image: none;
+}
+
+.student-analyst-root button,
+.student-analyst-root [role='button'] {
+  cursor: pointer;
+}
+
+.student-analyst-root table {
+  border-collapse: collapse;
+  text-indent: 0;
+}
+
+.student-analyst-root img,
+.student-analyst-root svg {
+  display: block;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+.student-analyst-root a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Khmer strings (school names, survey labels) get extra line-height for
+   readability. Font-family is inherited from .student-analyst-root — kept
+   as one shared stack (rather than a Khmer-first one) so a Latin word
+   embedded in a Khmer string (e.g. "CTC", "AI") doesn't switch typeface
+   mid-sentence. */
+.student-analyst-root .km { font-family: inherit; line-height: 1.7; }
+
+.student-analyst-root .card { @apply bg-white border border-line rounded-lg shadow-card; }
+.student-analyst-root .card-pad { @apply p-5; }
+.student-analyst-root .focus-ring { @apply outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-1; }
+
+/* Recharts tooltips inherit the card styling instead of the library default. */
+.student-analyst-root .recharts-default-tooltip {
+  border-radius: 8px !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 0.08) !important;
+  font-size: 13px !important;
+}
