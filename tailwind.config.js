@@ -38,10 +38,7 @@ export default {
       },
       fontSize: {
         'dash-title': ['30px', { lineHeight: '36px', fontWeight: '600' }],
-        // Matches the Teacher Analyst dashboards' page title exactly
-        // (src/App.css .header h1: 2.5rem / weight 700) so both apps read
-        // as one product.
-        'page-title': ['2.5rem', { lineHeight: '1.15', fontWeight: '700' }],
+        'page-title': ['2rem', { lineHeight: '1.2', fontWeight: '700' }],
         'section-title': ['18px', { lineHeight: '24px', fontWeight: '600' }],
         'chart-title': ['15px', { lineHeight: '20px', fontWeight: '600' }],
         kpi: ['30px', { lineHeight: '36px', fontWeight: '600' }],

@@ -406,13 +406,14 @@ const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
   const [lang, setLangState] = useState(() => {
-    if (typeof window === 'undefined') return 'en';
-    // A `?lang=` override lets a link force a language on first load (e.g. sharing a Khmer-language
+    if (typeof window === 'undefined') return 'kh';
+    // A `?lang=` override lets a link force a language on first load (e.g. sharing an English-language
     // view) without waiting on a click; it still persists to localStorage like any other switch.
     const fromQuery = new URLSearchParams(window.location.search).get('lang');
     if (fromQuery === 'kh' || fromQuery === 'en') return fromQuery;
+    // Khmer by default; a returning visitor's explicit switch to English is remembered.
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    return stored === 'kh' ? 'kh' : 'en';
+    return stored === 'en' ? 'en' : 'kh';
   });
 
   useEffect(() => {

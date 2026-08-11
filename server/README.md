@@ -1,58 +1,62 @@
-# ម.ប.ស. Student Survey Analytics Dashboard
+# ម.ប.ស. Student Survey Analytics — data provenance
 
-A six-page decision-support dashboard over 3,729 student survey responses from
-17 high schools, answering: what impact is ម.ប.ស. having, how are digital
-skills developing, how good is the learning experience, what risks exist, and
-what should be improved.
+This folder is a **read-only historical record** of where the Student
+Analyst dashboard's numbers came from. It is not runnable code — the
+NestJS API and PostgreSQL database that originally computed these figures
+have been removed from this repo (see "Why there's no backend here" below).
 
 ```
 Structured.csv ─┐
                 ├─→ ETL (validate → clean → load) ─→ PostgreSQL ─→ NestJS API ─→ React dashboard
-Unstructuerd.csv┘
+Unstructuerd.csv┘        (removed)                     (removed)     (removed)
 ```
 
-The raw CSVs are read-only inputs. The frontend never reads them; it only
-calls the API, which computes every figure in SQL at request time.
+## Where the dashboard actually lives now
 
-## Requirements
+The live app is fully static — no backend, no database, nothing to run or
+host beyond the website itself:
 
-PostgreSQL 14+, Node.js 20+.
+- **`src/student/data/`** (repo root) — a one-time JSON export of the
+  cleaned PostgreSQL data this folder's pipeline used to produce:
+  `students.json`, `themes.json` (already filtered to meaningful, non-blank
+  themes), `indicators.json` (the indicator catalog).
+- **`src/student/localData/`** (repo root) — `engine.js` and `pages.js`,
+  a line-for-line JavaScript re-implementation of every formula that used to
+  run as SQL, operating on that static export instead. Filtering, the three
+  indexes, theme rankings — same logic, same numbers, just computed in the
+  browser instead of a server.
 
-## Setup
+Every page, chart, and component reads from that local engine exactly as it
+would read from a live API — nothing about the dashboard's behavior changed
+when the backend was removed.
 
-```bash
-createdb mbs_survey
+## Why there's no backend here
 
-cd backend
-cp .env.example .env          # adjust DATABASE_URL if needed
-npm install
-npm run db:setup              # migrate schema, then validate + clean + load both CSVs
-npm run start:dev             # API on :3000
-```
+This app is hosted on Vercel as a static site, which can't run a persistent
+Node server or a database. Rather than pay for and maintain separate hosting
+just for Student Analyst's data layer, the decision was to compute
+everything once, export it, and ship it as part of the static site.
 
-The dashboard itself isn't a separate app in this folder anymore — it's the
-"Student Analyst" view inside the main app, at `src/student/` in the repo
-root. Run it from there:
+## What's still here, and why
 
-```bash
-cd ..                         # back to the repo root
-npm install
-npm run dev                   # whole app on :5173 (or next free port), /api proxied to :3000
-```
+- **`data/raw/`** — `Structured.csv` and `Unstructuerd.csv`, the original,
+  untouched survey exports. Kept so the ultimate source of the numbers is
+  traceable, even though nothing in this repo reads them anymore.
+- **`documentation/`** — `data_dictionary.md`, `metric_dictionary.md`,
+  `theme_filter_rules.md`. These describe the exact formulas
+  `src/student/localData/engine.js` implements (the three index formulas,
+  which themes get excluded as "no content" and why, filter semantics,
+  rounding rules). Still the reference for *why* a number is what it is.
 
-`npm run db:setup` is idempotent — rerun it any time to rebuild the database
-from the raw files. Each run writes its row counts, integrity checks and
-normalisation counts to the `import_runs` table.
+## If the survey data ever changes
 
-## Verifying the import
-
-```sql
-SELECT report FROM import_runs ORDER BY id DESC LIMIT 1;
-```
-
-Expected for this extract: 3,729 structured rows read and kept, 34,878 theme
-rows read and 34,322 kept (556 exact duplicates), 0 orphan respondent IDs, 0
-unmapped answer values, 17 schools.
+The backend + PostgreSQL schema that turned the raw CSVs into
+`src/student/data/*.json` were removed from this repo but are recoverable
+from git history (they were committed before removal). Regenerating the
+export means restoring that tooling, re-running the import against the new
+raw CSVs, and re-running the same export queries — at which point
+`src/student/localData/` keeps working unchanged, since it only depends on
+the JSON shape, not on how it was produced.
 
 ## Pages
 
@@ -71,86 +75,17 @@ benchmark page.
 ## Filters
 
 School, grade, gender and age band are global and apply to every KPI, chart
-and theme query on the page, evaluated in SQL rather than in the browser.
-Values within a filter are OR-ed; filters are AND-ed. **Reset all filters**
-clears everything.
-
-## API
-
-| Endpoint | Returns |
-| --- | --- |
-| `GET /api/headline` | Counts, three indexes, adoption and risk rates |
-| `GET /api/overview` | Page 1 payload including Key Insights |
-| `GET /api/profile` | Page 2 payload |
-| `GET /api/impact` | Page 3 payload |
-| `GET /api/digital-skills` | Page 4 payload |
-| `GET /api/learning-experience` | Page 5 payload |
-| `GET /api/risk` | Page 6 payload |
-| `GET /api/themes?questionType=&limit=` | Ranked meaningful themes |
-| `GET /api/themes/question-types` | Available question types |
-| `GET /api/themes/exclusions` | The theme exclusion registry, with reasons |
-| `GET /api/filters/options` | Filter values with student counts |
-| `GET /api/students` | Paged student rows |
-| `GET /api/students/data-quality` | Import counts and integrity checks |
-
-All analytics endpoints accept the same filter parameters:
-`?schools=&grades=&genders=&ages=` (repeatable or comma-separated).
-
-## Structure
-
-```
-server/
-├── data/raw/                Structured.csv, Unstructuerd.csv (read-only)
-├── database/
-│   ├── migrations/          001 schema, 002 analytics views
-│   └── seeds/               answer options, indicator catalog, theme exclusions
-├── backend/src/
-│   ├── etl/                 validate, normalise, load, integrity report
-│   ├── common/filters.ts    the one shared SQL filter clause
-│   └── modules/             analytics, themes, students, filters
-└── documentation/
-    ├── data_dictionary.md
-    ├── metric_dictionary.md
-    └── theme_filter_rules.md
-```
-
-The frontend that used to live here now lives in the main app instead, at
-`src/student/` in the repo root:
-
-```
-src/student/
-├── charts/                  ranked bars, stacked bars, donut, grouped bars, heatmap
-├── components/              layout, KPI card, chart card, filters, table
-└── pages/                   the six pages
-```
-
-Analytical logic lives in SQL and the analytics service. Components receive
-computed values and render them; they never recalculate or re-sort.
+and theme query on the page. Values within a filter are OR-ed; filters are
+AND-ed. **Reset all filters** clears everything.
 
 ## Two things worth knowing before reading the numbers
 
 **Theme filtering.** 16,460 of 34,322 classified theme rows are no-content
-placeholders (`Unclassified`, `No Suggestion`, and similar). They are excluded
-in the database view every theme query reads, so they cannot reach a chart.
-The registry is a table, not code — see `documentation/theme_filter_rules.md`.
+placeholders (`Unclassified`, `No Suggestion`, and similar). They're excluded
+from `src/student/data/themes.json` at export time, so they can never reach
+a chart. The exclusion list is in `documentation/theme_filter_rules.md`.
 
 **Index interpretation.** The three indexes score 0–100 with "no change"
-scored 50, so values cluster high. The signal is in the ranking of indicators,
-dimensions and schools, not the absolute level. Full formulas, weighting and
-missing-value handling are in `documentation/metric_dictionary.md`.
-
-## Production build
-
-```bash
-cd backend && npm run build && npm run start:prod
-```
-
-The frontend builds as part of the main app now — from the repo root:
-
-```bash
-npm run build      # static output in dist/, Student Analyst included
-```
-
-Set `CORS_ORIGIN` on the API and `VITE_STUDENT_API_URL` on the frontend when
-the two are served from different origins (locally, the dev proxy in the
-main app's `vite.config.js` avoids needing either).
+scored 50, so values cluster high. The signal is in the ranking of
+indicators, dimensions and schools, not the absolute level. Full formulas,
+weighting and missing-value handling are in `documentation/metric_dictionary.md`.

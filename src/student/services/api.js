@@ -1,23 +1,29 @@
-const BASE = import.meta.env.VITE_STUDENT_API_URL ?? '';
+import {
+  getOverview, getProfile, getImpact, getDigitalSkills, getExperience, getRisk, getFilterOptions,
+} from '../localData/pages';
 
-export function toQuery(filters) {
-  const params = new URLSearchParams();
-  const add = (key, values) => {
-    for (const value of values) params.append(key, value);
-  };
-  add('schools', filters.schools);
-  add('grades', filters.grades);
-  add('genders', filters.genders);
-  add('ages', filters.ages);
-  const query = params.toString();
-  return query ? `?${query}` : '';
-}
+/**
+ * Student Analyst runs fully static — see server/README.md for why (this app
+ * is deployed to Vercel as a static site with no live backend reachable).
+ * `src/student/localData/` re-implements every endpoint's exact SQL logic in
+ * JavaScript over a one-time export of the same PostgreSQL tables
+ * (src/student/data/*.json). Every page/component still calls `apiGet(path,
+ * filters)` exactly as it would call a live API — only this file changed.
+ */
+const ROUTES = {
+  '/api/overview': getOverview,
+  '/api/profile': getProfile,
+  '/api/impact': getImpact,
+  '/api/digital-skills': getDigitalSkills,
+  '/api/learning-experience': getExperience,
+  '/api/risk': getRisk,
+  '/api/filters/options': getFilterOptions,
+};
 
-export async function apiGet(path, filters, signal) {
-  const query = filters ? toQuery(filters) : '';
-  const response = await fetch(`${BASE}${path}${query}`, { signal });
-  if (!response.ok) {
-    throw new Error(`Request to ${path} failed (${response.status})`);
+export async function apiGet(path, filters) {
+  const handler = ROUTES[path];
+  if (!handler) {
+    throw new Error(`No local data handler registered for ${path}`);
   }
-  return await response.json();
+  return handler(filters);
 }

@@ -20,11 +20,11 @@ const PAGES = {
 };
 
 /**
- * Root of the ported ម.ប.ស. Student Survey Analytics Dashboard, backed by
- * the NestJS API in server/backend. Six pages, one shared filter state —
- * the same shape as the original standalone app, minus react-router (this
- * app already owns top-level navigation via tab state, so pages switch the
- * same way).
+ * Root of the ported ម.ប.ស. Student Survey Analytics Dashboard, running
+ * fully static over src/student/data/ (see server/README.md for why). Six
+ * pages, one shared filter state — the same shape as the original
+ * standalone app, minus react-router (this app already owns top-level
+ * navigation via tab state, so pages switch the same way).
  */
 export default function StudentAnalyticsApp({ onHome }) {
   const [page, setPage] = useState('overview');
