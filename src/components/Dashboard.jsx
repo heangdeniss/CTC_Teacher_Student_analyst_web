@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, RadialBarChart, RadialBar, Treemap, FunnelChart, Funnel } from 'recharts';
 import { Filter, Users, School, BookOpen, Sparkles, Activity, Target, MessageSquare, Building, User, Calendar, MonitorSmartphone } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
@@ -17,6 +17,38 @@ const COLORS = {
   rose: '#e11d48',
   indigo: '#4f46e5',
   emerald: '#10b981'
+};
+
+const PIE_COLORS = ['#f43f5e', '#ec4899', '#d946ef', '#a855f7', '#8b5cf6', '#6366f1', '#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#22c55e', '#84cc16', '#eab308', '#f59e0b', '#f97316'];
+
+const LollipopBar = (props) => {
+  const { fill, x, y, width, height } = props;
+  const radius = 6;
+  return (
+    <g>
+      <rect x={x} y={y + height / 2 - 2} width={width} height={4} fill={fill} rx={2} />
+      <circle cx={x + width} cy={y + height / 2} r={radius} fill={fill} />
+    </g>
+  );
+};
+
+const CustomizedTreemapContent = (props) => {
+  const { x, y, width, height, index, name, value } = props;
+  return (
+    <g>
+      <rect x={x} y={y} width={width} height={height} style={{ fill: PIE_COLORS[index % PIE_COLORS.length], stroke: '#fff', strokeWidth: 2 }} />
+      {width > 60 && height > 30 && (
+        <text x={x + width / 2} y={y + height / 2 - 2} textAnchor="middle" fill="#fff" fontSize={13} fontWeight={600}>
+          {name.length > 20 ? name.substring(0, 20) + '...' : name}
+        </text>
+      )}
+      {width > 60 && height > 50 && (
+        <text x={x + width / 2} y={y + height / 2 + 15} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize={11}>
+          {value}
+        </text>
+      )}
+    </g>
+  );
 };
 
 export default function Dashboard({ language = 'km' }) {
@@ -419,15 +451,51 @@ export default function Dashboard({ language = 'km' }) {
                 </div>
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={instData} layout="vertical" margin={{ top: 0, right: 80, left: 60, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
-                      <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
-                      <YAxis type="category" dataKey="name" width={140} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                      <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={val => `${val} `} />
-                      <Bar maxBarSize={45} dataKey="value" fill={COLORS.teal} radius={[0, 4, 4, 0]}>
-                        <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
-                      </Bar>
-                    </BarChart>
+                    {(() => {
+                      const sortedInstData = [...instData].sort((a, b) => b.value - a.value);
+                      return (
+                        <FunnelChart margin={{ top: 20, right: 180, left: 20, bottom: 20 }}>
+                          <Tooltip formatter={val => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} cursor={{fill: 'transparent'}} />
+                          <Funnel
+                            dataKey="value"
+                            data={sortedInstData}
+                            isAnimationActive
+                          >
+                            <LabelList 
+                              position="right"
+                              dataKey="name"
+                              content={(props) => {
+                                try {
+                                  if (!props) return null;
+                                  const { x, y, width, height, payload, value } = props;
+                                  
+                                  const currentX = (typeof x === 'number' && !isNaN(x)) ? x : 0;
+                                  const currentY = (typeof y === 'number' && !isNaN(y)) ? y : 0;
+                                  const currentWidth = (typeof width === 'number' && !isNaN(width)) ? width : 0;
+                                  const currentHeight = (typeof height === 'number' && !isNaN(height)) ? height : 0;
+
+                                  const actualName = (payload && payload.name) ? String(payload.name) : (typeof value === 'string' ? value : '');
+                                  const actualValue = (payload && typeof payload.value === 'number') ? payload.value : 0;
+                                  const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
+                                  
+                                  return (
+                                    <text x={currentX + currentWidth + 15} y={currentY + currentHeight / 2 + 4} fill="var(--text-main)" fontSize={11} textAnchor="start">
+                                      {actualName} {actualValue > 0 ? `(${pct}%)` : ''}
+                                    </text>
+                                  );
+                                } catch (e) {
+                                  return null;
+                                }
+                              }}
+                            />
+                            <LabelList position="center" fill="#fff" stroke="none" dataKey="value" fontSize={13} fontWeight="bold" />
+                            {sortedInstData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                            ))}
+                          </Funnel>
+                        </FunnelChart>
+                      );
+                    })()}
                   </ResponsiveContainer>
                 </div>
               </div>
@@ -438,17 +506,34 @@ export default function Dashboard({ language = 'km' }) {
                   <p className="chart-desc">{t[language].hsDesc}</p>
                 </div>
                 <div className="chart-body">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={schoolData} layout="vertical" margin={{ top: 0, right: 80, left: 10, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
-                      <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
-                      <YAxis type="category" dataKey="name" width={180} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                      <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={val => `${val} `} />
-                      <Bar maxBarSize={45} dataKey="value" fill={COLORS.rose} radius={[0, 4, 4, 0]}>
-                        <LabelList dataKey="value" position="right" formatter={(val) => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} style={{ fill: 'var(--text-muted)', fontSize: 11 }} />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <div style={{ maxHeight: '380px', overflowY: 'auto', paddingRight: '14px', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '10px' }}>
+                    {schoolData.map((item, index) => {
+                      const maxVal = schoolData[0]?.value || 1;
+                      const percentage = ((item.value / totalRespondents) * 100).toFixed(1);
+                      const barWidth = `${(item.value / maxVal) * 100}%`;
+                      return (
+                        <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ color: 'var(--text-main)', fontSize: '13px', fontWeight: 500 }}>
+                              {index + 1}. {item.name}
+                            </span>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600 }}>
+                              {item.value} <span style={{ fontWeight: 400, opacity: 0.7 }}>({percentage}%)</span>
+                            </span>
+                          </div>
+                          <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
+                            <div style={{ 
+                              width: barWidth, 
+                              height: '100%', 
+                              background: `linear-gradient(90deg, ${COLORS.coral}, ${COLORS.rose})`,
+                              borderRadius: '4px',
+                              transition: 'width 1s ease-in-out'
+                            }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 
