@@ -16,7 +16,7 @@ const COLORS = {
   emerald: '#10b981'
 };
 
-export default function ImpactDashboard({ language = 'km' }) {
+export default function ImpactDashboardPart3({ language = 'km' }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,44 +29,40 @@ export default function ImpactDashboard({ language = 'km' }) {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
       filters: 'ជម្រើសចម្រាញ់',
-      school: 'សាលារៀន (School)',
-      gender: 'ភេទ (Gender)',
-      subject: 'មុខវិជ្ជា (Subject)',
-      title: 'ផ្ទាំងគ្រប់គ្រងផលជះ និងការចូលរួម (Impact & Engagement)',
-      subtitle: 'ទិដ្ឋភាពទូទៅនៃផលជះលើសាលារៀន សហគមន៍ សមត្ថភាពគ្រូ និងសិស្ស',
+      school: 'សាលារៀន',
+      gender: 'ភេទ',
+      subject: 'មុខវិជ្ជា',
+      title: 'ការប្រើប្រាស់ធនធាន ម.ប.ស. និងសុវត្ថិភាពឌីជីថល',
+      subtitle: 'ការប្រើប្រាស់ទីតាំង ឧបករណ៍ និងការយល់ដឹងពីសុវត្ថិភាព',
       agree: 'យល់ស្រប (ពិត)',
       neutral: 'មិនប្រែប្រួល',
       disagree: 'មិនយល់ស្រប (មិនពិត)',
       people: 'នាក់',
-      chart1Title: 'សាលារៀន និងសហគមន៍',
-      chart1Desc: 'ការវាយតម្លៃលើការរីកចម្រើន',
-      chart2Title: 'សមត្ថភាពគ្រូ និងសិស្ស',
-      chart2Desc: 'ការវាយតម្លៃលើការអភិវឌ្ឍ',
-      chart3Title: 'ការចូលរួមក្នុងសហគមន៍',
-      chart3Desc: 'សកម្មភាពផ្សព្វផ្សាយ និងចូលរួម',
-      chart4Title: 'ការបន្សាំខ្លួននឹងបច្ចេកវិទ្យា',
-      chart4Desc: 'ការទទួលយកបច្ចេកវិទ្យាថ្មីៗ'
+      chart1Title: 'ការប្រើប្រាស់ទីតាំង និងឧបករណ៍ ម.ប.ស.',
+      chart1Desc: 'ការប្រើប្រាស់បន្ទប់សម្រាប់ប្រជុំ សម្រាក និងការងារ',
+      chart2Title: 'ភាពបត់បែន និងការប្រើប្រាស់ ម.ប.ស. កម្រិតខ្ពស់',
+      chart2Desc: 'ការប្រើប្រាស់បញ្ញាសិប្បនិម្មិត (AI) និងឧបករណ៍ស្រាវជ្រាវ',
+      chart3Title: 'សុវត្ថិភាពឌីជីថល និងស្វ័យសិក្សាជាមួយ ម.ប.ស.',
+      chart3Desc: 'ការការពារខ្លួនពីហានិភ័យ និងការចែករំលែកចំណេះដឹង'
     },
     en: {
-      loading: 'Loading Impact Dashboard...',
+      loading: 'Loading Dashboard...',
       filters: 'Filters',
       school: 'School',
       gender: 'Gender',
       subject: 'Subject',
-      title: 'Impact & Engagement Dashboard',
-      subtitle: 'Overview of impact on schools, community, and capacity',
+      title: 'CTC Resource Usage & Digital Safety',
+      subtitle: 'Usage of facilities, equipment, and security awareness',
       agree: 'Agree (True)',
       neutral: 'Neutral',
       disagree: 'Disagree (False)',
       people: 'people',
-      chart1Title: 'School & Community',
-      chart1Desc: 'Assessment of progress',
-      chart2Title: 'Teacher & Student Capacity',
-      chart2Desc: 'Assessment of development',
-      chart3Title: 'Community Engagement',
-      chart3Desc: 'Outreach and participation activities',
-      chart4Title: 'Technology Adaptation',
-      chart4Desc: 'Adoption of new technologies'
+      chart1Title: 'Utilization of CTC Facilities & Equipment',
+      chart1Desc: 'Usage of rooms for meetings, resting, and work',
+      chart2Title: 'CTC Flexibility & Advanced Usage',
+      chart2Desc: 'Usage of Artificial Intelligence (AI) and research tools',
+      chart3Title: 'Digital Safety & Continuous Learning with CTC',
+      chart3Desc: 'Protecting against risks and sharing knowledge'
     }
   };
 
@@ -76,18 +72,26 @@ export default function ImpactDashboard({ language = 'km' }) {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        setData(results.data);
+        const normalizedData = results.data.map(row => {
+          const newRow = {};
+          for (let key in row) {
+            if (Object.prototype.hasOwnProperty.call(row, key)) {
+              const normalizedKey = key.replace(/\s+/g, ' ').trim();
+              newRow[normalizedKey] = row[key];
+            }
+          }
+          return newRow;
+        });
+        setData(normalizedData);
         setLoading(false);
       }
     });
   }, []);
 
-  // Get unique options for slicers
   const schools = ['All', ...new Set(data.map(d => d['មកពីវិទ្យាល័យ']).filter(Boolean))].sort();
   const genders = ['All', 'ប្រុស', 'ស្រី', 'ផ្សេងៗ'];
   const subjects = ['All', ...new Set(data.map(d => d['Structure មុខវិជ្ជាបង្រៀន៖']).filter(Boolean))].sort();
 
-  // Apply Filters
   const filteredData = useMemo(() => {
     return data.filter(row => {
       const matchSchool = selectedSchool === 'All' || row['មកពីវិទ្យាល័យ'] === selectedSchool;
@@ -106,8 +110,9 @@ export default function ImpactDashboard({ language = 'km' }) {
       let neutralCount = 0;
       let total = 0;
 
+      const normalizedQ = q.replace(/\s+/g, ' ').trim();
       sourceData.forEach(row => {
-        const val = row[q]?.trim();
+        const val = row[normalizedQ]?.trim();
         if (val) {
           total += 1;
           if (val === 'ពិត') trueCount += 1;
@@ -132,32 +137,25 @@ export default function ImpactDashboard({ language = 'km' }) {
   };
 
   const chartData1 = useMemo(() => processData(filteredData, [
-    "ពេលមាន ម.ប.ស. សិស្សានុសិស្សខិតខំរៀនជាងមុន",
-    "ពេលមាន ម.ប.ស. អត្រាសិស្សបោះបង់ការសិក្សាធ្លាក់ចុះជាងមុន",
-    "ពេលមាន ម.ប.ស. បរិស្ថានសាលាមានសភាពល្អប្រសើរជាងមុន (ភាពស្អាត សណ្ដាប់ធ្នាប់)",
-    "ពេលមាន ម.ប.ស. អាណាព្យាបាល និងសហគមន៍ចូលរួមអភិវឌ្ឍសាលាបានច្រើនជាងមុន",
-    "ពេលមាន ម.ប.ស. អាជ្ញាធរមូលដ្ឋានបានផ្តល់ការគាំទ្រដល់វិទ្យាល័យច្រើនជាងមុន"
+    "ម.ប.ស. ជួយផ្តល់ទីតាំងសម្រាកលម្ហែដល់ លោកគ្រូ/អ្នកគ្រូ ប្រសើរជាងមុន",
+    "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់កុំព្យូទ័រ និងឧបករណ៍ឌីជីថលក្នុង ម.ប.ស. សម្រាប់រៀបចំការបង្រៀន និងស្រាវជ្រាវ",
+    "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់ទីតាំងសម្រាប់កិច្ចប្រជុំនានា",
+    "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់ទីតាំងសម្រាប់សម្រាកក្រៅម៉ោងការងារ"
   ], language), [filteredData, language]);
 
   const chartData2 = useMemo(() => processData(filteredData, [
-    "ម.ប.ស. ជួយអភិវឌ្ឍចំណេះដឹងឌីជីថលរបស់សិស្សក្នុងវិទ្យាល័យដូចនៅទីក្រុងដែរ",
-    "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ ប្រឹងប្រែងបង្រៀនច្រើនជាងមុន",
-    "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានសាមគ្គីភាពល្អជាងមុន",
-    "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានកន្លែងស្រាវជ្រាវ រៀបចំមេរៀនបានល្អជាងមុន",
-    "លោកគ្រូ/អ្នកគ្រូ ពេញចិត្តជាមួយការកសាង ម.ប.ស. នៅក្នុងវិទ្យាល័យ"
+    "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់សេវាប្រៃសណីយ៍",
+    "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ ម.ប.ស. នេះបានតាមតម្រូវការ គ្រប់ពេលវេលាដើម្បីរៀបចំ ការបង្រៀនរបស់ខ្លួន",
+    "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ឧបករណ៍ AI បាន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចស្វែងរកព័ត៌មានលើបណ្តាញអ៊ីនធឺណិត បានល្អប្រសើរជាងមុន"
   ], language), [filteredData, language]);
 
   const chartData3 = useMemo(() => processData(filteredData, [
-    "លោកគ្រូ/អ្នកគ្រូ ធ្លាប់បានប្រាប់ពី ម.ប.ស. ប្រជាពលរដ្ឋជុំវិញវិទ្យាល័យ",
-    "លោកគ្រូ/អ្នកគ្រូ បានយល់ដឹងពីយន្តការគ្រប់គ្រង ម.ប.ស.",
-    "លោកគ្រូ/អ្នកគ្រូត្រូវបានលើកទឹកចិត្តឱ្យចូលប្រើប្រាស់ ម.ប.ស.",
-    "លោកគ្រូ/អ្នកគ្រូ បានដឹងពីគោលបំណងនៃការបង្កើត ម.ប.ស. នេះបានច្បាស់លាស់"
-  ], language), [filteredData, language]);
-
-  const chartData4 = useMemo(() => processData(filteredData, [
-    "លោកគ្រូ/អ្នកគ្រូ មានទំនុកចិត្តថាអាចស្វែងរកជំនួយបច្ចេកទេសកុំព្យូទ័របានល្អជាងមុន",
-    "លោកគ្រូ/អ្នកគ្រូ មានភាពងាយស្រួល ក្នុងការបង្រៀនមុខវិជ្ជាផ្ទាល់ខ្លួនដោយប្រើប្រាស់បច្ចេកវិទ្យា ជាជំនួយ",
-    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូមានជំនឿចិត្តថាជំនាញឌីជីថល មានប្រយោជន៍ដល់ការងារប្រចាំថ្ងៃ"
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីហានិភ័យ នៅលើអ៊ីនធឺណិត និងរបៀបការពារខ្លួនច្រើនជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូដឹងអំពីសារៈសំខាន់ និងរបៀបដាក់ពាក្យសម្ងាត់ និងការពារឧបករណ៍ឌីជីថលរបស់ខ្លួន បានល្អជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹង អំពីអំពើឆបោកតាមអនឡាញ",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចរៀនសូត្របន្ថែមដោយខ្លួនឯងតាមរយៈការស្រាវជ្រាវ តាមបណ្តាញអ៊ីនធឺណិតបានល្អប្រសើរជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចយកចណេះដឹងឌីជីថលទៅចែករំលែក ឬជួយសមាជិកគ្រួសារ និងសហគមន៍"
   ], language), [filteredData, language]);
 
   if (loading) {
@@ -168,17 +166,19 @@ export default function ImpactDashboard({ language = 'km' }) {
     );
   }
 
-  const renderChart = (data, title, desc) => (
-    <div className="chart-card" style={{ gridColumn: 'span 1' }}>
+  const renderChart = (data, title, desc) => {
+    const chartHeight = Math.max(data.length * 65 + 60, 250);
+    return (
+    <div className="chart-card" style={{ gridColumn: 'span 1', justifyContent: 'flex-start' }}>
       <div className="chart-header-container">
         <h3 className="chart-title">{title}</h3>
         <p className="chart-desc">{desc}</p>
       </div>
-      <div className="chart-body" style={{ height: 350 }}>
+      <div className="chart-body" style={{ height: chartHeight, flex: 'none' }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
-            <XAxis type="number" domain={[0, 100]} tickFormatter={val => `${val}%`} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <XAxis type="number" domain={[0, 100]} tickFormatter={val => `${Math.round(val)}%`} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
             <YAxis type="category" dataKey="name" width={220} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
             <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={(val, name, props) => {
               let count = 0;
@@ -202,46 +202,41 @@ export default function ImpactDashboard({ language = 'km' }) {
       </div>
     </div>
   );
+  }
 
   return (
-    <div className="dashboard-container">
-      {/* Sidebar Filters */}
-      <aside className="sidebar">
+    <div className="page-container">
+      <div className="top-filter-bar">
         <h2><Filter size={20} />{t[language].filters}</h2>
-
         <div className="filter-group">
           <label>{t[language].school}</label>
           <select value={selectedSchool} onChange={e => setSelectedSchool(e.target.value)}>
-            {schools.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+            {schools.map(s => <option key={s} value={s}>{s === 'All' ? (language === 'en' ? 'All' : 'ទាំងអស់') : translateData(s, language)}</option>)}
           </select>
         </div>
-
         <div className="filter-group">
           <label>{t[language].gender}</label>
           <select value={selectedGender} onChange={e => setSelectedGender(e.target.value)}>
-            {genders.map(g => <option key={g} value={g}>{g === 'All' ? 'All' : translateData(g, language)}</option>)}
+            {genders.map(g => <option key={g} value={g}>{g === 'All' ? (language === 'en' ? 'All' : 'ទាំងអស់') : translateData(g, language)}</option>)}
           </select>
         </div>
-
         <div className="filter-group">
           <label>{t[language].subject}</label>
           <select value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)}>
-            {subjects.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+            {subjects.map(s => <option key={s} value={s}>{s === 'All' ? (language === 'en' ? 'All' : 'ទាំងអស់') : translateData(s, language)}</option>)}
           </select>
         </div>
-      </aside>
+      </div>
 
       <main className="main-content">
         <header className="header">
           <h1>{t[language].title}</h1>
           <p>{t[language].subtitle}</p>
         </header>
-
         <div className="charts-grid">
           {renderChart(chartData1, t[language].chart1Title, t[language].chart1Desc)}
           {renderChart(chartData2, t[language].chart2Title, t[language].chart2Desc)}
           {renderChart(chartData3, t[language].chart3Title, t[language].chart3Desc)}
-          {renderChart(chartData4, t[language].chart4Title, t[language].chart4Desc)}
         </div>
       </main>
     </div>

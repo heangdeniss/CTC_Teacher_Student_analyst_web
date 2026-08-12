@@ -123,7 +123,7 @@ export default function FeedbackDashboard({ language = 'km' }) {
   );
 
   return (
-    <div className="dashboard-container">
+    <div className="page-container">
       <main className="main-content">
         <header className="header">
           <h1>{t[language].title}</h1>

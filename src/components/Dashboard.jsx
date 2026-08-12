@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
-import { Filter, Users, School, BookOpen, Sparkles, Activity, Target, MessageSquare } from 'lucide-react';
+import { Filter, Users, School, BookOpen, Sparkles, Activity, Target, MessageSquare, Building, User, Calendar, MonitorSmartphone } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
 import { useTeacherData } from '../hooks/useTeacherData';
@@ -35,9 +35,9 @@ export default function Dashboard({ language = 'km' }) {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
       filters: 'ជម្រើសចម្រាញ់',
-      school: 'សាលារៀន (School)',
-      gender: 'ភេទ (Gender)',
-      subject: 'មុខវិជ្ជា (Subject)',
+      school: 'សាលារៀន',
+      gender: 'ភេទ',
+      subject: 'មុខវិជ្ជា',
       title: 'ផ្ទាំងគ្រប់គ្រងទិន្នន័យលោកគ្រូ អ្នកគ្រូ ម.ប.ស',
       subtitle: 'ទិដ្ឋភាពទូទៅនៃប្រជាសាស្ត្រ និងការប្រើប្រាស់បច្ចេកវិទ្យារបស់លោកគ្រូ អ្នកគ្រូ',
       tabDemo: 'ព័ត៌មានប្រជាសាស្ត្រ',
@@ -59,13 +59,36 @@ export default function Dashboard({ language = 'km' }) {
       subjTitle: 'មុខវិជ្ជាកំពុងបង្រៀន',
       subjDesc: 'មុខវិជ្ជាចម្បងដែលគ្រូបង្រៀន',
       topSubj: 'មុខវិជ្ជាបង្រៀនច្រើនជាងគេ',
+      kpiTopGender: 'ភេទភាគច្រើន',
+      kpiTopAge: 'ចន្លោះអាយុភាគច្រើន',
+      kpiTopSchool: 'សាលារៀនច្រើនជាងគេ',
+      kpiTopInst: 'ស្ថាប័នគ្រប់គ្រងច្រើនជាងគេ',
+      keyInsightsTitle: 'ចំណុចសំខាន់ៗ (Key Insights)',
+      demoInsight1Title: 'ប្រជាសាស្ត្រ',
+      demoInsight1Desc: 'ភេទ និងអាយុភាគច្រើន',
+      demoInsight2Title: 'សាលារៀន',
+      demoInsight2Desc: 'សាលាដែលមានអ្នកចូលរួមច្រើន',
+      demoInsight3Title: 'មុខវិជ្ជា',
+      demoInsight3Desc: 'មុខវិជ្ជាបង្រៀនច្រើនជាងគេ',
       topAI: 'AI ប្រើប្រាស់ច្រើនជាងគេ',
+      topDevice: 'ឧបករណ៍ប្រើប្រាស់ច្រើនជាងគេ',
+      techInsight1Title: 'ឧបករណ៍ AI',
+      techInsight1Desc: 'ការប្រើប្រាស់ AI ច្រើនជាងគេ',
+      techInsight2Title: 'ឧបករណ៍ឌីជីថល',
+      techInsight2Desc: 'ឧបករណ៍ឌីជីថលប្រើច្រើនជាងគេ',
       aiTitle: 'ការប្រើប្រាស់ AI',
       aiDesc: 'ឧបករណ៍ AI ពេញនិយមដែលគ្រូប្រើញឹកញាប់',
       devTitle: 'ឧបករណ៍ឌីជីថល',
       devDesc: 'ឧបករណ៍បច្ចេកវិទ្យាដែលគ្រូកំពុងប្រើប្រាស់',
       topDesired: 'មុខវិជ្ជាចង់រៀនបំផុត',
       topSupport: 'ចំណុចស្នើឱ្យគាំទ្របំផុត',
+      topImprovement: 'ចំណុចត្រូវកែលម្អធំបំផុត',
+      needsInsight1Title: 'មុខវិជ្ជាចង់រៀន',
+      needsInsight1Desc: 'មុខវិជ្ជាចង់រៀនបន្ថែមច្រើនជាងគេ',
+      needsInsight2Title: 'ការគាំទ្រ',
+      needsInsight2Desc: 'ការគាំទ្រដែលស្នើសុំច្រើនជាងគេ',
+      needsInsight3Title: 'ការកែលម្អ',
+      needsInsight3Desc: 'ចំណុចត្រូវកែលម្អច្រើនជាងគេ',
       desiredTitle: 'មុខវិជ្ជាចង់រៀនបន្ថែម',
       desiredDesc: 'ជំនាញឌីជីថលដែលគ្រូចង់សិក្សាបន្ថែម',
       supportTitle: 'ការគាំទ្រពីមជ្ឈមណ្ឌល',
@@ -100,13 +123,36 @@ export default function Dashboard({ language = 'km' }) {
       subjTitle: 'Teaching Subjects',
       subjDesc: 'Main subjects taught by teachers',
       topSubj: 'Most Taught Subject',
+      kpiTopGender: 'Most Common Gender',
+      kpiTopAge: 'Most Common Age',
+      kpiTopSchool: 'Top School',
+      kpiTopInst: 'Top Institution',
+      keyInsightsTitle: 'Key Insights',
+      demoInsight1Title: 'Demographics',
+      demoInsight1Desc: 'Top gender and age group',
+      demoInsight2Title: 'Schools',
+      demoInsight2Desc: 'School with most participants',
+      demoInsight3Title: 'Subjects',
+      demoInsight3Desc: 'Most taught subject',
       topAI: 'Most Used AI Tool',
+      topDevice: 'Most Used Device',
+      techInsight1Title: 'AI Tools',
+      techInsight1Desc: 'Most popular AI tool',
+      techInsight2Title: 'Digital Devices',
+      techInsight2Desc: 'Most popular digital device',
       aiTitle: 'AI Tool Usage',
       aiDesc: 'Popular AI tools frequently used by teachers',
       devTitle: 'Digital Devices',
       devDesc: 'Technology devices currently used by teachers',
       topDesired: 'Most Desired Subject',
       topSupport: 'Most Requested Support',
+      topImprovement: 'Top Area for Improvement',
+      needsInsight1Title: 'Desired Subjects',
+      needsInsight1Desc: 'Most requested subject to learn',
+      needsInsight2Title: 'Support Needs',
+      needsInsight2Desc: 'Most requested support',
+      needsInsight3Title: 'Improvements',
+      needsInsight3Desc: 'Top area for improvement',
       desiredTitle: 'Desired Subjects',
       desiredDesc: 'Digital skills teachers want to learn more about',
       supportTitle: 'Center Support',
@@ -123,7 +169,17 @@ export default function Dashboard({ language = 'km' }) {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        setData(results.data);
+        const normalizedData = results.data.map(row => {
+          const newRow = {};
+          for (let key in row) {
+            if (Object.prototype.hasOwnProperty.call(row, key)) {
+              const normalizedKey = key.replace(/\s+/g, ' ').trim();
+              newRow[normalizedKey] = row[key];
+            }
+          }
+          return newRow;
+        });
+        setData(normalizedData);
         setLoading(false);
       }
     });
@@ -174,33 +230,51 @@ export default function Dashboard({ language = 'km' }) {
     );
   }
 
+  const getTopObj = (arr) => (arr && arr.length > 0) ? arr.reduce((prev, current) => (prev.value > current.value) ? prev : current) : { name: 'N/A', value: 0 };
+  const topGender = getTopObj(genderData);
+  const topAgeGroup = getTopObj(ageData);
+  const topSchoolName = getTopObj(schoolData);
+  const topInstitution = getTopObj(instData);
+  const topSubjectObj = getTopObj(subjectData);
+  
+  const topAIToolObj = aiToolData[0] || { name: 'N/A', value: 0 };
+  const topAITool2 = aiToolData[1] || { name: 'N/A', value: 0 };
+  const topAITool3 = aiToolData[2] || { name: 'N/A', value: 0 };
+
+  const topDeviceObj = getTopObj(devicesData);
+  
+  const topDesiredObj = getTopObj(desiredSubjectsData);
+  const topSupportObj = getTopObj(supportNeedsData);
+  const topImprovementObj = getTopObj(improvementsData);
+
+  const formatPct = (val) => totalRespondents ? ((val / totalRespondents) * 100).toFixed(1) : 0;
+
+
   return (
-    <div className="dashboard-container">
-      {/* Sidebar Filters */}
-      <aside className="sidebar">
+    <div className="page-container">
+      {/* Top Filters */}
+      <div className="top-filter-bar">
         <h2><Filter size={20} />{t[language].filters}</h2>
 
         <div className="filter-group">
           <label>{t[language].school}</label>
           <select value={selectedSchool} onChange={e => setSelectedSchool(e.target.value)}>
-            {schools.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+            {schools.map(s => <option key={s} value={s}>{s === 'All' ? (language === 'en' ? 'All' : 'ទាំងអស់') : translateData(s, language)}</option>)}
           </select>
         </div>
-
         <div className="filter-group">
           <label>{t[language].gender}</label>
           <select value={selectedGender} onChange={e => setSelectedGender(e.target.value)}>
-            {genders.map(g => <option key={g} value={g}>{g === 'All' ? 'All' : translateData(g, language)}</option>)}
+            {genders.map(g => <option key={g} value={g}>{g === 'All' ? (language === 'en' ? 'All' : 'ទាំងអស់') : translateData(g, language)}</option>)}
           </select>
         </div>
-
         <div className="filter-group">
           <label>{t[language].subject}</label>
           <select value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)}>
-            {subjects.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+            {subjects.map(s => <option key={s} value={s}>{s === 'All' ? (language === 'en' ? 'All' : 'ទាំងអស់') : translateData(s, language)}</option>)}
           </select>
         </div>
-      </aside>
+      </div>
 
       {/* Main Content */}
       <main className="main-content">
@@ -228,16 +302,57 @@ export default function Dashboard({ language = 'km' }) {
         {/* Tab 1: Demographics */}
         {activeTab === 'demographics' && (
           <>
-            <div className="kpi-grid">
-              <div className="kpi-card">
-                <div className="kpi-header"><Users size={18} color="var(--accent-primary)" />{t[language].totalParticipants}</div>
-                <div className="kpi-value">{totalRespondents}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.sky }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Users size={15} color={COLORS.sky} />{t[language].totalParticipants}</div>
+                   <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{totalRespondents}</div>
+                 </div>
               </div>
-              <div className="kpi-card">
-                <div className="kpi-header"><Activity size={18} color="var(--accent-primary)" />{t[language].avgAge}</div>
-                <div className="kpi-value">{avgAge} <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>{t[language].years}</span></div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.indigo }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><User size={15} color={COLORS.indigo} />{t[language].kpiTopGender}</div>
+                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topGender.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topGender.value} {t[language].people} ({formatPct(topGender.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.amber }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Calendar size={15} color={COLORS.amber} />{t[language].kpiTopAge}</div>
+                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topAgeGroup.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topAgeGroup.value} {t[language].people} ({formatPct(topAgeGroup.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.rose }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><School size={15} color={COLORS.rose} />{t[language].kpiTopSchool}</div>
+                   <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topSchoolName.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topSchoolName.value} {t[language].people} ({formatPct(topSchoolName.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.teal }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Building size={15} color={COLORS.teal} />{t[language].kpiTopInst}</div>
+                   <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topInstitution.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topInstitution.value} {t[language].people} ({formatPct(topInstitution.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.emerald }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><BookOpen size={15} color={COLORS.emerald} />{t[language].topSubj}</div>
+                   <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topSubjectObj.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topSubjectObj.value} {t[language].people} ({formatPct(topSubjectObj.value)}%)</div>
+                 </div>
               </div>
             </div>
+
+
 
             <div className="charts-grid">
               <div className="chart-card">
@@ -337,7 +452,7 @@ export default function Dashboard({ language = 'km' }) {
                 </div>
               </div>
 
-              <div className="chart-card">
+              <div className="chart-card" style={{ gridColumn: '1 / -1' }}>
                 <div className="chart-header-container">
                   <h3 className="chart-title">{t[language].subjTitle}</h3>
                   <p className="chart-desc">{t[language].subjDesc}</p>
@@ -361,14 +476,64 @@ export default function Dashboard({ language = 'km' }) {
         {/* Tab 2: Teaching & Technology */}
         {activeTab === 'tech' && (
           <>
-            <div className="kpi-grid">
-              <div className="kpi-card">
-                <div className="kpi-header"><BookOpen size={18} color="var(--accent-primary)" />{t[language].topSubj}</div>
-                <div className="kpi-value" style={{ fontSize: '1.5rem' }}>{topSubject}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.sky }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Users size={15} color={COLORS.sky} />{t[language].totalParticipants}</div>
+                   <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{totalRespondents}</div>
+                 </div>
               </div>
-              <div className="kpi-card">
-                <div className="kpi-header"><Sparkles size={18} color="var(--accent-primary)" />{t[language].topAI}</div>
-                <div className="kpi-value" style={{ fontSize: '1.5rem' }}>{topAITool}</div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.violet }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Sparkles size={15} color={COLORS.violet} />{t[language].topAI} #1</div>
+                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topAIToolObj.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topAIToolObj.value} {t[language].people} ({formatPct(topAIToolObj.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.indigo }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Sparkles size={15} color={COLORS.indigo} />{t[language].topAI} #2</div>
+                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topAITool2.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topAITool2.value} {t[language].people} ({formatPct(topAITool2.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.teal }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Sparkles size={15} color={COLORS.teal} />{t[language].topAI} #3</div>
+                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topAITool3.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topAITool3.value} {t[language].people} ({formatPct(topAITool3.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.sky }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><MonitorSmartphone size={15} color={COLORS.sky} />{t[language].topDevice}</div>
+                   <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topDeviceObj.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topDeviceObj.value} {t[language].people} ({formatPct(topDeviceObj.value)}%)</div>
+                 </div>
+              </div>
+            </div>
+
+            <div className="chart-card" style={{ minHeight: 'auto', marginBottom: '24px', padding: '24px', background: 'var(--card-bg)' }}>
+              <h3 style={{ marginTop: 0, color: 'var(--text-main)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px' }}>
+                <Sparkles size={20} color="var(--amber)" />
+                {t[language].keyInsightsTitle}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                <div style={{ background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                   <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].techInsight1Title}</div>
+                   <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].techInsight1Desc}</div>
+                   <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '18px' }}>{topAIToolObj.name}</div>
+                </div>
+                <div style={{ background: 'rgba(14, 165, 233, 0.05)', border: '1px solid rgba(14, 165, 233, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                   <div style={{ color: COLORS.sky, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].techInsight2Title}</div>
+                   <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].techInsight2Desc}</div>
+                   <div style={{ color: COLORS.sky, fontWeight: 'bold', fontSize: '16px' }}>{topDeviceObj.name}</div>
+                </div>
               </div>
             </div>
 
@@ -400,14 +565,61 @@ export default function Dashboard({ language = 'km' }) {
         {/* Tab 3: Needs & Suggestions */}
         {activeTab === 'needs' && (
           <>
-            <div className="kpi-grid">
-              <div className="kpi-card">
-                <div className="kpi-header"><Target size={18} color="var(--accent-primary)" />{t[language].topDesired}</div>
-                <div className="kpi-value" style={{ fontSize: '1.5rem' }}>{desiredSubjectsData.length > 0 ? desiredSubjectsData[0].name : 'N/A'}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.sky }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Users size={15} color={COLORS.sky} />{t[language].totalParticipants}</div>
+                   <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{totalRespondents}</div>
+                 </div>
               </div>
-              <div className="kpi-card">
-                <div className="kpi-header"><MessageSquare size={18} color="var(--accent-primary)" />{t[language].topSupport}</div>
-                <div className="kpi-value" style={{ fontSize: '1.5rem' }}>{supportNeedsData.length > 0 ? supportNeedsData[0].name : 'N/A'}</div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.emerald }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Target size={15} color={COLORS.emerald} />{t[language].topDesired}</div>
+                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topDesiredObj.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topDesiredObj.value} {t[language].people} ({formatPct(topDesiredObj.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.teal }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><MessageSquare size={15} color={COLORS.teal} />{t[language].topSupport}</div>
+                   <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topSupportObj.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topSupportObj.value} {t[language].people} ({formatPct(topSupportObj.value)}%)</div>
+                 </div>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                 <div style={{ height: '3px', background: COLORS.rose }}></div>
+                 <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Activity size={15} color={COLORS.rose} />{t[language].topImprovement}</div>
+                   <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)' }}>{topImprovementObj.name}</div>
+                   <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topImprovementObj.value} {t[language].people} ({formatPct(topImprovementObj.value)}%)</div>
+                 </div>
+              </div>
+            </div>
+
+            <div className="chart-card" style={{ minHeight: 'auto', marginBottom: '24px', padding: '24px', background: 'var(--card-bg)' }}>
+              <h3 style={{ marginTop: 0, color: 'var(--text-main)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px' }}>
+                <Sparkles size={20} color="var(--amber)" />
+                {t[language].keyInsightsTitle}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                   <div style={{ color: COLORS.emerald, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].needsInsight1Title}</div>
+                   <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].needsInsight1Desc}</div>
+                   <div style={{ color: COLORS.emerald, fontWeight: 'bold', fontSize: '18px' }}>{topDesiredObj.name}</div>
+                </div>
+                <div style={{ background: 'rgba(13, 148, 136, 0.05)', border: '1px solid rgba(13, 148, 136, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                   <div style={{ color: COLORS.teal, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].needsInsight2Title}</div>
+                   <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].needsInsight2Desc}</div>
+                   <div style={{ color: COLORS.teal, fontWeight: 'bold', fontSize: '16px' }}>{topSupportObj.name}</div>
+                </div>
+                <div style={{ background: 'rgba(225, 29, 72, 0.05)', border: '1px solid rgba(225, 29, 72, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                   <div style={{ color: COLORS.rose, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].needsInsight3Title}</div>
+                   <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].needsInsight3Desc}</div>
+                   <div style={{ color: COLORS.rose, fontWeight: 'bold', fontSize: '18px' }}>{topImprovementObj.name}</div>
+                </div>
               </div>
             </div>
 
@@ -432,7 +644,7 @@ export default function Dashboard({ language = 'km' }) {
                 </div>
               </div>
 
-              <div className="chart-card">
+              <div className="chart-card" style={{ gridColumn: '1 / -1' }}>
                 <div className="chart-header-container">
                   <h3 className="chart-title">{t[language].improveTitle}</h3>
                   <p className="chart-desc">{t[language].improveDesc}</p>

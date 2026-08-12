@@ -132,48 +132,57 @@ export const dataTranslations = {
   "មិនពិត": "False",
   "ដូចមុនដដែល": "Unchanged",
   "ដូចមុនដដែល ពុំមានការប្រែប្រួល": "Unchanged, no difference",
-  "ពេលមាន ម.ប.ស. សិស្សានុសិស្សខិតខំរៀនជាងមុន": "With CTC, students study harder than before",
-  "ពេលមាន ម.ប.ស. អត្រាសិស្សបោះបង់ការសិក្សាធ្លាក់ចុះជាងមុន": "With CTC, the dropout rate has decreased",
-  "ពេលមាន ម.ប.ស. បរិស្ថានសាលាមានសភាពល្អប្រសើរជាងមុន (ភាពស្អាត សណ្ដាប់ធ្នាប់)": "With CTC, the school environment is better",
-  "ពេលមាន ម.ប.ស. អាណាព្យាបាល និងសហគមន៍ចូលរួមអភិវឌ្ឍសាលាបានច្រើនជាងមុន": "With CTC, parents and community participate more in school dev",
-  "ពេលមាន ម.ប.ស. អាជ្ញាធរមូលដ្ឋានបានផ្តល់ការគាំទ្រដល់វិទ្យាល័យច្រើនជាងមុន": "With CTC, local authorities provide more support to the high school",
-  "ម.ប.ស. ជួយអភិវឌ្ឍចំណេះដឹងឌីជីថលរបស់សិស្សក្នុងវិទ្យាល័យដូចនៅទីក្រុងដែរ": "CTC helps develop students' digital knowledge like in the city",
-  "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ ប្រឹងប្រែងបង្រៀនច្រើនជាងមុន": "With CTC, teachers put more effort into teaching",
-  "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានសាមគ្គីភាពល្អជាងមុន": "With CTC, teachers have better solidarity",
-  "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានកន្លែងស្រាវជ្រាវ រៀបចំមេរៀនបានល្អជាងមុន": "With CTC, teachers have a better place for research and lesson prep",
-  "លោកគ្រូ/អ្នកគ្រូ ពេញចិត្តជាមួយការកសាង ម.ប.ស. នៅក្នុងវិទ្យាល័យ": "Teachers are satisfied with building CTC in the high school",
-  "លោកគ្រូ/អ្នកគ្រូ ធ្លាប់បានប្រាប់ពី ម.ប.ស. ប្រជាពលរដ្ឋជុំវិញវិទ្យាល័យ": "Teachers have told citizens around the high school about CTC",
-  "លោកគ្រូ/អ្នកគ្រូ បានយល់ដឹងពីយន្តការគ្រប់គ្រង ម.ប.ស.": "Teachers understand the CTC management mechanism",
-  "លោកគ្រូ/អ្នកគ្រូត្រូវបានលើកទឹកចិត្តឱ្យចូលប្រើប្រាស់ ម.ប.ស.": "Teachers are encouraged to use CTC",
-  "លោកគ្រូ/អ្នកគ្រូ បានដឹងពីគោលបំណងនៃការបង្កើត ម.ប.ស. នេះបានច្បាស់លាស់": "Teachers clearly know the purpose of establishing CTC",
-  "លោកគ្រូ/អ្នកគ្រូ មានទំនុកចិត្តថាអាចស្វែងរកជំនួយបច្ចេកទេសកុំព្យូទ័របានល្អជាងមុន": "Teachers are confident they can find better computer tech support",
-  "លោកគ្រូ/អ្នកគ្រូ មានភាពងាយស្រួល ក្នុងការបង្រៀនមុខវិជ្ជាផ្ទាល់ខ្លួនដោយប្រើប្រាស់បច្ចេកវិទ្យា ជាជំនួយ": "Teachers find it easier to teach their subjects using technology",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូមានជំនឿចិត្តថាជំនាញឌីជីថល មានប្រយោជន៍ដល់ការងារប្រចាំថ្ងៃ": "With CTC, teachers believe digital skills are useful for daily work",
-  "លោកគ្រូ/អ្នកគ្រូបានចូលរៀនអភិវឌ្ឍជំនាញឌីជីថលរបស់ខ្លួន នៅ ម.ប.ស.": "Teachers attended digital skills development classes at CTC",
-  "ចាប់តាំងពីមានម.ប.ស. មក លោកគ្រូ/អ្នកគ្រូ មានឱកាសបានប្រើប្រាស់ កុំព្យូទ័រ ច្រើនជាងមុន និងមានប្រសិទ្ធភាពជាងមុន": "With CTC, teachers have more opportunity to use computers effectively",
-  "ចាប់តាំងពីមាន ម.ប.ស. មក លោកគ្រូ/អ្នកគ្រូ មានឱកាសប្រើប្រាស់អ៊ីនធឺណិតបានច្រើនជាងមុន និងមានប្រសិទ្ធភាពជាងមុន": "With CTC, teachers have more opportunity to use the internet effectively",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីកុំព្យូទ័រ អ៊ីនធឺណិត និងអាចប្រើប្រាស់ បានល្អប្រសើរជាងមុន": "With CTC, teachers understand computers/internet and use them better",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចបង្កើតប្រើប្រាស់អ៊ីម៉ែល Google docs បានល្អជាងមុន": "With CTC, teachers can create/use Email and Google Docs better",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចបង្កើតបទបង្ហាញបានល្អជាងមុន": "With CTC, teachers can create better presentations",
-  "ម.ប.ស. ជួយផ្តល់ទីតាំងសម្រាកលម្ហែដល់ លោកគ្រូ/អ្នកគ្រូ ប្រសើរជាងមុន": "CTC provides a better resting area for teachers",
-  "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់កុំព្យូទ័រ និងឧបករណ៍ឌីជីថលក្នុង ម.ប.ស. សម្រាប់រៀបចំការបង្រៀន និងស្រាវជ្រាវ": "Teachers use CTC digital devices for teaching prep and research",
-  "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់ទីតាំងសម្រាប់កិច្ចប្រជុំនានា": "Teachers use the location for meetings",
-  "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់ទីតាំងសម្រាប់សម្រាកក្រៅម៉ោងការងារ": "Teachers use the location for resting outside working hours",
-  "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់សេវាប្រៃសណីយ៍": "Teachers have used postal services",
-  "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ ម.ប.ស. នេះបានតាមតម្រូវការ គ្រប់ពេលវេលាដើម្បីរៀបចំ ការបង្រៀនរបស់ខ្លួន": "Teachers can use CTC on demand, anytime to prepare their teaching",
-  "លោកគ្រូ/អ្នកគ្រូអាចរចនារូបភាព និងមាតិកាឌីជីថលបានល្អជាងមុន": "Teachers can design images and digital content better",
-  "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ឧបករណ៍ AI បាន": "Teachers can use AI tools",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចស្វែងរកព័ត៌មានលើបណ្តាញអ៊ីនធឺណិត បានល្អប្រសើរជាងមុន": "With CTC, teachers can search for information on the internet better",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីហានិភ័យ នៅលើអ៊ីនធឺណិត និងរបៀបការពារខ្លួនច្រើនជាងមុន": "With CTC, teachers understand online risks and how to protect themselves more",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូដឹងអំពីសារៈសំខាន់ និងរបៀបដាក់ពាក្យសម្ងាត់ និងការពារឧបករណ៍ឌីជីថលរបស់ខ្លួន បានល្អជាងមុន": "With CTC, teachers know the importance of passwords and device protection better",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹង អំពីអំពើឆបោកតាមអនឡាញ": "With CTC, teachers understand online scams",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចរៀនសូត្របន្ថែមដោយខ្លួនឯងតាមរយៈការស្រាវជ្រាវ តាមបណ្តាញអ៊ីនធឺណិតបានល្អប្រសើរជាងមុន": "With CTC, teachers can self-learn through internet research better",
-  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចយកចណេះដឹងឌីជីថលទៅចែករំលែក ឬជួយសមាជិកគ្រួសារ និងសហគមន៍": "With CTC, teachers can share digital knowledge or help family and community"
+  "ពេលមាន ម.ប.ស. សិស្សានុសិស្សខិតខំរៀនជាងមុន": { km: "សិស្សខិតខំរៀនជាងមុន", en: "Students study harder" },
+  "ពេលមាន ម.ប.ស. អត្រាសិស្សបោះបង់ការសិក្សាធ្លាក់ចុះជាងមុន": { km: "អត្រាសិស្សបោះបង់ការសិក្សាធ្លាក់ចុះ", en: "Dropout rate decreased" },
+  "ពេលមាន ម.ប.ស. បរិស្ថានសាលាមានសភាពល្អប្រសើរជាងមុន (ភាពស្អាត សណ្ដាប់ធ្នាប់)": { km: "បរិស្ថានសាលាល្អប្រសើរជាងមុន", en: "Better school environment" },
+  "ពេលមាន ម.ប.ស. អាណាព្យាបាល និងសហគមន៍ចូលរួមអភិវឌ្ឍសាលាបានច្រើនជាងមុន": { km: "សហគមន៍ចូលរួមអភិវឌ្ឍសាលា", en: "Community participates more" },
+  "ពេលមាន ម.ប.ស. អាជ្ញាធរមូលដ្ឋានបានផ្តល់ការគាំទ្រដល់វិទ្យាល័យច្រើនជាងមុន": { km: "អាជ្ញាធរមូលដ្ឋានគាំទ្រជាងមុន", en: "Local authorities support more" },
+  "ម.ប.ស. ជួយអភិវឌ្ឍចំណេះដឹងឌីជីថលរបស់សិស្សក្នុងវិទ្យាល័យដូចនៅទីក្រុងដែរ": { km: "អភិវឌ្ឍចំណេះដឹងឌីជីថលសិស្ស", en: "Develop students' digital skills" },
+  "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ ប្រឹងប្រែងបង្រៀនច្រើនជាងមុន": { km: "គ្រូប្រឹងប្រែងបង្រៀនជាងមុន", en: "Teachers teach harder" },
+  "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានសាមគ្គីភាពល្អជាងមុន": { km: "គ្រូមានសាមគ្គីភាពល្អជាងមុន", en: "Better teacher solidarity" },
+  "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានកន្លែងស្រាវជ្រាវ រៀបចំមេរៀនបានល្អជាងមុន": { km: "មានកន្លែងស្រាវជ្រាវ រៀបចំមេរៀនល្អ", en: "Better research/prep place" },
+  "លោកគ្រូ/អ្នកគ្រូ ពេញចិត្តជាមួយការកសាង ម.ប.ស. នៅក្នុងវិទ្យាល័យ": { km: "ពេញចិត្តការកសាង ម.ប.ស.", en: "Satisfied with CTC construction" },
+  "លោកគ្រូ/អ្នកគ្រូ ធ្លាប់បានប្រាប់ពី ម.ប.ស. ប្រជាពលរដ្ឋជុំវិញវិទ្យាល័យ": { km: "បានប្រាប់ប្រជាពលរដ្ឋពី ម.ប.ស.", en: "Told citizens about CTC" },
+  "លោកគ្រូ/អ្នកគ្រូ បានយល់ដឹងពីយន្តការគ្រប់គ្រង ម.ប.ស.": { km: "យល់ដឹងពីយន្តការគ្រប់គ្រង ម.ប.ស.", en: "Understand CTC management" },
+  "លោកគ្រូ/អ្នកគ្រូត្រូវបានលើកទឹកចិត្តឱ្យចូលប្រើប្រាស់ ម.ប.ស.": { km: "ត្រូវបានលើកទឹកចិត្តប្រើ ម.ប.ស.", en: "Encouraged to use CTC" },
+  "លោកគ្រូ/អ្នកគ្រូ បានដឹងពីគោលបំណងនៃការបង្កើត ម.ប.ស. នេះបានច្បាស់លាស់": { km: "ដឹងពីគោលបំណង ម.ប.ស. ច្បាស់លាស់", en: "Know CTC purpose clearly" },
+  "លោកគ្រូ/អ្នកគ្រូ មានទំនុកចិត្តថាអាចស្វែងរកជំនួយបច្ចេកទេសកុំព្យូទ័របានល្អជាងមុន": { km: "ទំនុកចិត្តក្នុងការស្វែងរកជំនួយបច្ចេកទេស", en: "Confident in seeking tech help" },
+  "លោកគ្រូ/អ្នកគ្រូ មានភាពងាយស្រួល ក្នុងការបង្រៀនមុខវិជ្ជាផ្ទាល់ខ្លួនដោយប្រើប្រាស់បច្ចេកវិទ្យា ជាជំនួយ": { km: "ងាយស្រួលបង្រៀនដោយប្រើបច្ចេកវិទ្យា", en: "Easier to teach with tech" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូមានជំនឿចិត្តថាជំនាញឌីជីថល មានប្រយោជន៍ដល់ការងារប្រចាំថ្ងៃ": { km: "ជំនាញឌីជីថលមានប្រយោជន៍ដល់ការងារ", en: "Digital skills useful for work" },
+  "លោកគ្រូ/អ្នកគ្រូបានចូលរៀនអភិវឌ្ឍជំនាញឌីជីថលរបស់ខ្លួន នៅ ម.ប.ស.": { km: "បានចូលរៀនអភិវឌ្ឍជំនាញឌីជីថល", en: "Learned digital skills" },
+  "ចាប់តាំងពីមានម.ប.ស. មក លោកគ្រូ/អ្នកគ្រូ មានឱកាសបានប្រើប្រាស់ កុំព្យូទ័រ ច្រើនជាងមុន និងមានប្រសិទ្ធភាពជាងមុន": { km: "ប្រើប្រាស់កុំព្យូទ័រច្រើន និងប្រសិទ្ធភាពជាង", en: "Use PC more and effectively" },
+  "ចាប់តាំងពីមាន ម.ប.ស. មក លោកគ្រូ/អ្នកគ្រូ មានឱកាសប្រើប្រាស់អ៊ីនធឺណិតបានច្រើនជាងមុន និងមានប្រសិទ្ធភាពជាងមុន": { km: "ប្រើប្រាស់អ៊ីនធឺណិតច្រើន និងប្រសិទ្ធភាពជាង", en: "Use Internet more and effectively" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីកុំព្យូទ័រ អ៊ីនធឺណិត និងអាចប្រើប្រាស់ បានល្អប្រសើរជាងមុន": { km: "យល់ដឹង និងប្រើកុំព្យូទ័រ/អ៊ីនធឺណិតល្អជាង", en: "Understand & use PC/Internet better" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចបង្កើតប្រើប្រាស់អ៊ីម៉ែល Google docs បានល្អជាងមុន": { km: "ប្រើប្រាស់អ៊ីម៉ែលនិង Google docs បានល្អជាង", en: "Use Email/Google Docs better" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចបង្កើតបទបង្ហាញបានល្អជាងមុន": { km: "អាចបង្កើតបទបង្ហាញបានល្អជាងមុន", en: "Can create better presentations" },
+  "ម.ប.ស. ជួយផ្តល់ទីតាំងសម្រាកលម្ហែដល់ លោកគ្រូ/អ្នកគ្រូ ប្រសើរជាងមុន": { km: "មានទីតាំងសម្រាកលម្ហែប្រសើរជាងមុន", en: "Better resting area" },
+  "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់កុំព្យូទ័រ និងឧបករណ៍ឌីជីថលក្នុង ម.ប.ស. សម្រាប់រៀបចំការបង្រៀន និងស្រាវជ្រាវ": { km: "ប្រើឧបករណ៍ឌីជីថលរៀបចំការបង្រៀន/ស្រាវជ្រាវ", en: "Use tech for teaching prep & research" },
+  "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់ទីតាំងសម្រាប់កិច្ចប្រជុំនានា": { km: "បានប្រើប្រាស់ទីតាំងសម្រាប់កិច្ចប្រជុំនានា", en: "Used location for meetings" },
+  "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់ទីតាំងសម្រាប់សម្រាកក្រៅម៉ោងការងារ": { km: "ប្រើប្រាស់ទីតាំងសម្រាប់សម្រាកក្រៅម៉ោងការងារ", en: "Used location for resting outside work" },
+  "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់សេវាប្រៃសណីយ៍": { km: "បានប្រើប្រាស់សេវាប្រៃសណីយ៍", en: "Used postal services" },
+  "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ ម.ប.ស. នេះបានតាមតម្រូវការ គ្រប់ពេលវេលាដើម្បីរៀបចំ ការបង្រៀនរបស់ខ្លួន": { km: "ប្រើ ម.ប.ស តាមតម្រូវការ គ្រប់ពេលវេលា", en: "Use CTC anytime as needed" },
+  "លោកគ្រូ/អ្នកគ្រូអាចរចនារូបភាព និងមាតិកាឌីជីថលបានល្អជាងមុន": { km: "អាចរចនារូបភាព និងមាតិកាឌីជីថលល្អជាង", en: "Design images & digital content better" },
+  "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ឧបករណ៍ AI បាន": { km: "អាចប្រើប្រាស់ឧបករណ៍ AI បាន", en: "Can use AI tools" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចស្វែងរកព័ត៌មានលើបណ្តាញអ៊ីនធឺណិត បានល្អប្រសើរជាងមុន": { km: "ស្វែងរកព័ត៌មានលើអ៊ីនធឺណិតល្អជាង", en: "Search info on internet better" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីហានិភ័យ នៅលើអ៊ីនធឺណិត និងរបៀបការពារខ្លួនច្រើនជាងមុន": { km: "យល់ដឹងហានិភ័យលើអ៊ីនធឺណិតនិងការការពារខ្លួន", en: "Understand internet risk & protection" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូដឹងអំពីសារៈសំខាន់ និងរបៀបដាក់ពាក្យសម្ងាត់ និងការពារឧបករណ៍ឌីជីថលរបស់ខ្លួន បានល្អជាងមុន": { km: "ដឹងរបៀបដាក់ពាក្យសម្ងាត់ និងការពារឧបករណ៍", en: "Know password & device protection" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹង អំពីអំពើឆបោកតាមអនឡាញ": { km: "យល់ដឹងអំពីអំពើឆបោកតាមអនឡាញ", en: "Understand online scams" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចរៀនសូត្របន្ថែមដោយខ្លួនឯងតាមរយៈការស្រាវជ្រាវ តាមបណ្តាញអ៊ីនធឺណិតបានល្អប្រសើរជាងមុន": { km: "រៀនសូត្របន្ថែមដោយខ្លួនឯងតាមអ៊ីនធឺណិត", en: "Self-learn through internet better" },
+  "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចយកចណេះដឹងឌីជីថលទៅចែករំលែក ឬជួយសមាជិកគ្រួសារ និងសហគមន៍": { km: "ចែករំលែកចំណេះដឹងឌីជីថលដល់សហគមន៍", en: "Share digital knowledge with community" }
 };
 
 export function translateData(value, lang) {
-  if (lang !== 'en') return value;
   if (!value) return value;
   const valStr = value.toString().trim();
-  return dataTranslations[valStr] || valStr;
+  const translated = dataTranslations[valStr];
+  
+  if (translated && typeof translated === 'object') {
+    return translated[lang] || valStr;
+  }
+  
+  if (lang === 'en') {
+    return translated || valStr;
+  }
+  
+  return valStr;
 }
