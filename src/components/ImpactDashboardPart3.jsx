@@ -203,7 +203,19 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
       </div>
       <div className="chart-body" style={{ height: chartHeight, flex: 'none' }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
+          {(() => {
+            const renderCustomBarLabel = (props) => {
+              const { x, y, width, height, value } = props;
+              if (typeof width !== 'number' || width < 35 || typeof value !== 'number' || value <= 0) return null;
+              return (
+                <text x={x + width / 2} y={y + height / 2} fill="#fff" fontSize={11} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
+                  {value.toFixed(1)}%
+                </text>
+              );
+            };
+
+            return (
+              <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
             <XAxis type="number" domain={[0, 100]} tickFormatter={val => `${Math.round(val)}%`} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
             <YAxis type="category" dataKey="name" width={220} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
@@ -216,15 +228,17 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
             }} />
             <Legend verticalAlign="top" height={36} iconType="circle" />
             <Bar maxBarSize={45} dataKey="percentTrue" name={t[language].agree} stackId="a" fill={COLORS.teal} radius={[0, 0, 0, 0]}>
-              <LabelList dataKey="percentTrue" position="center" formatter={(val) => val > 0 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
+              <LabelList dataKey="percentTrue" position="center" content={renderCustomBarLabel} />
             </Bar>
             <Bar maxBarSize={45} dataKey="percentNeutral" name={t[language].neutral} stackId="a" fill={COLORS.amber} radius={[0, 0, 0, 0]}>
-              <LabelList dataKey="percentNeutral" position="center" formatter={(val) => val > 0 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
+              <LabelList dataKey="percentNeutral" position="center" content={renderCustomBarLabel} />
             </Bar>
             <Bar maxBarSize={45} dataKey="percentFalse" name={t[language].disagree} stackId="a" fill={COLORS.rose} radius={[0, 4, 4, 0]}>
-              <LabelList dataKey="percentFalse" position="center" formatter={(val) => val > 0 ? `${val.toFixed(1)}%` : ''} style={{ fill: '#fff', fontSize: 11, fontWeight: 'bold' }} />
+              <LabelList dataKey="percentFalse" position="center" content={renderCustomBarLabel} />
             </Bar>
           </BarChart>
+            );
+          })()}
         </ResponsiveContainer>
       </div>
     </div>

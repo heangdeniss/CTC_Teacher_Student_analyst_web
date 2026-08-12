@@ -505,10 +505,24 @@ export default function Dashboard({ language = 'km' }) {
                                   const actualValue = (typeof value === 'number') ? value : 0;
                                   const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
                                   
-                                  const displayText = currentWidth > 70 ? `${actualValue} (${pct}%)` : `${actualValue}`;
+                                  let displayText = '';
+                                  let fSize = 12;
+
+                                  if (currentWidth > 90) {
+                                    displayText = `${actualValue} (${pct}%)`;
+                                    fSize = 12;
+                                  } else if (currentWidth > 70) {
+                                    displayText = `${actualValue} (${pct}%)`;
+                                    fSize = 10;
+                                  } else {
+                                    displayText = `${actualValue}`;
+                                    fSize = 11;
+                                  }
+
+                                  if (!displayText) return null;
 
                                   return (
-                                    <text x={currentX + currentWidth / 2} y={currentY + currentHeight / 2} fill="#fff" fontSize={12} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
+                                    <text x={currentX + currentWidth / 2} y={currentY + currentHeight / 2} fill="#fff" fontSize={fSize} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
                                       {displayText}
                                     </text>
                                   );
@@ -859,10 +873,24 @@ export default function Dashboard({ language = 'km' }) {
                                   const actualValue = (typeof value === 'number') ? value : 0;
                                   const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
                                   
-                                  const displayText = currentWidth > 70 ? `${actualValue} (${pct}%)` : `${actualValue}`;
+                                  let displayText = '';
+                                  let fSize = 12;
+
+                                  if (currentWidth > 90) {
+                                    displayText = `${actualValue} (${pct}%)`;
+                                    fSize = 12;
+                                  } else if (currentWidth > 70) {
+                                    displayText = `${actualValue} (${pct}%)`;
+                                    fSize = 10;
+                                  } else {
+                                    displayText = `${actualValue}`;
+                                    fSize = 11;
+                                  }
+
+                                  if (!displayText) return null;
 
                                   return (
-                                    <text x={currentX + currentWidth / 2} y={currentY + currentHeight / 2} fill="#fff" fontSize={12} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
+                                    <text x={currentX + currentWidth / 2} y={currentY + currentHeight / 2} fill="#fff" fontSize={fSize} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
                                       {displayText}
                                     </text>
                                   );
