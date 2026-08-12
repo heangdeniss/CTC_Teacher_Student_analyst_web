@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend } from 'recharts';
+import { Filter } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
 
@@ -11,15 +12,21 @@ const COLORS = {
 };
 
 export default function AdvancedImpactDashboard({ language = 'km' }) {
-  const [data1, setData1] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Filters State
+  const [selectedSchool, setSelectedSchool] = useState('All');
+  const [selectedGender, setSelectedGender] = useState('All');
+  const [selectedSubject, setSelectedSubject] = useState('All');
 
   const t = {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
+      filters: 'ជម្រើសចម្រាញ់',
+      school: 'សាលារៀន (School)',
+      gender: 'ភេទ (Gender)',
+      subject: 'មុខវិជ្ជា (Subject)',
       title: 'ផ្ទាំងគ្រប់គ្រងការអភិវឌ្ឍជំនាញ & សុវត្ថិភាពឌីជីថល (Skills & Safety)',
       subtitle: 'ទិដ្ឋភាពទូទៅនៃការអភិវឌ្ឍសមត្ថភាព ភាពច្នៃប្រឌិត និងសុវត្ថិភាពឌីជីថល',
       agree: 'យល់ស្រប (ពិត)',
@@ -37,6 +44,10 @@ export default function AdvancedImpactDashboard({ language = 'km' }) {
     },
     en: {
       loading: 'Loading Advanced Impact...',
+      filters: 'Filters',
+      school: 'School',
+      gender: 'Gender',
+      subject: 'Subject',
       title: 'Skills & Digital Safety Dashboard',
       subtitle: 'Overview of capacity development, creativity, and digital safety',
       agree: 'Agree (True)',
@@ -54,66 +65,98 @@ export default function AdvancedImpactDashboard({ language = 'km' }) {
     }
   };
 
-
   useEffect(() => {
-    let loaded = 0;
-    const checkLoaded = () => {
-      loaded += 1;
-      if (loaded === 4) setLoading(false);
-    };
-
-    const loadCSV = async (url, setter) => {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const text = await response.text();
-        Papa.parse(text, {
-          header: true, skipEmptyLines: true,
-          complete: (results) => { setter(results.data); checkLoaded(); },
-          error: (err) => { console.error("Parse Error:", err); checkLoaded(); }
-        });
-      } catch (error) {
-        console.error("Fetch Error for", url, error);
-        checkLoaded();
+    Papa.parse('/Data/CTC_teacher/Demographical CTC Teacher.csv', {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        setData(results.data);
+        setLoading(false);
       }
-    };
-
-    loadCSV('/Data/CTC_teacher/3 Digital Growth.csv', setData1);
-    loadCSV('/Data/CTC_teacher/3 Resource Usage & Facility Utilization.csv', setData2);
-    loadCSV('/Data/CTC_teacher/4 Digital Creativity, AI Adoption & Online Safety.csv', setData3);
-    loadCSV('/Data/CTC_teacher/5 Digital Safety, Autonomy & Community Impact.csv', setData4);
+    });
   }, []);
 
-  const processData = (data, categoryKey, valueKey, lang) => {
-    const counts = {};
-    const totals = {};
-    data.forEach(row => {
-      const catRaw = row[categoryKey];
-      const val = row[valueKey]?.trim();
-      if (!catRaw || !val) return;
-      const cat = translateData(catRaw, lang);
-      if (!counts[cat]) { counts[cat] = { trueCount: 0, falseCount: 0, neutralCount: 0 }; totals[cat] = 0; }
-      totals[cat] += 1;
-      if (val === 'ពិត') counts[cat].trueCount += 1;
-      else if (val === 'មិនពិត') counts[cat].falseCount += 1;
-      else counts[cat].neutralCount += 1;
+  // Get unique options for slicers
+  const schools = ['All', ...new Set(data.map(d => d['មកពីវិទ្យាល័យ']).filter(Boolean))].sort();
+  const genders = ['All', 'ប្រុស', 'ស្រី', 'ផ្សេងៗ'];
+  const subjects = ['All', ...new Set(data.map(d => d['Structure មុខវិជ្ជាបង្រៀន៖']).filter(Boolean))].sort();
+
+  // Apply Filters
+  const filteredData = useMemo(() => {
+    return data.filter(row => {
+      const matchSchool = selectedSchool === 'All' || row['មកពីវិទ្យាល័យ'] === selectedSchool;
+      const g = row['ភេទ']?.trim().replace(/\u200b/g, '');
+      let rowGender = (g === 'ប្រុស' || g === 'ស្រី') ? g : 'ផ្សេងៗ';
+      const matchGender = selectedGender === 'All' || rowGender === selectedGender;
+      const matchSubject = selectedSubject === 'All' || row['Structure មុខវិជ្ជាបង្រៀន៖'] === selectedSubject;
+      return matchSchool && matchGender && matchSubject;
     });
-    return Object.entries(counts).map(([name, c]) => ({
-      name,
-      trueCount: c.trueCount,
-      falseCount: c.falseCount,
-      neutralCount: c.neutralCount,
-      total: totals[name],
-      percentTrue: totals[name] > 0 ? (c.trueCount / totals[name]) * 100 : 0,
-      percentFalse: totals[name] > 0 ? (c.falseCount / totals[name]) * 100 : 0,
-      percentNeutral: totals[name] > 0 ? (c.neutralCount / totals[name]) * 100 : 0
-    })).sort((a, b) => b.percentTrue - a.percentTrue);
+  }, [data, selectedSchool, selectedGender, selectedSubject]);
+
+  const processData = (sourceData, questions, lang) => {
+    const results = questions.map(q => {
+      let trueCount = 0;
+      let falseCount = 0;
+      let neutralCount = 0;
+      let total = 0;
+
+      sourceData.forEach(row => {
+        const val = row[q]?.trim();
+        if (val) {
+          total += 1;
+          if (val === 'ពិត') trueCount += 1;
+          else if (val === 'មិនពិត') falseCount += 1;
+          else neutralCount += 1;
+        }
+      });
+
+      return {
+        name: translateData(q, lang),
+        trueCount,
+        falseCount,
+        neutralCount,
+        total,
+        percentTrue: total > 0 ? (trueCount / total) * 100 : 0,
+        percentFalse: total > 0 ? (falseCount / total) * 100 : 0,
+        percentNeutral: total > 0 ? (neutralCount / total) * 100 : 0
+      };
+    });
+    
+    return results.sort((a, b) => b.percentTrue - a.percentTrue);
   };
 
-  const chartData1 = useMemo(() => processData(data1, 'ការអភិវឌ្ឍសមត្ថភាព និងជំនាញឌីជីថលរបស់គ្រូ', 'Valueការអភិវឌ្ឍសមត្ថភាព និងជំនាញឌីជីថលរបស់គ្រូ', language), [data1, language]);
-  const chartData2 = useMemo(() => processData(data2, 'ការប្រើប្រាស់ធនធាន និងទីតាំងរួមរបស់គ្រូ', 'Valueការប្រើប្រាស់ធនធាន និងទីតាំងរួមរបស់គ្រូ', language), [data2, language]);
-  const chartData3 = useMemo(() => processData(data3, 'ការបង្កើតមាតិកាឌីជីថល បញ្ញាសិប្បនិម្មិត (AI) និងសុវត្ថិភាព', 'Valueការបង្កើតមាតិកាឌីជីថល បញ្ញាសិប្បនិម្មិត (AI) និងសុវត្ថិភាព', language), [data3, language]);
-  const chartData4 = useMemo(() => processData(data4, 'សុវត្ថិភាពឌីជីថល ការស្វ័យសិក្សា និងការរួមចំណែកដល់សហគមន៍', 'Valueសុវត្ថិភាពឌីជីថល ការស្វ័យសិក្សា និងការរួមចំណែកដល់សហគមន៍', language), [data4, language]);
+  const chartData1 = useMemo(() => processData(filteredData, [
+    "លោកគ្រូ/អ្នកគ្រូបានចូលរៀនអភិវឌ្ឍជំនាញឌីជីថលរបស់ខ្លួន នៅ ម.ប.ស.",
+    "ចាប់តាំងពីមានម.ប.ស. មក លោកគ្រូ/អ្នកគ្រូ មានឱកាសបានប្រើប្រាស់ កុំព្យូទ័រ ច្រើនជាងមុន និងមានប្រសិទ្ធភាពជាងមុន",
+    "ចាប់តាំងពីមាន ម.ប.ស. មក លោកគ្រូ/អ្នកគ្រូ មានឱកាសប្រើប្រាស់អ៊ីនធឺណិតបានច្រើនជាងមុន និងមានប្រសិទ្ធភាពជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីកុំព្យូទ័រ អ៊ីនធឺណិត និងអាចប្រើប្រាស់ បានល្អប្រសើរជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចបង្កើតប្រើប្រាស់អ៊ីម៉ែល Google docs បានល្អជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចបង្កើតបទបង្ហាញបានល្អជាងមុន"
+  ], language), [filteredData, language]);
+
+  const chartData2 = useMemo(() => processData(filteredData, [
+    "ម.ប.ស. ជួយផ្តល់ទីតាំងសម្រាកលម្ហែដល់ លោកគ្រូ/អ្នកគ្រូ ប្រសើរជាងមុន",
+    "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់កុំព្យូទ័រ និងឧបករណ៍ឌីជីថលក្នុង ម.ប.ស. សម្រាប់រៀបចំការបង្រៀន និងស្រាវជ្រាវ",
+    "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់ទីតាំងសម្រាប់កិច្ចប្រជុំនានា",
+    "លោកគ្រូ/អ្នកគ្រូបានប្រើប្រាស់ទីតាំងសម្រាប់សម្រាកក្រៅម៉ោងការងារ",
+    "លោកគ្រូ/អ្នកគ្រូ បានប្រើប្រាស់សេវាប្រៃសណីយ៍",
+    "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ ម.ប.ស. នេះបានតាមតម្រូវការ គ្រប់ពេលវេលាដើម្បីរៀបចំ ការបង្រៀនរបស់ខ្លួន"
+  ], language), [filteredData, language]);
+
+  const chartData3 = useMemo(() => processData(filteredData, [
+    "លោកគ្រូ/អ្នកគ្រូអាចរចនារូបភាព និងមាតិកាឌីជីថលបានល្អជាងមុន",
+    "លោកគ្រូ/អ្នកគ្រូអាចប្រើប្រាស់ឧបករណ៍ AI បាន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចស្វែងរកព័ត៌មានលើបណ្តាញអ៊ីនធឺណិត បានល្អប្រសើរជាងមុន"
+  ], language), [filteredData, language]);
+
+  const chartData4 = useMemo(() => processData(filteredData, [
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹងពីហានិភ័យ នៅលើអ៊ីនធឺណិត និងរបៀបការពារខ្លួនច្រើនជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូដឹងអំពីសារៈសំខាន់ និងរបៀបដាក់ពាក្យសម្ងាត់ និងការពារឧបករណ៍ឌីជីថលរបស់ខ្លួន បានល្អជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូយល់ដឹង អំពីអំពើឆបោកតាមអនឡាញ",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចរៀនសូត្របន្ថែមដោយខ្លួនឯងតាមរយៈការស្រាវជ្រាវ តាមបណ្តាញអ៊ីនធឺណិតបានល្អប្រសើរជាងមុន",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូអាចយកចណេះដឹងឌីជីថលទៅចែករំលែក ឬជួយសមាជិកគ្រួសារ និងសហគមន៍"
+  ], language), [filteredData, language]);
 
   if (loading) {
     return (
@@ -160,6 +203,32 @@ export default function AdvancedImpactDashboard({ language = 'km' }) {
 
   return (
     <div className="dashboard-container">
+      {/* Sidebar Filters */}
+      <aside className="sidebar">
+        <h2><Filter size={20} />{t[language].filters}</h2>
+
+        <div className="filter-group">
+          <label>{t[language].school}</label>
+          <select value={selectedSchool} onChange={e => setSelectedSchool(e.target.value)}>
+            {schools.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>{t[language].gender}</label>
+          <select value={selectedGender} onChange={e => setSelectedGender(e.target.value)}>
+            {genders.map(g => <option key={g} value={g}>{g === 'All' ? 'All' : translateData(g, language)}</option>)}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>{t[language].subject}</label>
+          <select value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)}>
+            {subjects.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+          </select>
+        </div>
+      </aside>
+
       <main className="main-content">
         <header className="header">
           <h1>{t[language].title}</h1>

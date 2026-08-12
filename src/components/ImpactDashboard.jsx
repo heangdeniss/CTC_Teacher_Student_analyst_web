@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend } from 'recharts';
+import { Filter } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
 
@@ -16,15 +17,21 @@ const COLORS = {
 };
 
 export default function ImpactDashboard({ language = 'km' }) {
-  const [data1, setData1] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Filters State
+  const [selectedSchool, setSelectedSchool] = useState('All');
+  const [selectedGender, setSelectedGender] = useState('All');
+  const [selectedSubject, setSelectedSubject] = useState('All');
 
   const t = {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
+      filters: 'ជម្រើសចម្រាញ់',
+      school: 'សាលារៀន (School)',
+      gender: 'ភេទ (Gender)',
+      subject: 'មុខវិជ្ជា (Subject)',
       title: 'ផ្ទាំងគ្រប់គ្រងផលជះ និងការចូលរួម (Impact & Engagement)',
       subtitle: 'ទិដ្ឋភាពទូទៅនៃផលជះលើសាលារៀន សហគមន៍ សមត្ថភាពគ្រូ និងសិស្ស',
       agree: 'យល់ស្រប (ពិត)',
@@ -42,6 +49,10 @@ export default function ImpactDashboard({ language = 'km' }) {
     },
     en: {
       loading: 'Loading Impact Dashboard...',
+      filters: 'Filters',
+      school: 'School',
+      gender: 'Gender',
+      subject: 'Subject',
       title: 'Impact & Engagement Dashboard',
       subtitle: 'Overview of impact on schools, community, and capacity',
       agree: 'Agree (True)',
@@ -59,62 +70,95 @@ export default function ImpactDashboard({ language = 'km' }) {
     }
   };
 
-
   useEffect(() => {
-    let loaded = 0;
-    const checkLoaded = () => {
-      loaded += 1;
-      if (loaded === 4) setLoading(false);
-    };
-
-    Papa.parse('/Data/CTC_teacher/1 Impact of CTC on School & Community.csv', {
-      download: true, header: true, skipEmptyLines: true,
-      complete: (results) => { setData1(results.data); checkLoaded(); }
-    });
-    Papa.parse('/Data/CTC_teacher/1 Impact on Teacher Capacity & Student Skills.csv', {
-      download: true, header: true, skipEmptyLines: true,
-      complete: (results) => { setData2(results.data); checkLoaded(); }
-    });
-    Papa.parse('/Data/CTC_teacher/2 Teacher Engagement & Community Outreach.csv', {
-      download: true, header: true, skipEmptyLines: true,
-      complete: (results) => { setData3(results.data); checkLoaded(); }
-    });
-    Papa.parse('/Data/CTC_teacher/2 Teacher Perception & Tech Readiness.csv', {
-      download: true, header: true, skipEmptyLines: true,
-      complete: (results) => { setData4(results.data); checkLoaded(); }
+    Papa.parse('/Data/CTC_teacher/Demographical CTC Teacher.csv', {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        setData(results.data);
+        setLoading(false);
+      }
     });
   }, []);
 
-  const processData = (data, categoryKey, valueKey, lang) => {
-    const counts = {};
-    const totals = {};
-    data.forEach(row => {
-      const catRaw = row[categoryKey];
-      const val = row[valueKey]?.trim();
-      if (!catRaw || !val) return;
-      const cat = translateData(catRaw, lang);
-      if (!counts[cat]) { counts[cat] = { trueCount: 0, falseCount: 0, neutralCount: 0 }; totals[cat] = 0; }
-      totals[cat] += 1;
-      if (val === 'ពិត') counts[cat].trueCount += 1;
-      else if (val === 'មិនពិត') counts[cat].falseCount += 1;
-      else counts[cat].neutralCount += 1;
+  // Get unique options for slicers
+  const schools = ['All', ...new Set(data.map(d => d['មកពីវិទ្យាល័យ']).filter(Boolean))].sort();
+  const genders = ['All', 'ប្រុស', 'ស្រី', 'ផ្សេងៗ'];
+  const subjects = ['All', ...new Set(data.map(d => d['Structure មុខវិជ្ជាបង្រៀន៖']).filter(Boolean))].sort();
+
+  // Apply Filters
+  const filteredData = useMemo(() => {
+    return data.filter(row => {
+      const matchSchool = selectedSchool === 'All' || row['មកពីវិទ្យាល័យ'] === selectedSchool;
+      const g = row['ភេទ']?.trim().replace(/\u200b/g, '');
+      let rowGender = (g === 'ប្រុស' || g === 'ស្រី') ? g : 'ផ្សេងៗ';
+      const matchGender = selectedGender === 'All' || rowGender === selectedGender;
+      const matchSubject = selectedSubject === 'All' || row['Structure មុខវិជ្ជាបង្រៀន៖'] === selectedSubject;
+      return matchSchool && matchGender && matchSubject;
     });
-    return Object.entries(counts).map(([name, c]) => ({
-      name,
-      trueCount: c.trueCount,
-      falseCount: c.falseCount,
-      neutralCount: c.neutralCount,
-      total: totals[name],
-      percentTrue: totals[name] > 0 ? (c.trueCount / totals[name]) * 100 : 0,
-      percentFalse: totals[name] > 0 ? (c.falseCount / totals[name]) * 100 : 0,
-      percentNeutral: totals[name] > 0 ? (c.neutralCount / totals[name]) * 100 : 0
-    })).sort((a, b) => b.percentTrue - a.percentTrue);
+  }, [data, selectedSchool, selectedGender, selectedSubject]);
+
+  const processData = (sourceData, questions, lang) => {
+    const results = questions.map(q => {
+      let trueCount = 0;
+      let falseCount = 0;
+      let neutralCount = 0;
+      let total = 0;
+
+      sourceData.forEach(row => {
+        const val = row[q]?.trim();
+        if (val) {
+          total += 1;
+          if (val === 'ពិត') trueCount += 1;
+          else if (val === 'មិនពិត') falseCount += 1;
+          else neutralCount += 1;
+        }
+      });
+
+      return {
+        name: translateData(q, lang),
+        trueCount,
+        falseCount,
+        neutralCount,
+        total,
+        percentTrue: total > 0 ? (trueCount / total) * 100 : 0,
+        percentFalse: total > 0 ? (falseCount / total) * 100 : 0,
+        percentNeutral: total > 0 ? (neutralCount / total) * 100 : 0
+      };
+    });
+    
+    return results.sort((a, b) => b.percentTrue - a.percentTrue);
   };
 
-  const chartData1 = useMemo(() => processData(data1, 'ផលជះនៃ ម.ប.ស. លើសាលារៀន និងសហគមន៍', 'Value ផលជះនៃ ម.ប.ស. លើសាលារៀន និងសហគមន៍', language), [data1, language]);
-  const chartData2 = useMemo(() => processData(data2, 'ផលជះនៃ ម.ប.ស. លើការអភិវឌ្ឍសមត្ថភាពគ្រូ និងសិស្ស', 'Valueផលជះនៃ ម.ប.ស. លើការអភិវឌ្ឍសមត្ថភាពគ្រូ និងសិស្ស', language), [data2, language]);
-  const chartData3 = useMemo(() => processData(data3, 'ការចូលរួម និងការផ្សព្វផ្សាយទៅកាន់សហគមន៍របស់គ្រូ', 'Valueការចូលរួម និងការផ្សព្វផ្សាយទៅកាន់សហគមន៍របស់គ្រូ', language), [data3, language]);
-  const chartData4 = useMemo(() => processData(data4, 'ទស្សនៈ និងការបន្សាំខ្លួនផ្នែកបច្ចេកទេសរបស់គ្រូ', 'Valueទស្សនៈ និងការបន្សាំខ្លួនផ្នែកបច្ចេកទេសរបស់គ្រូ', language), [data4, language]);
+  const chartData1 = useMemo(() => processData(filteredData, [
+    "ពេលមាន ម.ប.ស. សិស្សានុសិស្សខិតខំរៀនជាងមុន",
+    "ពេលមាន ម.ប.ស. អត្រាសិស្សបោះបង់ការសិក្សាធ្លាក់ចុះជាងមុន",
+    "ពេលមាន ម.ប.ស. បរិស្ថានសាលាមានសភាពល្អប្រសើរជាងមុន (ភាពស្អាត សណ្ដាប់ធ្នាប់)",
+    "ពេលមាន ម.ប.ស. អាណាព្យាបាល និងសហគមន៍ចូលរួមអភិវឌ្ឍសាលាបានច្រើនជាងមុន",
+    "ពេលមាន ម.ប.ស. អាជ្ញាធរមូលដ្ឋានបានផ្តល់ការគាំទ្រដល់វិទ្យាល័យច្រើនជាងមុន"
+  ], language), [filteredData, language]);
+
+  const chartData2 = useMemo(() => processData(filteredData, [
+    "ម.ប.ស. ជួយអភិវឌ្ឍចំណេះដឹងឌីជីថលរបស់សិស្សក្នុងវិទ្យាល័យដូចនៅទីក្រុងដែរ",
+    "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ ប្រឹងប្រែងបង្រៀនច្រើនជាងមុន",
+    "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានសាមគ្គីភាពល្អជាងមុន",
+    "ពេលមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូ មានកន្លែងស្រាវជ្រាវ រៀបចំមេរៀនបានល្អជាងមុន",
+    "លោកគ្រូ/អ្នកគ្រូ ពេញចិត្តជាមួយការកសាង ម.ប.ស. នៅក្នុងវិទ្យាល័យ"
+  ], language), [filteredData, language]);
+
+  const chartData3 = useMemo(() => processData(filteredData, [
+    "លោកគ្រូ/អ្នកគ្រូ ធ្លាប់បានប្រាប់ពី ម.ប.ស. ប្រជាពលរដ្ឋជុំវិញវិទ្យាល័យ",
+    "លោកគ្រូ/អ្នកគ្រូ បានយល់ដឹងពីយន្តការគ្រប់គ្រង ម.ប.ស.",
+    "លោកគ្រូ/អ្នកគ្រូត្រូវបានលើកទឹកចិត្តឱ្យចូលប្រើប្រាស់ ម.ប.ស.",
+    "លោកគ្រូ/អ្នកគ្រូ បានដឹងពីគោលបំណងនៃការបង្កើត ម.ប.ស. នេះបានច្បាស់លាស់"
+  ], language), [filteredData, language]);
+
+  const chartData4 = useMemo(() => processData(filteredData, [
+    "លោកគ្រូ/អ្នកគ្រូ មានទំនុកចិត្តថាអាចស្វែងរកជំនួយបច្ចេកទេសកុំព្យូទ័របានល្អជាងមុន",
+    "លោកគ្រូ/អ្នកគ្រូ មានភាពងាយស្រួល ក្នុងការបង្រៀនមុខវិជ្ជាផ្ទាល់ខ្លួនដោយប្រើប្រាស់បច្ចេកវិទ្យា ជាជំនួយ",
+    "បន្ទាប់ពីមាន ម.ប.ស. លោកគ្រូ/អ្នកគ្រូមានជំនឿចិត្តថាជំនាញឌីជីថល មានប្រយោជន៍ដល់ការងារប្រចាំថ្ងៃ"
+  ], language), [filteredData, language]);
 
   if (loading) {
     return (
@@ -161,6 +205,32 @@ export default function ImpactDashboard({ language = 'km' }) {
 
   return (
     <div className="dashboard-container">
+      {/* Sidebar Filters */}
+      <aside className="sidebar">
+        <h2><Filter size={20} />{t[language].filters}</h2>
+
+        <div className="filter-group">
+          <label>{t[language].school}</label>
+          <select value={selectedSchool} onChange={e => setSelectedSchool(e.target.value)}>
+            {schools.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>{t[language].gender}</label>
+          <select value={selectedGender} onChange={e => setSelectedGender(e.target.value)}>
+            {genders.map(g => <option key={g} value={g}>{g === 'All' ? 'All' : translateData(g, language)}</option>)}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>{t[language].subject}</label>
+          <select value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)}>
+            {subjects.map(s => <option key={s} value={s}>{s === 'All' ? 'All' : translateData(s, language)}</option>)}
+          </select>
+        </div>
+      </aside>
+
       <main className="main-content">
         <header className="header">
           <h1>{t[language].title}</h1>
