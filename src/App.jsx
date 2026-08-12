@@ -86,9 +86,14 @@ function App() {
       {currentView !== 'welcome' && currentView !== 'student' && (
         <div className="app-layout">
           <aside className="app-sidebar">
-            <div className="logo-area">
-              <h1>{language === 'en' ? 'CTC Analytics' : 'ម.ប.ស.'}</h1>
-              <p>{language === 'en' ? 'Teacher Data' : 'ការវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ'}</p>
+            <div className="logo-area" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ backgroundColor: '#fff', borderRadius: '8px', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', boxSizing: 'border-box' }}>
+                <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+              </div>
+              <div>
+                <h1>{language === 'en' ? 'CTC Analytics' : 'ម.ប.ស.'}</h1>
+                <p>{language === 'en' ? 'Teacher Data' : 'ការវិភាគទិន្នន័យលោកគ្រូអ្នកគ្រូ'}</p>
+              </div>
             </div>
             <nav className="nav-menu">
               <button 
