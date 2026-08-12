@@ -93,6 +93,7 @@ export function RankedBarChart({
           type="category"
           dataKey="display"
           width={effectiveLabelWidth}
+          interval={0}
           tickLine={false}
           axisLine={false}
           tick={(props) => {
@@ -181,6 +182,7 @@ export function DotChart({
           type="category"
           dataKey="label"
           width={effectiveLabelWidth}
+          interval={0}
           tickLine={false}
           axisLine={false}
           tick={(props) => {
@@ -265,6 +267,7 @@ export function StackedDistributionChart({ data, labelWidth = 200, labels, heigh
           type="category"
           dataKey="label"
           width={effectiveLabelWidth}
+          interval={0}
           tickLine={false}
           axisLine={false}
           tick={(props) => {
