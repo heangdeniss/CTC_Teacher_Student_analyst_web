@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, RadialBarChart, RadialBar, Treemap, FunnelChart, Funnel } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, LabelList, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, RadialBarChart, RadialBar, Treemap, FunnelChart, Funnel, ScatterChart, Scatter, ZAxis } from 'recharts';
 import { Filter, Users, School, BookOpen, Sparkles, Activity, Target, MessageSquare, Building, User, Calendar, MonitorSmartphone } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
@@ -640,7 +640,59 @@ export default function Dashboard({ language = 'km' }) {
                   <p className="chart-desc">{t[language].devDesc}</p>
                 </div>
                 <div className="chart-body">
-                  <HorizontalBarChart data={devicesData} color={COLORS.sky} yAxisWidth={220} margin={{ top: 0, right: 80, left: 20, bottom: 0 }} totalRespondents={totalRespondents} unit={t[language].people} />
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart
+                      margin={{ top: 20, right: 130, bottom: 20, left: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                      <XAxis type="number" dataKey="value" name="Users" hide />
+                      <YAxis 
+                        type="category" 
+                        dataKey="name" 
+                        name="Device" 
+                        width={200} 
+                        tick={{ fontSize: 11, fill: 'var(--text-main)', fontWeight: 500 }} 
+                        axisLine={false} 
+                        tickLine={false} 
+                      />
+                      <ZAxis type="number" dataKey="value" range={[100, 2500]} name="Users" />
+                      <Tooltip 
+                        cursor={{ strokeDasharray: '3 3' }} 
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const data = payload[0].payload;
+                            const pct = totalRespondents > 0 ? ((data.value / totalRespondents) * 100).toFixed(1) : '0.0';
+                            return (
+                              <div style={{ backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', padding: '10px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                                <p style={{ color: 'var(--text-main)', margin: 0, fontWeight: 600 }}>{data.name}</p>
+                                <p style={{ color: 'var(--text-muted)', margin: 0, marginTop: '4px', fontSize: '13px' }}>
+                                  <span style={{ color: data.fill || COLORS.sky, fontWeight: 'bold' }}>{data.value}</span> {t[language].people} ({pct}%)
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Scatter data={[...devicesData].reverse()}>
+                        <LabelList 
+                          dataKey="value" 
+                          position="right"
+                          formatter={(val) => {
+                            const pct = totalRespondents > 0 ? ((val / totalRespondents) * 100).toFixed(1) : '0.0';
+                            return `${val} (${pct}%)`;
+                          }}
+                          fill="var(--text-main)"
+                          fontSize={12}
+                          fontWeight={600}
+                          offset={10}
+                        />
+                        {[...devicesData].reverse().map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} fillOpacity={0.85} stroke={PIE_COLORS[index % PIE_COLORS.length]} strokeWidth={2} />
+                        ))}
+                      </Scatter>
+                    </ScatterChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
