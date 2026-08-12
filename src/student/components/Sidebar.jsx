@@ -16,12 +16,12 @@ export function Sidebar({ page, onNavigate }) {
   const { t } = useLanguage();
 
   return (
-    <nav aria-label="Dashboard sections" className="flex h-full w-full flex-col bg-navy text-white">
+    <nav aria-label="Dashboard sections" className="flex h-full w-full flex-col border-r border-line bg-white text-ink">
       <div className="flex items-center gap-2.5 px-6 py-6">
         <BarChart3 className="h-5 w-5 text-brand" aria-hidden />
         <div>
           <p className="km text-[15px] font-semibold leading-tight">ម.ប.ស.</p>
-          <p className="text-small text-white/55">{t('sidebarSubtitle')}</p>
+          <p className="text-small text-muted">{t('sidebarSubtitle')}</p>
         </div>
       </div>
 
@@ -35,7 +35,7 @@ export function Sidebar({ page, onNavigate }) {
                 onClick={() => onNavigate(id)}
                 aria-current={isActive ? 'page' : undefined}
                 className={`focus-ring flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-small transition-colors ${
-                  isActive ? 'bg-brand text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  isActive ? 'bg-brand text-white' : 'text-muted hover:bg-canvas hover:text-ink'
                 }`}
               >
                 <Icon className="h-4 w-4 shrink-0" aria-hidden />

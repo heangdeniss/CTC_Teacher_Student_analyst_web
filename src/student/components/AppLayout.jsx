@@ -20,7 +20,7 @@ export function AppLayout({ page, onNavigate, onHome, children }) {
   };
 
   return (
-    <div className={`min-h-screen bg-canvas ${lang === 'kh' ? 'km' : ''}`}>
+    <div className={`min-h-screen bg-canvas ${lang === 'kh' ? 'km' : 'font-en'}`}>
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[260px] lg:block">
         <Sidebar page={page} onNavigate={navigate} />

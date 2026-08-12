@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -118,6 +120,15 @@
    embedded in a Khmer string (e.g. "CTC", "AI") doesn't switch typeface
    mid-sentence. */
 .student-analyst-root .km { font-family: inherit; line-height: 1.7; }
+
+/* English mode: Inter instead of Kantumruy Pro — a dedicated Latin-script
+   UI face reads cleaner for English text than a Khmer/Latin pairing font.
+   Kantumruy Pro/Battambang stay listed after it so any Khmer text still on
+   screen in English mode (e.g. unretranslated school names) still renders
+   correctly via per-character font fallback. */
+.student-analyst-root .font-en {
+  font-family: 'Inter', 'Kantumruy Pro', Battambang, ui-sans-serif, system-ui, sans-serif;
+}
 
 .student-analyst-root .card { @apply bg-white border border-line rounded-lg shadow-card; }
 .student-analyst-root .card-pad { @apply p-5; }
