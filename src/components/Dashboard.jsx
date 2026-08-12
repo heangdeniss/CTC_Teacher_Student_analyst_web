@@ -277,7 +277,8 @@ export default function Dashboard({ language = 'km' }) {
   
   const topDesiredObj = getTopObj(desiredSubjectsData);
   const topSupportObj = getTopObj(supportNeedsData);
-  const topImprovementObj = getTopObj(improvementsData);
+  const validImprovements = improvementsData.filter(item => item.name !== 'គ្មានយោបល់' && item.name !== 'មិនបានបំពេញ');
+  const topImprovementObj = validImprovements.length > 0 ? getTopObj(validImprovements) : getTopObj(improvementsData);
 
   const formatPct = (val) => totalRespondents ? ((val / totalRespondents) * 100).toFixed(1) : 0;
 
@@ -488,7 +489,34 @@ export default function Dashboard({ language = 'km' }) {
                                 }
                               }}
                             />
-                            <LabelList position="center" fill="#fff" stroke="none" dataKey="value" fontSize={13} fontWeight="bold" />
+                            <LabelList 
+                              position="center"
+                              dataKey="value"
+                              content={(props) => {
+                                try {
+                                  if (!props) return null;
+                                  const { x, y, width, height, value } = props;
+                                  
+                                  const currentX = (typeof x === 'number' && !isNaN(x)) ? x : 0;
+                                  const currentY = (typeof y === 'number' && !isNaN(y)) ? y : 0;
+                                  const currentWidth = (typeof width === 'number' && !isNaN(width)) ? width : 0;
+                                  const currentHeight = (typeof height === 'number' && !isNaN(height)) ? height : 0;
+
+                                  const actualValue = (typeof value === 'number') ? value : 0;
+                                  const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
+                                  
+                                  const displayText = currentWidth > 70 ? `${actualValue} (${pct}%)` : `${actualValue}`;
+
+                                  return (
+                                    <text x={currentX + currentWidth / 2} y={currentY + currentHeight / 2} fill="#fff" fontSize={12} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
+                                      {displayText}
+                                    </text>
+                                  );
+                                } catch (e) {
+                                  return null;
+                                }
+                              }}
+                            />
                             {sortedInstData.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                             ))}
@@ -777,7 +805,80 @@ export default function Dashboard({ language = 'km' }) {
                   <p className="chart-desc">{t[language].supportDesc}</p>
                 </div>
                 <div className="chart-body">
-                  <HorizontalBarChart data={supportNeedsData} color={COLORS.teal} yAxisWidth={140} margin={{ top: 0, right: 80, left: 60, bottom: 0 }} totalRespondents={totalRespondents} unit={t[language].people} />
+                  <ResponsiveContainer width="100%" height="100%">
+                    {(() => {
+                      const sortedSupportData = [...supportNeedsData].sort((a, b) => b.value - a.value);
+                      return (
+                        <FunnelChart margin={{ top: 20, right: 180, left: 20, bottom: 20 }}>
+                          <Tooltip formatter={val => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} cursor={{fill: 'transparent'}} />
+                          <Funnel
+                            dataKey="value"
+                            data={sortedSupportData}
+                            isAnimationActive={true}
+                          >
+                            <LabelList 
+                              position="right"
+                              dataKey="name"
+                              content={(props) => {
+                                try {
+                                  if (!props) return null;
+                                  const { x, y, width, height, payload, value } = props;
+                                  
+                                  const currentX = (typeof x === 'number' && !isNaN(x)) ? x : 0;
+                                  const currentY = (typeof y === 'number' && !isNaN(y)) ? y : 0;
+                                  const currentWidth = (typeof width === 'number' && !isNaN(width)) ? width : 0;
+                                  const currentHeight = (typeof height === 'number' && !isNaN(height)) ? height : 0;
+
+                                  const actualName = (payload && payload.name) ? String(payload.name) : (typeof value === 'string' ? value : '');
+                                  const actualValue = (payload && typeof payload.value === 'number') ? payload.value : 0;
+                                  const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
+                                  
+                                  return (
+                                    <text x={currentX + currentWidth + 15} y={currentY + currentHeight / 2 + 4} fill="var(--text-main)" fontSize={11} textAnchor="start">
+                                      {actualName} {actualValue > 0 ? `(${pct}%)` : ''}
+                                    </text>
+                                  );
+                                } catch (e) {
+                                  return null;
+                                }
+                              }}
+                            />
+                            <LabelList 
+                              position="center"
+                              dataKey="value"
+                              content={(props) => {
+                                try {
+                                  if (!props) return null;
+                                  const { x, y, width, height, value } = props;
+                                  
+                                  const currentX = (typeof x === 'number' && !isNaN(x)) ? x : 0;
+                                  const currentY = (typeof y === 'number' && !isNaN(y)) ? y : 0;
+                                  const currentWidth = (typeof width === 'number' && !isNaN(width)) ? width : 0;
+                                  const currentHeight = (typeof height === 'number' && !isNaN(height)) ? height : 0;
+
+                                  const actualValue = (typeof value === 'number') ? value : 0;
+                                  const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
+                                  
+                                  const displayText = currentWidth > 70 ? `${actualValue} (${pct}%)` : `${actualValue}`;
+
+                                  return (
+                                    <text x={currentX + currentWidth / 2} y={currentY + currentHeight / 2} fill="#fff" fontSize={12} fontWeight="bold" textAnchor="middle" dominantBaseline="central">
+                                      {displayText}
+                                    </text>
+                                  );
+                                } catch (e) {
+                                  return null;
+                                }
+                              }}
+                            />
+                            {sortedSupportData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                            ))}
+                          </Funnel>
+                        </FunnelChart>
+                      );
+                    })()}
+                  </ResponsiveContainer>
                 </div>
               </div>
 
@@ -787,7 +888,60 @@ export default function Dashboard({ language = 'km' }) {
                   <p className="chart-desc">{t[language].improveDesc}</p>
                 </div>
                 <div className="chart-body">
-                  <HorizontalBarChart data={improvementsData} color={COLORS.rose} yAxisWidth={200} margin={{ top: 0, right: 80, left: 40, bottom: 0 }} totalRespondents={totalRespondents} unit={t[language].people} />
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart
+                      margin={{ top: 20, right: 130, bottom: 20, left: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                      <XAxis type="number" dataKey="value" name="Users" hide />
+                      <YAxis 
+                        type="category" 
+                        dataKey="name" 
+                        name="Improvement" 
+                        width={200} 
+                        tick={{ fontSize: 11, fill: 'var(--text-main)', fontWeight: 500 }} 
+                        axisLine={false} 
+                        tickLine={false} 
+                      />
+                      <ZAxis type="number" dataKey="value" range={[50, 800]} name="Users" />
+                      <Tooltip 
+                        cursor={{ strokeDasharray: '3 3' }} 
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const data = payload[0].payload;
+                            const pct = totalRespondents > 0 ? ((data.value / totalRespondents) * 100).toFixed(1) : '0.0';
+                            // Since we reverse the data for rendering, we can match the color by finding its original index, or just use the payload's fill if Recharts passes it.
+                            return (
+                              <div style={{ backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', padding: '10px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                                <p style={{ color: 'var(--text-main)', margin: 0, fontWeight: 600 }}>{data.name}</p>
+                                <p style={{ color: 'var(--text-muted)', margin: 0, marginTop: '4px', fontSize: '13px' }}>
+                                  <span style={{ color: data.fill || COLORS.rose, fontWeight: 'bold' }}>{data.value}</span> {t[language].people} ({pct}%)
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Scatter data={[...improvementsData].reverse()}>
+                        <LabelList 
+                          dataKey="value" 
+                          position="right"
+                          formatter={(val) => {
+                            const pct = totalRespondents > 0 ? ((val / totalRespondents) * 100).toFixed(1) : '0.0';
+                            return `${val} (${pct}%)`;
+                          }}
+                          fill="var(--text-main)"
+                          fontSize={12}
+                          fontWeight={600}
+                          offset={10}
+                        />
+                        {[...improvementsData].reverse().map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} fillOpacity={0.85} stroke={PIE_COLORS[index % PIE_COLORS.length]} strokeWidth={2} />
+                        ))}
+                      </Scatter>
+                    </ScatterChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
