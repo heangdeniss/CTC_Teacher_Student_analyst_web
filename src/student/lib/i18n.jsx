@@ -199,7 +199,7 @@ const UI = {
     strongestOutcome: 'លទ្ធផលល្អបំផុត',
     needsAttention: 'ត្រូវការការយកចិត្តទុកដាក់',
     majorRisk: 'ហានិភ័យសំខាន់',
-    topImprovementPriority: 'អាទិភាពកែលម្អចម្បង',
+    topImprovementPriority: 'ចំណុចដែលត្រូវកែលម្អជាចម្បង',
 
     totalStudents: 'សិស្សសរុប',
     schools: 'សាលារៀន',
@@ -239,7 +239,7 @@ const UI = {
     tooltipPersonalDeviceAccess: 'មានឧបករណ៍ផ្ទាល់ខ្លួនយ៉ាងតិចមួយ — កុំព្យូទ័រ ស្មាតហ្វូន ឬថេប្លេត។',
     tooltipStudentsWithoutDevice: 'រាយការណ៍ថាគ្មានឧបករណ៍ផ្ទាល់ខ្លួន — ពឹងផ្អែកលើឧបករណ៍សាលារៀន។',
 
-    topImprovementPriorities: 'អាទិភាពកែលម្អចម្បង',
+    topImprovementPriorities: 'ចំណុចដែលត្រូវកែលម្អ',
     aiAdoption: 'ការប្រើប្រាស់ AI',
     studentsByGrade: 'សិស្សតាមថ្នាក់',
     studentsByGender: 'សិស្សតាមភេទ',
@@ -372,7 +372,7 @@ const DATA_LABELS = {
   'Confidence & Courage': 'ទំនុកចិត្ត និងភាពក្លាហាន',
   'Career Readiness': 'ការត្រៀមខ្លួនសម្រាប់អាជីព',
   'Facility & Environment Satisfaction': 'ការពេញចិត្តលើទីតាំង និងបរិយាកាសសិក្សា',
-  'Discipline & Character': 'វិន័យ និងចរិយាមារយាទ',
+  'Discipline & Order': 'វិន័យ និងសណ្តាប់ធ្នាប់',
   Creativity: 'ភាពច្នៃប្រឌិត',
   'Social Connection': 'ទំនាក់ទំនងសង្គម',
   'Time-Saving': 'សន្សំសំចៃពេលវេលា',

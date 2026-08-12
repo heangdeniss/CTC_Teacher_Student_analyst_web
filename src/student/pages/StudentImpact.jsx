@@ -10,6 +10,25 @@ import { formatIndex, formatNumber, formatPct } from '../lib/format';
 import { IMPACT_KPI_COLORS, SERIES, sequentialColor } from '../lib/colors';
 import { useLanguage } from '../lib/i18n';
 
+/** Folded into "Confidence & Courage": personal-growth mentions counted alongside confidence/courage. */
+const CONFIDENCE_ALIASES = new Set(['Confidence & Courage', 'Personal Growth']);
+
+function standardizePositiveThemes(themes) {
+  const merged = new Map();
+  for (const t of themes) {
+    const label = CONFIDENCE_ALIASES.has(t.theme) ? 'Confidence & Courage' : t.theme;
+    const existing = merged.get(label);
+    merged.set(label, existing ? {
+      theme: label,
+      students: existing.students + t.students,
+      occurrences: existing.occurrences + t.occurrences,
+      studentShare: (existing.studentShare ?? 0) + (t.studentShare ?? 0),
+      respondentShare: (existing.respondentShare ?? 0) + (t.respondentShare ?? 0),
+    } : { ...t, theme: label });
+  }
+  return [...merged.values()].sort((a, b) => b.students - a.students);
+}
+
 export function StudentImpactPage() {
   const { filters } = useFilters();
   const { data, loading, error } = useApi('/api/impact', filters);
@@ -19,7 +38,8 @@ export function StudentImpactPage() {
   if (loading || !data) return <LoadingPage />;
 
   const { headline, kpis } = data;
-  const maxThemeStudents = Math.max(...data.positiveThemes.map((theme) => theme.students), 0);
+  const positiveThemes = standardizePositiveThemes(data.positiveThemes);
+  const maxThemeStudents = Math.max(...positiveThemes.map((theme) => theme.students), 0);
   // Round up to a clean multiple of 100 so the axis never shows floating-point noise (e.g. 1647.9499999999998).
   const themeDomainMax = Math.ceil((maxThemeStudents * 1.15) / 100) * 100;
 
@@ -76,7 +96,7 @@ export function StudentImpactPage() {
 
         <ChartCard title={t('positiveImpactThemes')}>
           <DotChart
-            data={data.positiveThemes.map((theme) => ({
+            data={positiveThemes.map((theme) => ({
               label: td(theme.theme), value: theme.students, meta: `${formatPct(theme.studentShare)} ${t('ofStudents')}`,
             }))}
             colors={SERIES}
