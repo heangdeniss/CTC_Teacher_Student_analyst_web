@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import {
   Bar, BarChart, CartesianGrid, Cell, Label, LabelList, Legend, Pie, PieChart, PolarAngleAxis, PolarGrid,
   PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -13,6 +14,42 @@ const KHMER_LABEL_PAD = 40;
 const AXIS = { fontSize: 12, fill: COLORS.secondary };
 const GRID = { stroke: COLORS.border };
 
+/**
+ * Tracks a wrapper element's rendered width so a chart's label column can
+ * shrink on narrow (phone-width) screens instead of a fixed pixel width
+ * consuming the whole card and leaving no room for the bars/dots themselves.
+ */
+function useElementWidth() {
+  const ref = useRef(null);
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry) setWidth(entry.contentRect.width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return [ref, width];
+}
+
+/**
+ * Shrinks a desired label-column width to fit a narrow container, and caps
+ * how many characters the tick text truncates to at that width — both
+ * unchanged (return the desired width, no extra truncation) once there's
+ * enough room.
+ */
+function responsiveLabelSizing(desiredWidth, containerWidth, lang) {
+  if (!containerWidth) return { width: desiredWidth, maxChars: null };
+  const width = Math.max(70, Math.min(desiredWidth, containerWidth * 0.42));
+  if (width >= desiredWidth) return { width: desiredWidth, maxChars: null };
+  const pxPerChar = lang === 'kh' ? 11 : 7;
+  const maxChars = Math.max(6, Math.floor(width / pxPerChar));
+  return { width, maxChars };
+}
+
 /* ------------------------------------------------------------------ */
 /* Ranked horizontal bars — rankings and comparisons                   */
 /* ------------------------------------------------------------------ */
@@ -24,6 +61,7 @@ export function RankedBarChart({
   fadeByRank = false,
 }) {
   const { lang, t } = useLanguage();
+  const [wrapRef, containerWidth] = useElementWidth();
   const rows = data.filter((d) => d.value !== null);
   if (rows.length === 0) return <EmptyState />;
 
@@ -33,7 +71,9 @@ export function RankedBarChart({
   }));
   const computedHeight = height ?? Math.max(160, chartData.length * 30 + 30);
   const max = domainMax ?? (unit === 'count' ? 'dataMax' : 100);
-  const effectiveLabelWidth = lang === 'kh' ? labelWidth + KHMER_LABEL_PAD : labelWidth;
+  const desiredLabelWidth = lang === 'kh' ? labelWidth + KHMER_LABEL_PAD : labelWidth;
+  const { width: effectiveLabelWidth, maxChars: tickMaxChars } =
+    responsiveLabelSizing(desiredLabelWidth, containerWidth, lang);
 
   const cellFill = (entry, index) => {
     if (banded) return bandColor(entry.value, higherIsBetter);
@@ -45,6 +85,7 @@ export function RankedBarChart({
   };
 
   return (
+    <div ref={wrapRef}>
     <ResponsiveContainer width="100%" height={computedHeight}>
       <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 44, bottom: 4, left: 4 }}>
         <XAxis type="number" domain={[0, max]} hide />
@@ -56,13 +97,14 @@ export function RankedBarChart({
           axisLine={false}
           tick={(props) => {
             const { x, y, payload } = props;
+            const text = tickMaxChars ? truncate(payload.value, tickMaxChars) : payload.value;
             return (
               <text
                 x={x} y={y} dy={4} textAnchor="end"
                 className={isKhmer(payload.value) ? 'km' : ''}
                 style={{ fontSize: 12, fill: COLORS.text }}
               >
-                {payload.value}
+                {text}
               </text>
             );
           }}
@@ -95,6 +137,7 @@ export function RankedBarChart({
         </Bar>
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 }
 
@@ -114,6 +157,7 @@ export function DotChart({
   showValues = false, showStem = true,
 }) {
   const { lang, t } = useLanguage();
+  const [wrapRef, containerWidth] = useElementWidth();
   const rows = data.filter((d) => d.value !== null);
   if (rows.length === 0) return <EmptyState />;
 
@@ -123,9 +167,12 @@ export function DotChart({
   const computedHeight = height ?? Math.max(160, rows.length * 34 + 30);
   const formatValue = valueFormatter ?? ((v) => `${formatIndex(v)} / 100`);
   const effectiveValueLabel = valueLabel ?? t('score');
-  const effectiveLabelWidth = lang === 'kh' ? labelWidth + KHMER_LABEL_PAD : labelWidth;
+  const desiredLabelWidth = lang === 'kh' ? labelWidth + KHMER_LABEL_PAD : labelWidth;
+  const { width: effectiveLabelWidth, maxChars: tickMaxChars } =
+    responsiveLabelSizing(desiredLabelWidth, containerWidth, lang);
 
   return (
+    <div ref={wrapRef}>
     <ResponsiveContainer width="100%" height={computedHeight}>
       <BarChart data={rows} layout="vertical" margin={{ top: 8, right: showValues ? 64 : 44, bottom: 4, left: 4 }}>
         <CartesianGrid horizontal={false} stroke={COLORS.border} />
@@ -138,13 +185,14 @@ export function DotChart({
           axisLine={false}
           tick={(props) => {
             const { x, y, payload } = props;
+            const text = tickMaxChars ? truncate(payload.value, tickMaxChars) : payload.value;
             return (
               <text
                 x={x} y={y} dy={4} textAnchor="end"
                 className={isKhmer(payload.value) ? 'km' : ''}
                 style={{ fontSize: 12, fill: COLORS.text }}
               >
-                {payload.value}
+                {text}
               </text>
             );
           }}
@@ -184,6 +232,7 @@ export function DotChart({
         />
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 }
 
@@ -198,17 +247,36 @@ export function DotChart({
  */
 export function StackedDistributionChart({ data, labelWidth = 200, labels, height }) {
   const { lang, t } = useLanguage();
+  const [wrapRef, containerWidth] = useElementWidth();
   if (data.length === 0) return <EmptyState />;
   const computedHeight = height ?? Math.max(160, data.length * 30 + 44);
   const effectiveLabels = labels ?? { yes: t('improvedAgree'), noChange: t('noChange'), no: t('noDisagree') };
-  const effectiveLabelWidth = lang === 'kh' ? labelWidth + KHMER_LABEL_PAD : labelWidth;
+  const desiredLabelWidth = lang === 'kh' ? labelWidth + KHMER_LABEL_PAD : labelWidth;
+  const { width: effectiveLabelWidth, maxChars: tickMaxChars } =
+    responsiveLabelSizing(desiredLabelWidth, containerWidth, lang);
 
   return (
+    <div ref={wrapRef}>
     <ResponsiveContainer width="100%" height={computedHeight}>
       <BarChart data={data} layout="vertical" stackOffset="expand"
         margin={{ top: 4, right: 12, bottom: 4, left: 4 }}>
         <XAxis type="number" domain={[0, 1]} tickFormatter={(v) => `${Math.round(v * 100)}%`} tick={AXIS} axisLine={GRID} tickLine={false} />
-        <YAxis type="category" dataKey="label" width={effectiveLabelWidth} tick={{ ...AXIS, fill: COLORS.text }} tickLine={false} axisLine={false} />
+        <YAxis
+          type="category"
+          dataKey="label"
+          width={effectiveLabelWidth}
+          tickLine={false}
+          axisLine={false}
+          tick={(props) => {
+            const { x, y, payload } = props;
+            const text = tickMaxChars ? truncate(payload.value, tickMaxChars) : payload.value;
+            return (
+              <text x={x} y={y} dy={4} textAnchor="end" className={isKhmer(payload.value) ? 'km' : ''} style={{ fontSize: 12, fill: COLORS.text }}>
+                {text}
+              </text>
+            );
+          }}
+        />
         <Tooltip formatter={(value, name) => [formatPct(value), name]} />
         <Legend iconType="square" wrapperStyle={{ fontSize: 12, paddingTop: 4 }} />
         <Bar dataKey="yesPct" name={effectiveLabels.yes} stackId="a" fill={COLORS.positive} barSize={16} isAnimationActive={false} />
@@ -216,6 +284,7 @@ export function StackedDistributionChart({ data, labelWidth = 200, labels, heigh
         <Bar dataKey="noPct" name={effectiveLabels.no} stackId="a" fill={COLORS.negative} barSize={16} radius={[0, 3, 3, 0]} isAnimationActive={false} />
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 }
 
