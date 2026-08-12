@@ -28,7 +28,7 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
   const t = {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
-      filters: 'ជម្រើសចម្រាញ់',
+      filters: 'ចម្រុះ',
       school: 'សាលារៀន',
       gender: 'ភេទ',
       subject: 'មុខវិជ្ជា',
@@ -51,11 +51,11 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
       kpi3: 'ការបង្កើតមាតិកា',
       keyInsightsTitle: 'ចំណុចសំខាន់ៗ (Key Insights)',
       keyInsight1Title: 'ការចូលរួមយ៉ាងសកម្ម',
-      keyInsight1Desc: 'ទទួលបានការគាំទ្រ និងការលើកទឹកចិត្ត',
+      keyInsight1Desc: 'ទទួលបានការវាយតម្លៃវិជ្ជមានបំផុត',
       keyInsight2Title: 'ជំនាញឌីជីថល',
-      keyInsight2Desc: 'មានភាពប្រសើរឡើងក្នុងការប្រើប្រាស់',
+      keyInsight2Desc: 'ទទួលបានការវាយតម្លៃវិជ្ជមានបំផុត',
       keyInsight3Title: 'មាតិកាឌីជីថល',
-      keyInsight3Desc: 'អាចរចនា និងបង្កើតឯកសារបានល្អជាងមុន'
+      keyInsight3Desc: 'ទទួលបានការវាយតម្លៃវិជ្ជមានបំផុត'
     },
     en: {
       loading: 'Loading Dashboard...',
@@ -82,11 +82,11 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
       kpi3: 'Content Creation',
       keyInsightsTitle: 'Key Insights',
       keyInsight1Title: 'Active Engagement',
-      keyInsight1Desc: 'Received good tech support',
+      keyInsight1Desc: 'Received the most positive feedback',
       keyInsight2Title: 'Digital Skills',
-      keyInsight2Desc: 'Improved PC/Internet usage',
+      keyInsight2Desc: 'Received the most positive feedback',
       keyInsight3Title: 'Content Creation',
-      keyInsight3Desc: 'Better design and document creation'
+      keyInsight3Desc: 'Received the most positive feedback'
     }
   };
 
@@ -191,21 +191,13 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
 
   const totalRespondents = filteredData.length;
   
-  const calculateAvgTrue = (chartDataArr) => {
-    if (!chartDataArr || chartDataArr.length === 0) return 0;
-    const sum = chartDataArr.reduce((acc, curr) => acc + curr.percentTrue, 0);
-    return Math.round(sum / chartDataArr.length);
-  };
-
-  const kpiTechSupport = calculateAvgTrue(chartData1);
-  const kpiDigitalSkills = calculateAvgTrue(chartData2);
-  const kpiContentCreation = calculateAvgTrue(chartData3);
-
-
-  const renderChart = (data, title, desc) => {
+  const topTechSupport = chartData1[0] || { name: 'N/A', percentTrue: 0, total: 0 };
+  const topDigitalSkills = chartData2[0] || { name: 'N/A', percentTrue: 0, total: 0 };
+  const topContentCreation = chartData3[0] || { name: 'N/A', percentTrue: 0, total: 0 };
+  const renderChart = (data, title, desc, fullWidth = false) => {
     const chartHeight = Math.max(data.length * 65 + 60, 250);
     return (
-    <div className="chart-card" style={{ gridColumn: 'span 1', justifyContent: 'flex-start' }}>
+    <div className="chart-card" style={{ gridColumn: fullWidth ? '1 / -1' : 'span 1', justifyContent: 'flex-start' }}>
       <div className="chart-header-container">
         <h3 className="chart-title">{title}</h3>
         <p className="chart-desc">{desc}</p>
@@ -270,12 +262,12 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
           <p>{t[language].subtitle}</p>
         </header>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
           
           <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
              <div style={{ height: '3px', background: COLORS.sky }}></div>
              <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px' }}>{t[language].totalParticipants}</div>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Users size={15} color={COLORS.sky} />{t[language].totalParticipants}</div>
                <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{totalRespondents}</div>
              </div>
           </div>
@@ -283,24 +275,27 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
           <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
              <div style={{ height: '3px', background: COLORS.teal }}></div>
              <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px' }}>{t[language].kpi1}</div>
-               <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{kpiTechSupport}%</div>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Laptop size={15} color={COLORS.teal} />{t[language].kpi1}</div>
+               <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={topTechSupport.name}>{topTechSupport.name}</div>
+               <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topTechSupport.percentTrue.toFixed(1)}% ({topTechSupport.trueCount} {t[language].people}) {t[language].agree}</div>
              </div>
           </div>
 
           <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
              <div style={{ height: '3px', background: COLORS.violet }}></div>
              <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px' }}>{t[language].kpi2}</div>
-               <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{kpiDigitalSkills}%</div>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Lightbulb size={15} color={COLORS.violet} />{t[language].kpi2}</div>
+               <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={topDigitalSkills.name}>{topDigitalSkills.name}</div>
+               <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topDigitalSkills.percentTrue.toFixed(1)}% ({topDigitalSkills.trueCount} {t[language].people}) {t[language].agree}</div>
              </div>
           </div>
 
           <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
              <div style={{ height: '3px', background: COLORS.amber }}></div>
              <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px' }}>{t[language].kpi3}</div>
-               <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{kpiContentCreation}%</div>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><PenTool size={15} color={COLORS.amber} />{t[language].kpi3}</div>
+               <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={topContentCreation.name}>{topContentCreation.name}</div>
+               <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topContentCreation.percentTrue.toFixed(1)}% ({topContentCreation.trueCount} {t[language].people}) {t[language].agree}</div>
              </div>
           </div>
 
@@ -316,19 +311,19 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
             <div style={{ background: 'rgba(13, 148, 136, 0.05)', border: '1px solid rgba(13, 148, 136, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
                <div style={{ color: COLORS.teal, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].keyInsight1Title}</div>
                <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].keyInsight1Desc}</div>
-               <div style={{ color: COLORS.teal, fontWeight: 'bold', fontSize: '20px' }}>{kpiTechSupport}%</div>
+               <div style={{ color: COLORS.teal, fontWeight: 'bold', fontSize: '16px' }}>{topTechSupport.name}</div>
             </div>
 
             <div style={{ background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
                <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].keyInsight2Title}</div>
                <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].keyInsight2Desc}</div>
-               <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '20px' }}>{kpiDigitalSkills}%</div>
+               <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '16px' }}>{topDigitalSkills.name}</div>
             </div>
 
             <div style={{ background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
                <div style={{ color: COLORS.amber, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].keyInsight3Title}</div>
                <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].keyInsight3Desc}</div>
-               <div style={{ color: COLORS.amber, fontWeight: 'bold', fontSize: '20px' }}>{kpiContentCreation}%</div>
+               <div style={{ color: COLORS.amber, fontWeight: 'bold', fontSize: '16px' }}>{topContentCreation.name}</div>
             </div>
 
           </div>
@@ -337,7 +332,7 @@ export default function ImpactDashboardPart2({ language = 'km' }) {
         <div className="charts-grid">
           {renderChart(chartData1, t[language].chart1Title, t[language].chart1Desc)}
           {renderChart(chartData2, t[language].chart2Title, t[language].chart2Desc)}
-          {renderChart(chartData3, t[language].chart3Title, t[language].chart3Desc)}
+          {renderChart(chartData3, t[language].chart3Title, t[language].chart3Desc, true)}
         </div>
       </main>
     </div>

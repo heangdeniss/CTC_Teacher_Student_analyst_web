@@ -34,7 +34,7 @@ export default function Dashboard({ language = 'km' }) {
   const t = {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
-      filters: 'ជម្រើសចម្រាញ់',
+      filters: 'ចម្រុះ',
       school: 'សាលារៀន',
       gender: 'ភេទ',
       subject: 'មុខវិជ្ជា',

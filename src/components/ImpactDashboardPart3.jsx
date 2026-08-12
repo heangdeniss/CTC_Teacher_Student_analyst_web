@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend } from 'recharts';
-import { Filter } from 'lucide-react';
+import { Filter, Users, Building, Cpu, ShieldCheck, Sparkles } from 'lucide-react';
 import '../App.css';
 import { translateData } from '../utils/dataTranslations';
 
@@ -28,7 +28,7 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
   const t = {
     km: {
       loading: 'កំពុងផ្ទុកទិន្នន័យ...',
-      filters: 'ជម្រើសចម្រាញ់',
+      filters: 'ចម្រុះ',
       school: 'សាលារៀន',
       gender: 'ភេទ',
       subject: 'មុខវិជ្ជា',
@@ -43,7 +43,18 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
       chart2Title: 'ភាពបត់បែន និងការប្រើប្រាស់ ម.ប.ស. កម្រិតខ្ពស់',
       chart2Desc: 'ការប្រើប្រាស់បញ្ញាសិប្បនិម្មិត (AI) និងឧបករណ៍ស្រាវជ្រាវ',
       chart3Title: 'សុវត្ថិភាពឌីជីថល និងស្វ័យសិក្សាជាមួយ ម.ប.ស.',
-      chart3Desc: 'ការការពារខ្លួនពីហានិភ័យ និងការចែករំលែកចំណេះដឹង'
+      chart3Desc: 'ការការពារខ្លួនពីហានិភ័យ និងការចែករំលែកចំណេះដឹង',
+      keyInsightsTitle: 'ចំណុចសំខាន់ៗ (Key Insights)',
+      kpiTotal: 'អ្នកចូលរួមសរុប',
+      kpi1: 'ធនធាន ម.ប.ស.',
+      kpi2: 'ភាពបត់បែន',
+      kpi3: 'សុវត្ថិភាពឌីជីថល',
+      insight1Title: 'ការប្រើប្រាស់ធនធាន',
+      insight1Desc: 'ទទួលបានការវាយតម្លៃវិជ្ជមានបំផុត',
+      insight2Title: 'ភាពបត់បែន',
+      insight2Desc: 'ទទួលបានការវាយតម្លៃវិជ្ជមានបំផុត',
+      insight3Title: 'សុវត្ថិភាពឌីជីថល',
+      insight3Desc: 'ទទួលបានការវាយតម្លៃវិជ្ជមានបំផុត'
     },
     en: {
       loading: 'Loading Dashboard...',
@@ -62,7 +73,18 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
       chart2Title: 'CTC Flexibility & Advanced Usage',
       chart2Desc: 'Usage of Artificial Intelligence (AI) and research tools',
       chart3Title: 'Digital Safety & Continuous Learning with CTC',
-      chart3Desc: 'Protecting against risks and sharing knowledge'
+      chart3Desc: 'Protecting against risks and sharing knowledge',
+      keyInsightsTitle: 'Key Insights',
+      kpiTotal: 'Total Participants',
+      kpi1: 'CTC Resources',
+      kpi2: 'Flexibility',
+      kpi3: 'Digital Safety',
+      insight1Title: 'Resource Usage',
+      insight1Desc: 'Received the most positive feedback',
+      insight2Title: 'Flexibility',
+      insight2Desc: 'Received the most positive feedback',
+      insight3Title: 'Digital Safety',
+      insight3Desc: 'Received the most positive feedback'
     }
   };
 
@@ -166,10 +188,15 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
     );
   }
 
-  const renderChart = (data, title, desc) => {
+  const totalRespondents = filteredData.length;
+  const topResources = chartData1[0] || { name: 'N/A', percentTrue: 0, total: 0 };
+  const topFlexibility = chartData2[0] || { name: 'N/A', percentTrue: 0, total: 0 };
+  const topSafety = chartData3[0] || { name: 'N/A', percentTrue: 0, total: 0 };
+
+  const renderChart = (data, title, desc, fullWidth = false) => {
     const chartHeight = Math.max(data.length * 65 + 60, 250);
     return (
-    <div className="chart-card" style={{ gridColumn: 'span 1', justifyContent: 'flex-start' }}>
+    <div className="chart-card" style={{ gridColumn: fullWidth ? '1 / -1' : 'span 1', justifyContent: 'flex-start' }}>
       <div className="chart-header-container">
         <h3 className="chart-title">{title}</h3>
         <p className="chart-desc">{desc}</p>
@@ -233,10 +260,69 @@ export default function ImpactDashboardPart3({ language = 'km' }) {
           <h1>{t[language].title}</h1>
           <p>{t[language].subtitle}</p>
         </header>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+          <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+             <div style={{ height: '3px', background: COLORS.sky }}></div>
+             <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Users size={15} color={COLORS.sky} />{t[language].kpiTotal}</div>
+               <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>{totalRespondents}</div>
+             </div>
+          </div>
+          <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+             <div style={{ height: '3px', background: COLORS.violet }}></div>
+             <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Building size={15} color={COLORS.violet} />{t[language].kpi1}</div>
+               <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={topResources.name}>{topResources.name}</div>
+               <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topResources.percentTrue.toFixed(1)}% ({topResources.trueCount} {t[language].people}) {t[language].agree}</div>
+             </div>
+          </div>
+          <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+             <div style={{ height: '3px', background: COLORS.emerald }}></div>
+             <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Cpu size={15} color={COLORS.emerald} />{t[language].kpi2}</div>
+               <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={topFlexibility.name}>{topFlexibility.name}</div>
+               <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topFlexibility.percentTrue.toFixed(1)}% ({topFlexibility.trueCount} {t[language].people}) {t[language].agree}</div>
+             </div>
+          </div>
+          <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+             <div style={{ height: '3px', background: COLORS.amber }}></div>
+             <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><ShieldCheck size={15} color={COLORS.amber} />{t[language].kpi3}</div>
+               <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={topSafety.name}>{topSafety.name}</div>
+               <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>{topSafety.percentTrue.toFixed(1)}% ({topSafety.trueCount} {t[language].people}) {t[language].agree}</div>
+             </div>
+          </div>
+        </div>
+
+        <div className="chart-card" style={{ minHeight: 'auto', marginBottom: '24px', padding: '24px', background: 'var(--card-bg)' }}>
+          <h3 style={{ marginTop: 0, color: 'var(--text-main)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px' }}>
+            <Sparkles size={20} color="var(--amber)" />
+            {t[language].keyInsightsTitle}
+          </h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+            <div style={{ background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+               <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].insight1Title}</div>
+               <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].insight1Desc}</div>
+               <div style={{ color: COLORS.violet, fontWeight: 'bold', fontSize: '16px' }}>{topResources.name}</div>
+            </div>
+            <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+               <div style={{ color: COLORS.emerald, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].insight2Title}</div>
+               <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].insight2Desc}</div>
+               <div style={{ color: COLORS.emerald, fontWeight: 'bold', fontSize: '16px' }}>{topFlexibility.name}</div>
+            </div>
+            <div style={{ background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+               <div style={{ color: COLORS.amber, fontWeight: 'bold', fontSize: '13px', marginBottom: '8px' }}>{t[language].insight3Title}</div>
+               <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{t[language].insight3Desc}</div>
+               <div style={{ color: COLORS.amber, fontWeight: 'bold', fontSize: '16px' }}>{topSafety.name}</div>
+            </div>
+          </div>
+        </div>
+
         <div className="charts-grid">
           {renderChart(chartData1, t[language].chart1Title, t[language].chart1Desc)}
           {renderChart(chartData2, t[language].chart2Title, t[language].chart2Desc)}
-          {renderChart(chartData3, t[language].chart3Title, t[language].chart3Desc)}
+          {renderChart(chartData3, t[language].chart3Title, t[language].chart3Desc, true)}
         </div>
       </main>
     </div>
