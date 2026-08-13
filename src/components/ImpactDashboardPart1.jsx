@@ -16,14 +16,23 @@ const COLORS = {
   emerald: '#10b981'
 };
 
-export default function ImpactDashboardPart1({ language = 'km' }) {
+export default function ImpactDashboardPart1({ 
+  language = 'km',
+  selectedSchool = 'All', setSelectedSchool = () => {},
+  selectedGender = 'All', setSelectedGender = () => {},
+  selectedSubject = 'All', setSelectedSubject = () => {}
+}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Filters State
-  const [selectedSchool, setSelectedSchool] = useState('All');
-  const [selectedGender, setSelectedGender] = useState('All');
-  const [selectedSubject, setSelectedSubject] = useState('All');
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Filters State (now passed as props)
 
   const t = {
     km: {
@@ -213,11 +222,37 @@ export default function ImpactDashboardPart1({ language = 'km' }) {
               );
             };
 
+            const CustomYAxisTick = ({ x, y, payload }) => {
+              const width = isMobile ? 110 : 210;
+              const xOffset = isMobile ? -110 : -210;
+              return (
+                <g transform={`translate(${x},${y})`}>
+                  <foreignObject x={xOffset} y={-25} width={width} height={50}>
+                    <div xmlns="http://www.w3.org/1999/xhtml" style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      fontSize: '11px', 
+                      color: 'var(--text-main)', 
+                      fontWeight: 500, 
+                      lineHeight: '1.2',
+                      textAlign: 'left' 
+                    }}>
+                      <span style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {payload.value}
+                      </span>
+                    </div>
+                  </foreignObject>
+                </g>
+              );
+            };
+
             return (
               <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
             <XAxis type="number" domain={[0, 100]} tickFormatter={val => `${Math.round(val)}%`} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis type="category" dataKey="name" width={220} tick={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 500 }} axisLine={false} tickLine={false} />
+            <YAxis type="category" dataKey="name" width={isMobile ? 120 : 220} tick={<CustomYAxisTick />} axisLine={false} tickLine={false} />
             <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={(val, name, props) => {
               let count = 0;
               if (name === t[language].agree) count = props.payload.trueCount;

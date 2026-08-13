@@ -9,10 +9,15 @@ import FeedbackDisadvantage from './components/FeedbackDisadvantage'
 import StudentAnalyticsApp from './student/StudentAnalyticsApp'
 
 import Welcome from './components/Welcome'
-import { Home, PieChart, Activity, MonitorPlay, ShieldCheck, Sparkles, AlertTriangle } from 'lucide-react'
+import { Home, PieChart, Activity, MonitorPlay, ShieldCheck, Sparkles, AlertTriangle, Menu, X } from 'lucide-react'
 import './App.css'
+import './mobile.css'
 
 function App() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedSchool, setSelectedSchool] = useState('All');
+  const [selectedGender, setSelectedGender] = useState('All');
+  const [selectedSubject, setSelectedSubject] = useState('All');
   const [currentView, setCurrentView] = useState(() => {
     return localStorage.getItem('currentView') || 'welcome';
   });
@@ -56,6 +61,7 @@ function App() {
     if (!mounted[tab]) {
       setMounted(prev => ({ ...prev, [tab]: true }));
     }
+    setIsMobileMenuOpen(false);
   };
 
   const handleStart = (type) => {
@@ -70,6 +76,7 @@ function App() {
   const handleHome = () => {
     setAnalystType(null);
     switchTab('welcome');
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -85,7 +92,11 @@ function App() {
 
       {currentView !== 'welcome' && currentView !== 'student' && (
         <div className="app-layout">
-          <aside className="app-sidebar">
+          <div 
+            className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+          <aside className={`app-sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
             <div className="logo-area" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ backgroundColor: '#fff', borderRadius: '8px', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', boxSizing: 'border-box' }}>
                 <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
@@ -156,7 +167,30 @@ function App() {
           </aside>
 
           <div className="app-main" style={{ position: 'relative' }}>
-            <div style={{ position: 'fixed', top: '16px', right: '32px', zIndex: 100 }}>
+            <div className="mobile-header">
+              <div className="mobile-header-title">
+                <button className="menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+                  <Menu size={24} />
+                </button>
+                <img src="/Image/CTC_Logo.webp" alt="CTC Logo" />
+                <span>{language === 'en' ? 'CTC' : 'ម.ប.ស.'}</span>
+              </div>
+              <div className="mobile-lang-pill-container">
+                {language === 'en' ? (
+                  <>
+                    <button className="active"><img src="https://flagcdn.com/w20/gb.png" srcSet="https://flagcdn.com/w40/gb.png 2x" width="16" alt="UK" style={{ marginRight: '4px', borderRadius: '2px' }} /> EN</button>
+                    <button onClick={() => setLanguage('km')}><img src="https://flagcdn.com/w20/kh.png" srcSet="https://flagcdn.com/w40/kh.png 2x" width="16" alt="KH" style={{ marginRight: '4px', borderRadius: '2px' }} /> KH</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => setLanguage('en')}><img src="https://flagcdn.com/w20/gb.png" srcSet="https://flagcdn.com/w40/gb.png 2x" width="16" alt="UK" style={{ marginRight: '4px', borderRadius: '2px' }} /> EN</button>
+                    <button className="active"><img src="https://flagcdn.com/w20/kh.png" srcSet="https://flagcdn.com/w40/kh.png 2x" width="16" alt="KH" style={{ marginRight: '4px', borderRadius: '2px' }} /> KH</button>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="desktop-lang-pill" style={{ position: 'fixed', top: '16px', right: '32px', zIndex: 100 }}>
               <div className="lang-pill-container">
                 {language === 'en' ? (
                   <>
@@ -174,16 +208,16 @@ function App() {
 
             {/* Teacher Tabs */}
             <div style={{ display: currentView === 'demographics' ? 'block' : 'none', height: '100%' }}>
-              {mounted.demographics && <Dashboard language={language} />}
+              {mounted.demographics && <Dashboard language={language} selectedSchool={selectedSchool} setSelectedSchool={setSelectedSchool} selectedGender={selectedGender} setSelectedGender={setSelectedGender} selectedSubject={selectedSubject} setSelectedSubject={setSelectedSubject} />}
             </div>
             <div style={{ display: currentView === 'impact1' ? 'block' : 'none', height: '100%' }}>
-              {mounted.impact1 && <ImpactDashboardPart1 language={language} />}
+              {mounted.impact1 && <ImpactDashboardPart1 language={language} selectedSchool={selectedSchool} setSelectedSchool={setSelectedSchool} selectedGender={selectedGender} setSelectedGender={setSelectedGender} selectedSubject={selectedSubject} setSelectedSubject={setSelectedSubject} />}
             </div>
             <div style={{ display: currentView === 'impact2' ? 'block' : 'none', height: '100%' }}>
-              {mounted.impact2 && <ImpactDashboardPart2 language={language} />}
+              {mounted.impact2 && <ImpactDashboardPart2 language={language} selectedSchool={selectedSchool} setSelectedSchool={setSelectedSchool} selectedGender={selectedGender} setSelectedGender={setSelectedGender} selectedSubject={selectedSubject} setSelectedSubject={setSelectedSubject} />}
             </div>
             <div style={{ display: currentView === 'impact3' ? 'block' : 'none', height: '100%' }}>
-              {mounted.impact3 && <ImpactDashboardPart3 language={language} />}
+              {mounted.impact3 && <ImpactDashboardPart3 language={language} selectedSchool={selectedSchool} setSelectedSchool={setSelectedSchool} selectedGender={selectedGender} setSelectedGender={setSelectedGender} selectedSubject={selectedSubject} setSelectedSubject={setSelectedSubject} />}
             </div>
             <div style={{ display: currentView === 'feedbackAdv' ? 'block' : 'none', height: '100%' }}>
               {mounted.feedbackAdv && <FeedbackAdvantage language={language} />}

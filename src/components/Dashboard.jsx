@@ -51,14 +51,23 @@ const CustomizedTreemapContent = (props) => {
   );
 };
 
-export default function Dashboard({ language = 'km' }) {
+export default function Dashboard({ 
+  language = 'km',
+  selectedSchool = 'All', setSelectedSchool = () => {},
+  selectedGender = 'All', setSelectedGender = () => {},
+  selectedSubject = 'All', setSelectedSubject = () => {}
+}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Filters State
-  const [selectedSchool, setSelectedSchool] = useState('All');
-  const [selectedGender, setSelectedGender] = useState('All');
-  const [selectedSubject, setSelectedSubject] = useState('All');
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Filters State (now passed as props)
 
   // Tabs State
   const [activeTab, setActiveTab] = useState('demographics'); // 'demographics' or 'tech'
@@ -335,7 +344,7 @@ export default function Dashboard({ language = 'km' }) {
         {/* Tab 1: Demographics */}
         {activeTab === 'demographics' && (
           <>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(6, 1fr)', gap: '16px', marginBottom: '24px' }}>
               <div style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                  <div style={{ height: '3px', background: COLORS.sky }}></div>
                  <div style={{ padding: '16px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -434,7 +443,16 @@ export default function Dashboard({ language = 'km' }) {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={ageData} margin={{ top: 30, right: 20, left: 0, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
-                      <XAxis dataKey="name" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <XAxis 
+                        dataKey="name" 
+                        interval={0} 
+                        tick={{ fill: 'var(--text-muted)', fontSize: isMobile ? 10 : 12 }} 
+                        angle={isMobile ? -45 : 0}
+                        textAnchor={isMobile ? 'end' : 'middle'}
+                        height={isMobile ? 60 : 30}
+                        axisLine={false} 
+                        tickLine={false} 
+                      />
                       <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
                       <Tooltip cursor={{ fill: 'var(--bg-color)' }} formatter={val => `${val} `} />
                       <Bar maxBarSize={45} dataKey="value" fill={COLORS.sky} radius={[4, 4, 0, 0]}>
@@ -455,7 +473,7 @@ export default function Dashboard({ language = 'km' }) {
                     {(() => {
                       const sortedInstData = [...instData].sort((a, b) => b.value - a.value);
                       return (
-                        <FunnelChart margin={{ top: 20, right: 180, left: 20, bottom: 20 }}>
+                        <FunnelChart margin={{ top: 20, right: isMobile ? 100 : 180, left: isMobile ? 0 : 20, bottom: 20 }}>
                           <Tooltip formatter={val => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} cursor={{fill: 'transparent'}} />
                           <Funnel
                             dataKey="value"
@@ -480,9 +498,22 @@ export default function Dashboard({ language = 'km' }) {
                                   const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
                                   
                                   return (
-                                    <text x={currentX + currentWidth + 15} y={currentY + currentHeight / 2 + 4} fill="var(--text-main)" fontSize={11} textAnchor="start">
-                                      {actualName} {actualValue > 0 ? `(${pct}%)` : ''}
-                                    </text>
+                                    <foreignObject x={currentX + currentWidth + 10} y={currentY} width={isMobile ? 95 : 170} height={currentHeight}>
+                                      <div xmlns="http://www.w3.org/1999/xhtml" style={{ 
+                                        width: '100%', 
+                                        height: '100%', 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        fontSize: '11px', 
+                                        color: 'var(--text-main)', 
+                                        lineHeight: '1.2',
+                                        textAlign: 'left'
+                                      }}>
+                                        <span style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                          {actualName} {!isMobile && actualValue > 0 ? ` (${pct}%)` : ''}
+                                        </span>
+                                      </div>
+                                    </foreignObject>
                                   );
                                 } catch (e) {
                                   return null;
@@ -684,7 +715,7 @@ export default function Dashboard({ language = 'km' }) {
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart
-                      margin={{ top: 20, right: 130, bottom: 20, left: 0 }}
+                      margin={{ top: 20, right: isMobile ? 90 : 130, bottom: 20, left: 0 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
                       <XAxis type="number" dataKey="value" name="Users" hide />
@@ -692,12 +723,12 @@ export default function Dashboard({ language = 'km' }) {
                         type="category" 
                         dataKey="name" 
                         name="Device" 
-                        width={200} 
+                        width={isMobile ? 120 : 200} 
                         tick={{ fontSize: 11, fill: 'var(--text-main)', fontWeight: 500 }} 
                         axisLine={false} 
                         tickLine={false} 
                       />
-                      <ZAxis type="number" dataKey="value" range={[100, 2500]} name="Users" />
+                      <ZAxis type="number" dataKey="value" range={isMobile ? [50, 1200] : [100, 2500]} name="Users" />
                       <Tooltip 
                         cursor={{ strokeDasharray: '3 3' }} 
                         content={({ active, payload }) => {
@@ -823,7 +854,7 @@ export default function Dashboard({ language = 'km' }) {
                     {(() => {
                       const sortedSupportData = [...supportNeedsData].sort((a, b) => b.value - a.value);
                       return (
-                        <FunnelChart margin={{ top: 20, right: 180, left: 20, bottom: 20 }}>
+                        <FunnelChart margin={{ top: 20, right: isMobile ? 100 : 180, left: isMobile ? 0 : 20, bottom: 20 }}>
                           <Tooltip formatter={val => `${val} (${((val / totalRespondents) * 100).toFixed(1)}%)`} cursor={{fill: 'transparent'}} />
                           <Funnel
                             dataKey="value"
@@ -848,9 +879,22 @@ export default function Dashboard({ language = 'km' }) {
                                   const pct = totalRespondents > 0 ? ((actualValue / totalRespondents) * 100).toFixed(1) : '0.0';
                                   
                                   return (
-                                    <text x={currentX + currentWidth + 15} y={currentY + currentHeight / 2 + 4} fill="var(--text-main)" fontSize={11} textAnchor="start">
-                                      {actualName} {actualValue > 0 ? `(${pct}%)` : ''}
-                                    </text>
+                                    <foreignObject x={currentX + currentWidth + 10} y={currentY} width={isMobile ? 95 : 170} height={currentHeight}>
+                                      <div xmlns="http://www.w3.org/1999/xhtml" style={{ 
+                                        width: '100%', 
+                                        height: '100%', 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        fontSize: '11px', 
+                                        color: 'var(--text-main)', 
+                                        lineHeight: '1.2',
+                                        textAlign: 'left'
+                                      }}>
+                                        <span style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                          {actualName} {!isMobile && actualValue > 0 ? ` (${pct}%)` : ''}
+                                        </span>
+                                      </div>
+                                    </foreignObject>
                                   );
                                 } catch (e) {
                                   return null;
@@ -918,7 +962,7 @@ export default function Dashboard({ language = 'km' }) {
                 <div className="chart-body">
                   <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart
-                      margin={{ top: 20, right: 130, bottom: 20, left: 0 }}
+                      margin={{ top: 20, right: isMobile ? 90 : 130, bottom: 20, left: 0 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
                       <XAxis type="number" dataKey="value" name="Users" hide />
@@ -926,12 +970,12 @@ export default function Dashboard({ language = 'km' }) {
                         type="category" 
                         dataKey="name" 
                         name="Improvement" 
-                        width={200} 
+                        width={isMobile ? 120 : 200} 
                         tick={{ fontSize: 11, fill: 'var(--text-main)', fontWeight: 500 }} 
                         axisLine={false} 
                         tickLine={false} 
                       />
-                      <ZAxis type="number" dataKey="value" range={[50, 800]} name="Users" />
+                      <ZAxis type="number" dataKey="value" range={isMobile ? [25, 400] : [50, 800]} name="Users" />
                       <Tooltip 
                         cursor={{ strokeDasharray: '3 3' }} 
                         content={({ active, payload }) => {

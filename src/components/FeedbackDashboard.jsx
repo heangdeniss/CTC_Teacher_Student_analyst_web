@@ -13,6 +13,13 @@ export default function FeedbackDashboard({ language = 'km' }) {
   const [dataAdv, setDataAdv] = useState([]);
   const [dataDis, setDataDis] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const t = {
     km: {
@@ -111,7 +118,34 @@ export default function FeedbackDashboard({ language = 'km' }) {
           <BarChart data={data} layout="vertical" margin={{ top: 0, right: 60, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-color)" />
             <XAxis type="number" tick={{fill: 'var(--text-muted)', fontSize: 12}} axisLine={false} tickLine={false} />
-            <YAxis type="category" dataKey="name" width={280} tick={{fill: 'var(--text-main)', fontSize: 11, fontWeight: 500}} axisLine={false} tickLine={false} />
+            <YAxis 
+              type="category" 
+              dataKey="name" 
+              width={isMobile ? 130 : 280} 
+              tick={({ x, y, payload }) => (
+                <g transform={`translate(${x},${y})`}>
+                  <foreignObject x={isMobile ? -120 : -270} y={-25} width={isMobile ? 120 : 270} height={50}>
+                    <div xmlns="http://www.w3.org/1999/xhtml" style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      fontSize: '11px', 
+                      color: 'var(--text-main)', 
+                      fontWeight: 500, 
+                      lineHeight: '1.2',
+                      textAlign: 'left' 
+                    }}>
+                      <span style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {payload.value}
+                      </span>
+                    </div>
+                  </foreignObject>
+                </g>
+              )} 
+              axisLine={false} 
+              tickLine={false} 
+            />
             <Tooltip cursor={{fill: 'var(--bg-color)'}} formatter={(val, name, props) => [`${val}  (${props.payload.percent.toFixed(1)}%)`, t[language].count]} />
             <Bar maxBarSize={45} dataKey="value" fill={color} radius={[0, 4, 4, 0]}>
               <LabelList dataKey="labelStr" position="right" formatter={(val) => `${val}`} style={{ fill: 'var(--text-main)', fontSize: 11, fontWeight: 'bold' }} />
