@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { FilterBar } from './FilterBar';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -23,7 +23,7 @@ export function AppLayout({ page, onNavigate, onHome, children }) {
     <div className={`min-h-screen bg-canvas ${lang === 'kh' ? 'km' : 'font-en'}`}>
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[260px] lg:block">
-        <Sidebar page={page} onNavigate={navigate} />
+        <Sidebar page={page} onNavigate={navigate} onHome={onHome} />
       </aside>
 
       {/* Mobile drawer */}
@@ -31,7 +31,7 @@ export function AppLayout({ page, onNavigate, onHome, children }) {
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-navy/50" onClick={() => setOpen(false)} aria-hidden />
           <aside className="absolute inset-y-0 left-0 w-[260px]">
-            <Sidebar page={page} onNavigate={navigate} />
+            <Sidebar page={page} onNavigate={navigate} onHome={onHome} />
           </aside>
         </div>
       ) : null}
@@ -51,16 +51,6 @@ export function AppLayout({ page, onNavigate, onHome, children }) {
               </button>
               <p className="text-dash-title truncate">{t('appTitle')}</p>
               <div className="ml-auto flex shrink-0 items-center gap-3">
-                {onHome ? (
-                  <button
-                    type="button"
-                    onClick={onHome}
-                    className="focus-ring flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-small text-ink transition-colors hover:bg-canvas"
-                  >
-                    <Home className="h-3.5 w-3.5" aria-hidden />
-                    {t('backToHome')}
-                  </button>
-                ) : null}
                 <LanguageSwitcher />
               </div>
             </div>

@@ -1,5 +1,5 @@
 import {
-  Activity, Cpu, GraduationCap, LayoutDashboard, ShieldAlert, Users,
+  Activity, Cpu, GraduationCap, Home, LayoutDashboard, ShieldAlert, Users,
 } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
@@ -12,7 +12,7 @@ const NAV = [
   { id: 'risk', labelKey: 'navRisk', icon: ShieldAlert },
 ];
 
-export function Sidebar({ page, onNavigate }) {
+export function Sidebar({ page, onNavigate, onHome }) {
   const { t } = useLanguage();
 
   return (
@@ -44,6 +44,19 @@ export function Sidebar({ page, onNavigate }) {
           );
         })}
       </ul>
+
+      {onHome ? (
+        <div className="border-t border-line px-3 py-3">
+          <button
+            type="button"
+            onClick={onHome}
+            className="focus-ring flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-small text-muted transition-colors hover:bg-canvas hover:text-ink"
+          >
+            <Home className="h-4 w-4 shrink-0" aria-hidden />
+            <span className="truncate">{t('backToHome')}</span>
+          </button>
+        </div>
+      ) : null}
     </nav>
   );
 }
