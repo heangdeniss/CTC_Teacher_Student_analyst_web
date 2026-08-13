@@ -17,16 +17,11 @@ export default function Welcome({ onStart, language = 'km', setLanguage }) {
         gap: '16px',
         flexWrap: 'wrap'
       }}>
-        <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 32px)', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
-          </div>
+        <div>
+          <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
         </div>
         
-        <div className="lang-pill-container" style={{ margin: '0 auto', flexShrink: 0 }}>
+        <div className="lang-pill-container" style={{ flexShrink: 0 }}>
           {language === 'en' ? (
             <>
               <button className="active"><img src="https://flagcdn.com/w20/gb.png" srcSet="https://flagcdn.com/w40/gb.png 2x" width="20" alt="UK" style={{ marginRight: '6px', display: 'inline-block', borderRadius: '2px' }} /> EN</button>
