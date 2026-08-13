@@ -21,13 +21,11 @@ The CTC Analytics Dashboard is a comprehensive web-based platform designed to vi
 - **Data Parsing:** PapaParse
 
 ## Project Objectives
-1. Evaluate the direct impact of CTCs on students' academic performance and teachers' daily instruction.
+1. Evaluate the direct impacts of CTCs on students' academic performance and teachers' daily instruction.
 2. Assess technology equity and the reliance on school-provided CTC equipment.
 3. Track technology engagement and digital skills growth for both students and educators.
 4. Analyze practical resource utilization and awareness of digital safety.
 5. Gather direct qualitative feedback to pinpoint specific advantages and operational challenges of CTCs.
-
-## Getting Started
 
 ### Prerequisites
 Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
