@@ -15,8 +15,8 @@ const STORAGE_KEY = 'ctc-dashboard-lang';
 const UI = {
   en: {
     // App chrome
-    appTitle: 'CTC Student Analytics',
-    sidebarSubtitle: 'Student Analytics',
+    appTitle: 'CTC Student Analytics System',
+    sidebarSubtitle: 'Student Analytics System',
     // Nav / page titles
     navOverview: 'Overview',
     navProfile: 'Student Profile & Access',
@@ -156,8 +156,8 @@ const UI = {
     shareOfStudents: 'Share of students',
   },
   kh: {
-    appTitle: 'CTC ការវិភាគទិន្នន័យសិស្ស',
-    sidebarSubtitle: 'ការវិភាគទិន្នន័យសិស្ស',
+    appTitle: 'CTC ប្រព័ន្ធវិភាគទិន្នន័យសិស្ស',
+    sidebarSubtitle: 'ប្រព័ន្ធវិភាគទិន្នន័យសិស្ស',
     navOverview: 'ទិដ្ឋភាពទូទៅ',
     navProfile: 'ប្រវត្តិរូបសិស្ស និងលទ្ធភាពប្រើប្រាស់',
     navImpact: 'លទ្ធផលវិជ្ជមានរបស់សិស្ស',

@@ -1,5 +1,5 @@
 import {
-  Activity, BarChart3, Cpu, GraduationCap, LayoutDashboard, ShieldAlert, Users,
+  Activity, Cpu, GraduationCap, LayoutDashboard, ShieldAlert, Users,
 } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
@@ -18,7 +18,7 @@ export function Sidebar({ page, onNavigate }) {
   return (
     <nav aria-label="Dashboard sections" className="flex h-full w-full flex-col border-r border-line bg-white text-ink">
       <div className="flex items-center gap-2.5 px-6 py-6">
-        <BarChart3 className="h-5 w-5 text-brand" aria-hidden />
+        <img src="/Image/MPS_Logo.png" alt="" className="h-9 w-9 shrink-0 object-contain" aria-hidden />
         <div>
           <p className="km text-[15px] font-semibold leading-tight">ម.ប.ស.</p>
           <p className="text-small text-muted">{t('sidebarSubtitle')}</p>
