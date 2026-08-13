@@ -17,6 +17,7 @@ const UI = {
     // App chrome
     appTitle: 'CTC Student Analytics System',
     sidebarSubtitle: 'Student Analytics System',
+    backToHome: 'Home',
     // Nav / page titles
     navOverview: 'Overview',
     navProfile: 'Student Profile & Access',
@@ -158,6 +159,7 @@ const UI = {
   kh: {
     appTitle: 'CTC ប្រព័ន្ធវិភាគទិន្នន័យសិស្ស',
     sidebarSubtitle: 'ប្រព័ន្ធវិភាគទិន្នន័យសិស្ស',
+    backToHome: 'ទំព័រដើម',
     navOverview: 'ទិដ្ឋភាពទូទៅ',
     navProfile: 'ប្រវត្តិរូបសិស្ស និងលទ្ធភាពប្រើប្រាស់',
     navImpact: 'លទ្ធផលវិជ្ជមានរបស់សិស្ស',

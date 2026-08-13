@@ -58,7 +58,7 @@ export function AppLayout({ page, onNavigate, onHome, children }) {
                     className="focus-ring flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-small text-ink transition-colors hover:bg-canvas"
                   >
                     <Home className="h-3.5 w-3.5" aria-hidden />
-                    ទំព័រដើម
+                    {t('backToHome')}
                   </button>
                 ) : null}
                 <LanguageSwitcher />
