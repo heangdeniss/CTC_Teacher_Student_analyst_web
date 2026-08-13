@@ -26,7 +26,7 @@ const PAGES = {
  * standalone app, minus react-router (this app already owns top-level
  * navigation via tab state, so pages switch the same way).
  */
-export default function StudentAnalyticsApp({ onHome }) {
+export default function StudentAnalyticsApp({ onHome, language, setLanguage }) {
   const [page, setPage] = useState('overview');
 
   // index.css constrains #root to a centered 1126px column for the rest of
@@ -43,7 +43,7 @@ export default function StudentAnalyticsApp({ onHome }) {
 
   return (
     <div className="student-analyst-root">
-      <LanguageProvider>
+      <LanguageProvider parentLang={language} setParentLang={setLanguage}>
         <FilterProvider>
           <AppLayout page={page} onNavigate={setPage} onHome={onHome}>
             <Page />

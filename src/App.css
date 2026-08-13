@@ -28,6 +28,169 @@ body {
   min-height: 100vh;
 }
 
+/* App Layout */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-sidebar {
+  width: 260px;
+  background-color: #1e293b; /* Dark navy color matching student theme */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  z-index: 20;
+}
+
+.app-sidebar .logo-area {
+  padding: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 16px;
+}
+
+.app-sidebar .logo-area h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: #fff;
+}
+
+.app-sidebar .logo-area p {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin: 4px 0 0 0;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.app-sidebar .tab-btn {
+  background: transparent;
+  color: #cbd5e1;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-sidebar .tab-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.app-sidebar .tab-btn.active {
+  background-color: #3b82f6; /* Blue highlight */
+  color: #fff;
+  font-weight: 600;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.top-filter-bar {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 160px 12px 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+
+.top-filter-bar h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-filter-bar .filter-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-filter-bar .filter-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.top-filter-bar .filter-group select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  outline: none;
+  min-width: 130px;
+}
+
+/* Language Pill */
+.lang-pill-container {
+  display: flex;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.lang-pill-container button {
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.lang-pill-container button:hover:not(.active) {
+  background-color: rgba(0,0,0,0.05);
+}
+
+.lang-pill-container button.active {
+  background-color: var(--text-main);
+  color: #fff;
+}
+
 /* Sidebar / Filters */
 .sidebar {
   width: 280px;
@@ -243,6 +406,26 @@ body {
 @media (max-width: 1024px) {
   .dashboard-container {
     flex-direction: column;
+  }
+  .app-layout {
+    flex-direction: column;
+  }
+  .app-sidebar {
+    width: 100%;
+    height: auto;
+  }
+  .top-filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+  .top-filter-bar .filter-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .top-filter-bar .filter-group select {
+    width: 100%;
   }
   .sidebar {
     width: 100%;

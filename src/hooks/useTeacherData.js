@@ -85,8 +85,7 @@ export function useTeacherData(filteredData, language, translateData) {
     });
     return Object.entries(counts)
       .map(([name, value]) => ({ name: translateData(name, language), value }))
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 10);
+      .sort((a, b) => b.value - a.value);
   }, [filteredData, language, translateData]);
 
   const aiToolData = useMemo(() => {
@@ -191,7 +190,6 @@ export function useTeacherData(filteredData, language, translateData) {
     return Object.entries(counts)
       .map(([name, value]) => ({ name: translateData(name, language), value }))
       .sort((a, b) => b.value - a.value)
-      .filter(item => item.name !== 'គ្មានយោបល់' && item.name !== 'មិនបានបំពេញ')
       .slice(0, 6);
   }, [filteredData, language, translateData]);
 
