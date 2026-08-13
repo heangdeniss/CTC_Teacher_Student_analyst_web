@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-const STORAGE_KEY = 'ctc-dashboard-lang';
+const STORAGE_KEY = 'language';
 
 /**
  * Static UI copy — every fixed label, heading, tooltip and helper string in
@@ -404,26 +404,20 @@ const DATA_LABELS = {
 
 const LanguageContext = createContext(null);
 
-export function LanguageProvider({ children }) {
-  const [lang, setLangState] = useState(() => {
-    if (typeof window === 'undefined') return 'kh';
-    // A `?lang=` override lets a link force a language on first load (e.g. sharing an English-language
-    // view) without waiting on a click; it still persists to localStorage like any other switch.
-    const fromQuery = new URLSearchParams(window.location.search).get('lang');
-    if (fromQuery === 'kh' || fromQuery === 'en') return fromQuery;
-    // Khmer by default; a returning visitor's explicit switch to English is remembered.
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    return stored === 'en' ? 'en' : 'kh';
-  });
+export function LanguageProvider({ children, parentLang, setParentLang }) {
+  // Map parent language ('km' or 'en') to internal language key ('kh' or 'en')
+  const lang = parentLang === 'en' ? 'en' : 'kh';
 
   useEffect(() => {
     document.documentElement.lang = lang === 'kh' ? 'km' : 'en';
   }, [lang]);
 
   const setLang = useCallback((next) => {
-    setLangState(next);
-    window.localStorage.setItem(STORAGE_KEY, next);
-  }, []);
+    // next is 'kh' or 'en'
+    if (setParentLang) {
+      setParentLang(next === 'kh' ? 'km' : next);
+    }
+  }, [setParentLang]);
 
   const t = useCallback((key) => UI[lang][key], [lang]);
   const td = useCallback((label) => (lang === 'kh' ? DATA_LABELS[label] ?? label : label), [lang]);

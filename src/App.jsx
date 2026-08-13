@@ -82,12 +82,12 @@ function App() {
   return (
     <>
       <div style={{ display: currentView === 'welcome' ? 'block' : 'none', height: '100%' }}>
-          {mounted.welcome && <Welcome onStart={handleStart} language={language} />}
+          {mounted.welcome && <Welcome onStart={handleStart} language={language} setLanguage={setLanguage} />}
       </div>
       
       {/* Student Analyst dashboard */}
       <div style={{ display: currentView === 'student' ? 'block' : 'none' }}>
-        {mounted.student && <StudentAnalyticsApp onHome={handleHome} />}
+        {mounted.student && <StudentAnalyticsApp onHome={handleHome} language={language} setLanguage={setLanguage} />}
       </div>
 
       {currentView !== 'welcome' && currentView !== 'student' && (

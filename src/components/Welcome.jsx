@@ -1,12 +1,12 @@
 import React from 'react';
 import '../App.css';
 
-export default function Welcome({ onStart, language = 'km' }) {
+export default function Welcome({ onStart, language = 'km', setLanguage }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'inherit' }}>
       
       {/* Header Bar */}
-      <header style={{ 
+      <header className="welcome-header" style={{ 
         padding: 'clamp(10px, 3vw, 16px) 5%', 
         display: 'flex', 
         alignItems: 'center', 
@@ -17,11 +17,27 @@ export default function Welcome({ onStart, language = 'km' }) {
         gap: '16px',
         flexWrap: 'wrap'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+        <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 32px)', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="/Image/CTC_Logo.webp" alt="CTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="/Image/Logo_MPTC.png" alt="MPTC Logo" style={{ height: 'clamp(40px, 12vw, 60px)', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+        
+        <div className="lang-pill-container" style={{ margin: '0 auto', flexShrink: 0 }}>
+          {language === 'en' ? (
+            <>
+              <button className="active"><img src="https://flagcdn.com/w20/gb.png" srcSet="https://flagcdn.com/w40/gb.png 2x" width="20" alt="UK" style={{ marginRight: '6px', display: 'inline-block', borderRadius: '2px' }} /> EN</button>
+              <button onClick={() => setLanguage && setLanguage('km')}><img src="https://flagcdn.com/w20/kh.png" srcSet="https://flagcdn.com/w40/kh.png 2x" width="20" alt="KH" style={{ marginRight: '6px', display: 'inline-block', borderRadius: '2px' }} /> KH</button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => setLanguage && setLanguage('en')}><img src="https://flagcdn.com/w20/gb.png" srcSet="https://flagcdn.com/w40/gb.png 2x" width="20" alt="UK" style={{ marginRight: '6px', display: 'inline-block', borderRadius: '2px' }} /> អង់គ្លេស</button>
+              <button className="active"><img src="https://flagcdn.com/w20/kh.png" srcSet="https://flagcdn.com/w40/kh.png 2x" width="20" alt="KH" style={{ marginRight: '6px', display: 'inline-block', borderRadius: '2px' }} /> ខ្មែរ</button>
+            </>
+          )}
         </div>
       </header>
 
@@ -48,13 +64,13 @@ export default function Welcome({ onStart, language = 'km' }) {
 
         <div style={{ padding: '0 5%', maxWidth: '900px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: '900', marginBottom: '16px', lineHeight: '1.2', color: '#ffffff', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
-            Community Tech Center
+            {language === 'en' ? 'Community Tech Center' : 'មជ្ឈមណ្ឌលបច្ចេកវិទ្យាសហគមន៍'}
           </h1>
           <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '700', marginBottom: '24px', color: '#38bdf8', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
             {language === 'en' ? 'CTC Data Analysis System' : 'ប្រព័ន្ធវិភាគទិន្នន័យ ម.ប.ស.'}
           </h2>
           <p style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', marginBottom: '40px', color: '#f1f5f9', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto', fontWeight: '500', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-            Empowering communities through technology and innovation.<br/>
+            {language === 'en' ? 'Empowering communities through technology and innovation.' : 'ពង្រឹងសហគមន៍តាមរយៈបច្ចេកវិទ្យា និងនវានុវត្តន៍។'}<br/>
             {language === 'en' ? 'This dashboard is designed to present and analyze evaluation data from teachers and students regarding digital capacity impact and development.' : 'ផ្ទាំងទិន្នន័យនេះត្រូវបានរចនាឡើងដើម្បីបង្ហាញ និងវិភាគទិន្នន័យវាយតម្លៃពីលោកគ្រូអ្នកគ្រូ និងសិស្សានុសិស្សអំពីផលជះ និងការអភិវឌ្ឍសមត្ថភាពឌីជីថល។'}
           </p>
           
@@ -81,7 +97,7 @@ export default function Welcome({ onStart, language = 'km' }) {
               onMouseOver={(e) => e.target.style.backgroundColor = '#004785'}
               onMouseOut={(e) => e.target.style.backgroundColor = '#005baa'}
             >
-              Teacher Analyst <span style={{fontSize: '1.2rem'}}>→</span>
+              {language === 'en' ? 'Teacher Analyst' : 'ប្រព័ន្ធវិភាគទិន្នន័យគ្រូបង្រៀន'} <span style={{fontSize: '1.2rem'}}>→</span>
             </button>
             <button 
               onClick={() => onStart('student')} 
@@ -105,7 +121,7 @@ export default function Welcome({ onStart, language = 'km' }) {
               onMouseOver={(e) => e.target.style.backgroundColor = '#0f766e'}
               onMouseOut={(e) => e.target.style.backgroundColor = '#0d9488'}
             >
-              Student Analyst <span style={{fontSize: '1.2rem'}}>→</span>
+              {language === 'en' ? 'Student Analyst' : 'ប្រព័ន្ធវិភាគទិន្នន័យសិស្ស'} <span style={{fontSize: '1.2rem'}}>→</span>
             </button>
           </div>
         </div>
